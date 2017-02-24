@@ -72,7 +72,6 @@ class INM377ProjTemplate : public PlatformDemoApplication
         
         btRigidBody* boid;
         
-				
 		INM377ProjTemplate();
 
 		virtual ~INM377ProjTemplate()
