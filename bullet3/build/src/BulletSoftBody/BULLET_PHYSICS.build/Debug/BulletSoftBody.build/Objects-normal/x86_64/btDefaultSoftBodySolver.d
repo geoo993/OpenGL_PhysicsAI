@@ -1,0 +1,34 @@
+dependencies: \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletSoftBody/btDefaultSoftBodySolver.cpp \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btStridingMeshInterface.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btVector3.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btScalar.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btMinMax.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btAlignedAllocator.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btTriangleCallback.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btConcaveShape.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btCollisionShape.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btTransform.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btMatrix3x3.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btQuaternion.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btQuadWord.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/BroadphaseCollision/btBroadphaseProxy.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btAlignedObjectArray.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionDispatch/btCollisionObject.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btMotionState.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletSoftBody/btDefaultSoftBodySolver.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletSoftBody/btSoftBodySolvers.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletSoftBody/btSoftBodySolverVertexBuffer.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btCapsuleShape.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btConvexInternalShape.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btConvexShape.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btCollisionMargin.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btAabbUtil2.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletSoftBody/btSoftBody.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btIDebugDraw.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Dynamics/btRigidBody.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionDispatch/btCollisionCreateFunc.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletSoftBody/btSparseSDF.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/NarrowPhaseCollision/btGjkEpa2.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/BroadphaseCollision/btDbvt.h
