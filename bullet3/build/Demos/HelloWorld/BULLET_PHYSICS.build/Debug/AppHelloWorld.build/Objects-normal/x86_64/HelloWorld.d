@@ -1,5 +1,5 @@
 dependencies: \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3\ 2/Demos/HelloWorld/HelloWorld.cpp \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/HelloWorld/HelloWorld.cpp \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/btBulletDynamicsCommon.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/btBulletCollisionCommon.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionDispatch/btCollisionWorld.h \

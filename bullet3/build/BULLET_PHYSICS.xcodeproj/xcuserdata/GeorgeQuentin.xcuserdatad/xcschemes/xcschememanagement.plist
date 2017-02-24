@@ -44,6 +44,11 @@
 			<key>orderHint</key>
 			<integer>8</integer>
 		</dict>
+		<key>AppChainDemo.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>67</integer>
+		</dict>
 		<key>AppCharacterDemo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -209,6 +214,11 @@
 			<key>orderHint</key>
 			<integer>29</integer>
 		</dict>
+		<key>AppSpringDemo.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>68</integer>
+		</dict>
 		<key>AppThreadingDemo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -309,12 +319,12 @@
 			<key>isShown</key>
 			<true/>
 			<key>orderHint</key>
-			<integer>66</integer>
+			<integer>65</integer>
 		</dict>
 		<key>INM377ProjTemplateForces.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>67</integer>
+			<integer>66</integer>
 		</dict>
 		<key>LinearMath.xcscheme</key>
 		<dict>
@@ -585,6 +595,16 @@
 			<true/>
 		</dict>
 		<key>C737E706CE6C4F02A739931F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C74695691E5FB8E9003BB3F4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C74695761E5FB914003BB3F4</key>
 		<dict>
 			<key>primary</key>
 			<true/>

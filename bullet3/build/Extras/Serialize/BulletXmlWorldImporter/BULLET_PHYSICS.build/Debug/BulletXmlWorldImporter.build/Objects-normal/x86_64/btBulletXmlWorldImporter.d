@@ -1,6 +1,6 @@
 dependencies: \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3\ 2/Extras/Serialize/BulletXmlWorldImporter/btBulletXmlWorldImporter.cpp \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3\ 2/Extras/Serialize/BulletXmlWorldImporter/btBulletXmlWorldImporter.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Extras/Serialize/BulletXmlWorldImporter/btBulletXmlWorldImporter.cpp \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Extras/Serialize/BulletXmlWorldImporter/btBulletXmlWorldImporter.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btScalar.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btAlignedObjectArray.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btAlignedAllocator.h \
@@ -12,8 +12,8 @@ dependencies: \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btQuaternion.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btQuadWord.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btHashMap.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3\ 2/Extras/Serialize/BulletXmlWorldImporter/tinyxml.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3\ 2/Extras/Serialize/BulletXmlWorldImporter/tinystr.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Extras/Serialize/BulletXmlWorldImporter/tinyxml.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Extras/Serialize/BulletXmlWorldImporter/tinystr.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/btBulletDynamicsCommon.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/btBulletCollisionCommon.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionDispatch/btCollisionWorld.h \
@@ -101,4 +101,4 @@ dependencies: \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Vehicle/btVehicleRaycaster.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Vehicle/btWheelInfo.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Dynamics/btActionInterface.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3\ 2/Extras/Serialize/BulletXmlWorldImporter/string_split.h
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Extras/Serialize/BulletXmlWorldImporter/string_split.h

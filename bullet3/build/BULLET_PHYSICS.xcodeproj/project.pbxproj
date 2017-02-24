@@ -390,6 +390,13 @@
 		C5F123EB5F194163BD29EEA8 /* DoublePrecisionDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A993C2261314F3E9C8480DE /* DoublePrecisionDemo.cpp */; };
 		C648C7429B594248AEA0CB2D /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDEBA5FA31F847A69FD1D01A /* btConvexPointCloudShape.cpp */; };
 		C736A1641E5E77700063DDEF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C736A1631E5E77700063DDEF /* main.cpp */; };
+		C746956D1E5FB8E9003BB3F4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C746956C1E5FB8E9003BB3F4 /* main.cpp */; };
+		C746957A1E5FB914003BB3F4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695791E5FB914003BB3F4 /* main.cpp */; };
+		C74695851E5FBABC003BB3F4 /* INM377ProjTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695821E5FBA2A003BB3F4 /* INM377ProjTemplate.cpp */; };
+		C74695861E5FBABC003BB3F4 /* INM377ProjTemplate.h in Sources */ = {isa = PBXBuildFile; fileRef = C74695831E5FBA2A003BB3F4 /* INM377ProjTemplate.h */; };
+		C74695871E5FBABC003BB3F4 /* Spring in Sources */ = {isa = PBXBuildFile; fileRef = C74695841E5FBA2A003BB3F4 /* Spring */; };
+		C74695881E5FBAFF003BB3F4 /* MyChainDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695801E5FB997003BB3F4 /* MyChainDemo.cpp */; };
+		C74695891E5FBAFF003BB3F4 /* MyChainDemo.h in Sources */ = {isa = PBXBuildFile; fileRef = C74695811E5FB997003BB3F4 /* MyChainDemo.h */; };
 		C7D2A32B1E5EF05E00082CE9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D2A32A1E5EF05E00082CE9 /* main.cpp */; };
 		C7D2A3471E5EF18A00082CE9 /* INM377ProjTemplateForces.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D2A3451E5EF14B00082CE9 /* INM377ProjTemplateForces.cpp */; };
 		C7D2A3481E5EF18A00082CE9 /* INM377ProjTemplateForces.h in Sources */ = {isa = PBXBuildFile; fileRef = C7D2A3461E5EF14B00082CE9 /* INM377ProjTemplateForces.h */; };
@@ -2297,6 +2304,139 @@
 			remoteGlobalIDString = F10F0E4504584B8F88DB414B;
 			remoteInfo = BulletMultiThreaded;
 		};
+		C746958A1E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 004FDF2CDC064791A2593F43;
+			remoteInfo = OpenGLSupport;
+		};
+		C746958C1E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70851389DEE649888894369D;
+			remoteInfo = BulletSoftBody;
+		};
+		C746958E1E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F44C5B6DBA8A486AB0F0FA57;
+			remoteInfo = BulletCollision;
+		};
+		C74695901E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DA70C2B437244E7A275FBB7;
+			remoteInfo = BulletDynamics;
+		};
+		C74695921E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FDACAC9ECF0645BA890BEDF6;
+			remoteInfo = LinearMath;
+		};
+		C74695941E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CD9D8869C6F74F2C985FF9DF;
+			remoteInfo = MiniCL;
+		};
+		C74695961E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F10F0E4504584B8F88DB414B;
+			remoteInfo = BulletMultiThreaded;
+		};
+		C74695981E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C2D99E30274845C28AEBC91F;
+			remoteInfo = BulletSoftBodySolvers_OpenCL_Mini;
+		};
+		C746959A1E5FBB27003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A23BFD654E4E4E9693C31E03;
+			remoteInfo = BulletSoftBodySolvers_OpenCL_Apple;
+		};
+		C746959C1E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 47579C72899A478FAA9AB353;
+			remoteInfo = ZERO_CHECK;
+		};
+		C746959E1E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 004FDF2CDC064791A2593F43;
+			remoteInfo = OpenGLSupport;
+		};
+		C74695A01E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70851389DEE649888894369D;
+			remoteInfo = BulletSoftBody;
+		};
+		C74695A21E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F44C5B6DBA8A486AB0F0FA57;
+			remoteInfo = BulletCollision;
+		};
+		C74695A41E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DA70C2B437244E7A275FBB7;
+			remoteInfo = BulletDynamics;
+		};
+		C74695A61E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FDACAC9ECF0645BA890BEDF6;
+			remoteInfo = LinearMath;
+		};
+		C74695A81E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CD9D8869C6F74F2C985FF9DF;
+			remoteInfo = MiniCL;
+		};
+		C74695AA1E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F10F0E4504584B8F88DB414B;
+			remoteInfo = BulletMultiThreaded;
+		};
+		C74695AC1E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C2D99E30274845C28AEBC91F;
+			remoteInfo = BulletSoftBodySolvers_OpenCL_Mini;
+		};
+		C74695AE1E5FBB3A003BB3F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A23BFD654E4E4E9693C31E03;
+			remoteInfo = BulletSoftBodySolvers_OpenCL_Apple;
+		};
 		C7A262CFA9234D8D8AF9FDFF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B12859E423D46C5845736E3 /* Project object */;
@@ -3009,6 +3149,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		C74695681E5FB8E9003BB3F4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		C74695751E5FB914003BB3F4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		C7D2A3261E5EF05E00082CE9 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3675,6 +3833,15 @@
 		C736A1751E5E7ABB0063DDEF /* INM377ProjTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INM377ProjTemplate.h; sourceTree = "<group>"; };
 		C7443C84ED8B4F08A75ACC93 /* btScaledBvhTriangleMeshShape.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btScaledBvhTriangleMeshShape.h; path = src/BulletCollision/CollisionShapes/btScaledBvhTriangleMeshShape.h; sourceTree = SOURCE_ROOT; };
 		C744D395321F4800BDE91AC4 /* gim_tri_collision.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gim_tri_collision.h; path = src/BulletCollision/Gimpact/gim_tri_collision.h; sourceTree = SOURCE_ROOT; };
+		C746956A1E5FB8E9003BB3F4 /* AppChainDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AppChainDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		C746956C1E5FB8E9003BB3F4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		C74695771E5FB914003BB3F4 /* AppSpringDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AppSpringDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		C74695791E5FB914003BB3F4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		C74695801E5FB997003BB3F4 /* MyChainDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyChainDemo.cpp; sourceTree = "<group>"; };
+		C74695811E5FB997003BB3F4 /* MyChainDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyChainDemo.h; sourceTree = "<group>"; };
+		C74695821E5FBA2A003BB3F4 /* INM377ProjTemplate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = INM377ProjTemplate.cpp; sourceTree = "<group>"; };
+		C74695831E5FBA2A003BB3F4 /* INM377ProjTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INM377ProjTemplate.h; sourceTree = "<group>"; };
+		C74695841E5FBA2A003BB3F4 /* Spring */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Spring; sourceTree = "<group>"; };
 		C78099367CF04DE0A986985E /* btPolyhedralContactClipping.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = btPolyhedralContactClipping.cpp; path = src/BulletCollision/NarrowPhaseCollision/btPolyhedralContactClipping.cpp; sourceTree = SOURCE_ROOT; };
 		C79AA08A9E8343ACB7E33FDC /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = Demos/VehicleDemo/main.cpp; sourceTree = SOURCE_ROOT; };
 		C7CA956F272845B98263B48C /* btPolarDecomposition.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btPolarDecomposition.h; path = src/LinearMath/btPolarDecomposition.h; sourceTree = SOURCE_ROOT; };
@@ -3874,6 +4041,20 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		C736A15E1E5E77700063DDEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C74695671E5FB8E9003BB3F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C74695741E5FB914003BB3F4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5026,6 +5207,8 @@
 				7B0C679BD9CA43418D09CFD6 /* AppOpenCLClothDemo_Apple */,
 				E275ADEC7A2B4A93A17CEBA1 /* AppVectorAdd_Mini */,
 				BB73827804EF4A54858B46FD /* AppVectorAdd_Apple */,
+				C746956B1E5FB8E9003BB3F4 /* AppChainDemo */,
+				C74695781E5FB914003BB3F4 /* AppSpringDemo */,
 				7F675BE1AD9245518250EB40 /* ConvexDecomposition */,
 				3431BD4F0F1D4BA9982494DE /* HACD */,
 				48AAA508A63F4568B597058E /* GIMPACTUtils */,
@@ -5516,6 +5699,29 @@
 			path = build/INM377ProjTemplate;
 			sourceTree = "<group>";
 		};
+		C746956B1E5FB8E9003BB3F4 /* AppChainDemo */ = {
+			isa = PBXGroup;
+			children = (
+				C74695801E5FB997003BB3F4 /* MyChainDemo.cpp */,
+				C74695811E5FB997003BB3F4 /* MyChainDemo.h */,
+				C746956C1E5FB8E9003BB3F4 /* main.cpp */,
+			);
+			name = AppChainDemo;
+			path = build/AppChainDemo;
+			sourceTree = "<group>";
+		};
+		C74695781E5FB914003BB3F4 /* AppSpringDemo */ = {
+			isa = PBXGroup;
+			children = (
+				C74695821E5FBA2A003BB3F4 /* INM377ProjTemplate.cpp */,
+				C74695831E5FBA2A003BB3F4 /* INM377ProjTemplate.h */,
+				C74695841E5FBA2A003BB3F4 /* Spring */,
+				C74695791E5FB914003BB3F4 /* main.cpp */,
+			);
+			name = AppSpringDemo;
+			path = build/AppSpringDemo;
+			sourceTree = "<group>";
+		};
 		C793F52ADAAF49C596405AAF /* AppBulletXmlImportDemo */ = {
 			isa = PBXGroup;
 			children = (
@@ -5726,6 +5932,8 @@
 				425D4FC86F5C4A45BF07ECA0 /* libBulletSoftBodySolvers_OpenCL_Apple.a */,
 				C736A1611E5E77700063DDEF /* INM377ProjTemplate */,
 				C7D2A3281E5EF05E00082CE9 /* INM377ProjTemplateForces */,
+				C746956A1E5FB8E9003BB3F4 /* AppChainDemo */,
+				C74695771E5FB914003BB3F4 /* AppSpringDemo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7009,6 +7217,59 @@
 			productReference = A781A4BA376A459A810A29AF /* AppVectorAdd_Apple */;
 			productType = "com.apple.product-type.tool";
 		};
+		C74695691E5FB8E9003BB3F4 /* AppChainDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C74695721E5FB8E9003BB3F4 /* Build configuration list for PBXNativeTarget "AppChainDemo" */;
+			buildPhases = (
+				C74695661E5FB8E9003BB3F4 /* Sources */,
+				C74695671E5FB8E9003BB3F4 /* Frameworks */,
+				C74695681E5FB8E9003BB3F4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C746958B1E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C746958D1E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C746958F1E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C74695911E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C74695931E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C74695951E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C74695971E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C74695991E5FBB27003BB3F4 /* PBXTargetDependency */,
+				C746959B1E5FBB27003BB3F4 /* PBXTargetDependency */,
+			);
+			name = AppChainDemo;
+			productName = AppChainDemo;
+			productReference = C746956A1E5FB8E9003BB3F4 /* AppChainDemo */;
+			productType = "com.apple.product-type.tool";
+		};
+		C74695761E5FB914003BB3F4 /* AppSpringDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C746957B1E5FB914003BB3F4 /* Build configuration list for PBXNativeTarget "AppSpringDemo" */;
+			buildPhases = (
+				C74695731E5FB914003BB3F4 /* Sources */,
+				C74695741E5FB914003BB3F4 /* Frameworks */,
+				C74695751E5FB914003BB3F4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C746959D1E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C746959F1E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695A11E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695A31E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695A51E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695A71E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695A91E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695AB1E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695AD1E5FBB3A003BB3F4 /* PBXTargetDependency */,
+				C74695AF1E5FBB3A003BB3F4 /* PBXTargetDependency */,
+			);
+			name = AppSpringDemo;
+			productName = AppSpringDemo;
+			productReference = C74695771E5FB914003BB3F4 /* AppSpringDemo */;
+			productType = "com.apple.product-type.tool";
+		};
 		C7D2A3271E5EF05E00082CE9 /* INM377ProjTemplateForces */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7D2A32C1E5EF05E00082CE9 /* Build configuration list for PBXNativeTarget "INM377ProjTemplateForces" */;
@@ -7386,6 +7647,16 @@
 						DevelopmentTeam = 4Q93294747;
 						ProvisioningStyle = Automatic;
 					};
+					C74695691E5FB8E9003BB3F4 = {
+						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = 4Q93294747;
+						ProvisioningStyle = Automatic;
+					};
+					C74695761E5FB914003BB3F4 = {
+						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = 4Q93294747;
+						ProvisioningStyle = Automatic;
+					};
 					C7D2A3271E5EF05E00082CE9 = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = 4Q93294747;
@@ -7454,6 +7725,8 @@
 				C84AA59F89FD4A518EED20B7 /* AppOpenCLClothDemo_Apple */,
 				24416B2EAE874A219522A35A /* AppVectorAdd_Mini */,
 				C737E706CE6C4F02A739931F /* AppVectorAdd_Apple */,
+				C74695691E5FB8E9003BB3F4 /* AppChainDemo */,
+				C74695761E5FB914003BB3F4 /* AppSpringDemo */,
 				C736A1601E5E77700063DDEF /* INM377ProjTemplate */,
 				C7D2A3271E5EF05E00082CE9 /* INM377ProjTemplateForces */,
 				241E89268B25468A9713E60E /* ConvexDecomposition */,
@@ -8207,6 +8480,27 @@
 				C7D2A3491E5EF1B900082CE9 /* INM377ProjTemplate.cpp in Sources */,
 				C7D2A34A1E5EF1B900082CE9 /* INM377ProjTemplate.h in Sources */,
 				C736A1641E5E77700063DDEF /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C74695661E5FB8E9003BB3F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C74695881E5FBAFF003BB3F4 /* MyChainDemo.cpp in Sources */,
+				C74695891E5FBAFF003BB3F4 /* MyChainDemo.h in Sources */,
+				C746956D1E5FB8E9003BB3F4 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C74695731E5FB914003BB3F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C74695851E5FBABC003BB3F4 /* INM377ProjTemplate.cpp in Sources */,
+				C74695861E5FBABC003BB3F4 /* INM377ProjTemplate.h in Sources */,
+				C74695871E5FBABC003BB3F4 /* Spring in Sources */,
+				C746957A1E5FB914003BB3F4 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9816,6 +10110,101 @@
 			isa = PBXTargetDependency;
 			target = 47579C72899A478FAA9AB353 /* ZERO_CHECK */;
 			targetProxy = 473767F65E88481B9D0ABE3C /* PBXContainerItemProxy */;
+		};
+		C746958B1E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 004FDF2CDC064791A2593F43 /* OpenGLSupport */;
+			targetProxy = C746958A1E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C746958D1E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70851389DEE649888894369D /* BulletSoftBody */;
+			targetProxy = C746958C1E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C746958F1E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F44C5B6DBA8A486AB0F0FA57 /* BulletCollision */;
+			targetProxy = C746958E1E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695911E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8DA70C2B437244E7A275FBB7 /* BulletDynamics */;
+			targetProxy = C74695901E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695931E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FDACAC9ECF0645BA890BEDF6 /* LinearMath */;
+			targetProxy = C74695921E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695951E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CD9D8869C6F74F2C985FF9DF /* MiniCL */;
+			targetProxy = C74695941E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695971E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F10F0E4504584B8F88DB414B /* BulletMultiThreaded */;
+			targetProxy = C74695961E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695991E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C2D99E30274845C28AEBC91F /* BulletSoftBodySolvers_OpenCL_Mini */;
+			targetProxy = C74695981E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C746959B1E5FBB27003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A23BFD654E4E4E9693C31E03 /* BulletSoftBodySolvers_OpenCL_Apple */;
+			targetProxy = C746959A1E5FBB27003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C746959D1E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 47579C72899A478FAA9AB353 /* ZERO_CHECK */;
+			targetProxy = C746959C1E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C746959F1E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 004FDF2CDC064791A2593F43 /* OpenGLSupport */;
+			targetProxy = C746959E1E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695A11E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70851389DEE649888894369D /* BulletSoftBody */;
+			targetProxy = C74695A01E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695A31E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F44C5B6DBA8A486AB0F0FA57 /* BulletCollision */;
+			targetProxy = C74695A21E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695A51E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8DA70C2B437244E7A275FBB7 /* BulletDynamics */;
+			targetProxy = C74695A41E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695A71E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FDACAC9ECF0645BA890BEDF6 /* LinearMath */;
+			targetProxy = C74695A61E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695A91E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CD9D8869C6F74F2C985FF9DF /* MiniCL */;
+			targetProxy = C74695A81E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695AB1E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F10F0E4504584B8F88DB414B /* BulletMultiThreaded */;
+			targetProxy = C74695AA1E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695AD1E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C2D99E30274845C28AEBC91F /* BulletSoftBodySolvers_OpenCL_Mini */;
+			targetProxy = C74695AC1E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
+		};
+		C74695AF1E5FBB3A003BB3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A23BFD654E4E4E9693C31E03 /* BulletSoftBodySolvers_OpenCL_Apple */;
+			targetProxy = C74695AE1E5FBB3A003BB3F4 /* PBXContainerItemProxy */;
 		};
 		C7D2A31B1E5EEA8500082CE9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -19858,6 +20247,554 @@
 			};
 			name = RelWithDebInfo;
 		};
+		C746956E1E5FB8E9003BB3F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C746956F1E5FB8E9003BB3F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C74695701E5FB8E9003BB3F4 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = MinSizeRel;
+		};
+		C74695711E5FB8E9003BB3F4 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = RelWithDebInfo;
+		};
+		C746957C1E5FB914003BB3F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C746957D1E5FB914003BB3F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C746957E1E5FB914003BB3F4 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = MinSizeRel;
+		};
+		C746957F1E5FB914003BB3F4 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4Q93294747;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/SharedOpenCL,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/Demos/OpenGL/Debug/libOpenGLSupport.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/Debug/libBulletSoftBodySolvers_OpenCL_Mini.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/MiniCL/Debug/libMiniCL.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletMultiThreaded/Debug/libBulletMultiThreaded.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletSoftBody/Debug/libBulletSoftBody.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletDynamics/Debug/libBulletDynamics.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/BulletCollision/Debug/libBulletCollision.a,
+					/Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/src/LinearMath/Debug/libLinearMath.a,
+					"-framework",
+					GLUT,
+					"-framework",
+					OpenGL,
+					"-framework",
+					OpenGL,
+					"-lpthread",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = RelWithDebInfo;
+		};
 		C767D7377795449C893B6066 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -23454,6 +24391,26 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
+		};
+		C74695721E5FB8E9003BB3F4 /* Build configuration list for PBXNativeTarget "AppChainDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C746956E1E5FB8E9003BB3F4 /* Debug */,
+				C746956F1E5FB8E9003BB3F4 /* Release */,
+				C74695701E5FB8E9003BB3F4 /* MinSizeRel */,
+				C74695711E5FB8E9003BB3F4 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C746957B1E5FB914003BB3F4 /* Build configuration list for PBXNativeTarget "AppSpringDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C746957C1E5FB914003BB3F4 /* Debug */,
+				C746957D1E5FB914003BB3F4 /* Release */,
+				C746957E1E5FB914003BB3F4 /* MinSizeRel */,
+				C746957F1E5FB914003BB3F4 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		C7D2A32C1E5EF05E00082CE9 /* Build configuration list for PBXNativeTarget "INM377ProjTemplateForces" */ = {
 			isa = XCConfigurationList;

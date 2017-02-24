@@ -48,6 +48,8 @@ class INM377ProjTemplate : public PlatformDemoApplication
 
 //	btConstraintSolver*	m_solver;
 
+//	btDefaultCollisionConfiguration* m_collisionConfiguration;
+    
 	class btBroadphaseInterface*	m_overlappingPairCache;
 
 	class btCollisionDispatcher*	m_dispatcher;
@@ -63,8 +65,6 @@ class INM377ProjTemplate : public PlatformDemoApplication
 		USE_NO_CCD
 	};
 	int 	m_ccdMode;
-
-//	btDefaultCollisionConfiguration* m_collisionConfiguration;
 
 	public:
 
