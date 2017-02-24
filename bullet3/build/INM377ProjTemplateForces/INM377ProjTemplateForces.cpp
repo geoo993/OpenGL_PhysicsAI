@@ -291,8 +291,6 @@ void	INM377ProjTemplate::initPhysics()
         
         
         
-        
-        
         //btCollisionShape* bShape = new btBoxShape(btVector3(5, 3, 5));
         btConvexHullShape * bShape = new btConvexHullShape();
         bShape -> addPoint(btVector3(10, 0, 0));
