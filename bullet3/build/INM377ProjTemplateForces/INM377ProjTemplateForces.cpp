@@ -155,7 +155,6 @@ void INM377ProjTemplate::displayCallback(void) {
 	swapBuffers();
 }
 
-
 void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     world->clearForces();
     btRigidBody* body0 = static_cast<INM377ProjTemplate *>(world->getWorldUserInfo())->body000;
