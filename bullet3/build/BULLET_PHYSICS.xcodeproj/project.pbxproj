@@ -391,12 +391,13 @@
 		C648C7429B594248AEA0CB2D /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDEBA5FA31F847A69FD1D01A /* btConvexPointCloudShape.cpp */; };
 		C736A1641E5E77700063DDEF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C736A1631E5E77700063DDEF /* main.cpp */; };
 		C746956D1E5FB8E9003BB3F4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C746956C1E5FB8E9003BB3F4 /* main.cpp */; };
-		C746957A1E5FB914003BB3F4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695791E5FB914003BB3F4 /* main.cpp */; };
 		C74695851E5FBABC003BB3F4 /* INM377ProjTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695821E5FBA2A003BB3F4 /* INM377ProjTemplate.cpp */; };
 		C74695861E5FBABC003BB3F4 /* INM377ProjTemplate.h in Sources */ = {isa = PBXBuildFile; fileRef = C74695831E5FBA2A003BB3F4 /* INM377ProjTemplate.h */; };
-		C74695871E5FBABC003BB3F4 /* Spring in Sources */ = {isa = PBXBuildFile; fileRef = C74695841E5FBA2A003BB3F4 /* Spring */; };
 		C74695881E5FBAFF003BB3F4 /* MyChainDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695801E5FB997003BB3F4 /* MyChainDemo.cpp */; };
 		C74695891E5FBAFF003BB3F4 /* MyChainDemo.h in Sources */ = {isa = PBXBuildFile; fileRef = C74695811E5FB997003BB3F4 /* MyChainDemo.h */; };
+		C78C311D1E6025EF00607996 /* MySpringDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C78C311A1E6025C800607996 /* MySpringDemo.cpp */; };
+		C78C311E1E6025EF00607996 /* MySpringDemo.h in Sources */ = {isa = PBXBuildFile; fileRef = C78C311B1E6025C800607996 /* MySpringDemo.h */; };
+		C78C31201E60271A00607996 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695791E5FB914003BB3F4 /* main.cpp */; };
 		C7D2A32B1E5EF05E00082CE9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D2A32A1E5EF05E00082CE9 /* main.cpp */; };
 		C7D2A3471E5EF18A00082CE9 /* INM377ProjTemplateForces.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D2A3451E5EF14B00082CE9 /* INM377ProjTemplateForces.cpp */; };
 		C7D2A3481E5EF18A00082CE9 /* INM377ProjTemplateForces.h in Sources */ = {isa = PBXBuildFile; fileRef = C7D2A3461E5EF14B00082CE9 /* INM377ProjTemplateForces.h */; };
@@ -3841,8 +3842,9 @@
 		C74695811E5FB997003BB3F4 /* MyChainDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyChainDemo.h; sourceTree = "<group>"; };
 		C74695821E5FBA2A003BB3F4 /* INM377ProjTemplate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = INM377ProjTemplate.cpp; sourceTree = "<group>"; };
 		C74695831E5FBA2A003BB3F4 /* INM377ProjTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INM377ProjTemplate.h; sourceTree = "<group>"; };
-		C74695841E5FBA2A003BB3F4 /* Spring */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Spring; sourceTree = "<group>"; };
 		C78099367CF04DE0A986985E /* btPolyhedralContactClipping.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = btPolyhedralContactClipping.cpp; path = src/BulletCollision/NarrowPhaseCollision/btPolyhedralContactClipping.cpp; sourceTree = SOURCE_ROOT; };
+		C78C311A1E6025C800607996 /* MySpringDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MySpringDemo.cpp; sourceTree = "<group>"; };
+		C78C311B1E6025C800607996 /* MySpringDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySpringDemo.h; sourceTree = "<group>"; };
 		C79AA08A9E8343ACB7E33FDC /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = Demos/VehicleDemo/main.cpp; sourceTree = SOURCE_ROOT; };
 		C7CA956F272845B98263B48C /* btPolarDecomposition.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btPolarDecomposition.h; path = src/LinearMath/btPolarDecomposition.h; sourceTree = SOURCE_ROOT; };
 		C7D1610AD02F4C4480328DD4 /* glui_spinner.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = glui_spinner.cpp; path = Extras/glui/glui_spinner.cpp; sourceTree = SOURCE_ROOT; };
@@ -5713,9 +5715,10 @@
 		C74695781E5FB914003BB3F4 /* AppSpringDemo */ = {
 			isa = PBXGroup;
 			children = (
+				C78C311A1E6025C800607996 /* MySpringDemo.cpp */,
+				C78C311B1E6025C800607996 /* MySpringDemo.h */,
 				C74695821E5FBA2A003BB3F4 /* INM377ProjTemplate.cpp */,
 				C74695831E5FBA2A003BB3F4 /* INM377ProjTemplate.h */,
-				C74695841E5FBA2A003BB3F4 /* Spring */,
 				C74695791E5FB914003BB3F4 /* main.cpp */,
 			);
 			name = AppSpringDemo;
@@ -8497,10 +8500,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C78C31201E60271A00607996 /* main.cpp in Sources */,
+				C78C311D1E6025EF00607996 /* MySpringDemo.cpp in Sources */,
+				C78C311E1E6025EF00607996 /* MySpringDemo.h in Sources */,
 				C74695851E5FBABC003BB3F4 /* INM377ProjTemplate.cpp in Sources */,
 				C74695861E5FBABC003BB3F4 /* INM377ProjTemplate.h in Sources */,
-				C74695871E5FBABC003BB3F4 /* Spring in Sources */,
-				C746957A1E5FB914003BB3F4 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -24401,6 +24405,7 @@
 				C74695711E5FB8E9003BB3F4 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 		C746957B1E5FB914003BB3F4 /* Build configuration list for PBXNativeTarget "AppSpringDemo" */ = {
 			isa = XCConfigurationList;
@@ -24411,6 +24416,7 @@
 				C746957F1E5FB914003BB3F4 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 		C7D2A32C1E5EF05E00082CE9 /* Build configuration list for PBXNativeTarget "INM377ProjTemplateForces" */ = {
 			isa = XCConfigurationList;

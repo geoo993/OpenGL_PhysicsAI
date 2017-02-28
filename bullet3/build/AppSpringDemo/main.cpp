@@ -14,6 +14,7 @@
  */
 
 #include "INM377ProjTemplate.h"
+#include "MySpringDemo.h"
 #include "GlutStuff.h"
 #include "GLDebugDrawer.h"
 #include "btBulletDynamicsCommon.h"
@@ -22,12 +23,15 @@
 #include <fenv.h>
 #endif
 
+
+
+
 GLDebugDrawer	gDebugDrawer;
 
 int main(int argc,char** argv)
 {
-    
-    INM377ProjTemplate* demo = new INM377ProjTemplate();
+    //INM377ProjTemplate* demo = new INM377ProjTemplate();
+    MySpringDemo* demo = new MySpringDemo();
     
 #ifdef __DEBUG_FPU_ISSUES
     //	feenableexcept (FE_DIVBYZERO);
@@ -41,9 +45,15 @@ int main(int argc,char** argv)
     demo->getDynamicsWorld()->setDebugDrawer(&gDebugDrawer);
     
     
-    glutmain(argc, argv,640,480,"Bullet Physics Demo. http://bulletphysics.com",demo);
+    
+    demo->setDebugMode(btIDebugDraw::DBG_DrawConstraints+btIDebugDraw::DBG_DrawConstraintLimits);
+    glutmain(argc, argv,640,480,"Slider Constraint Demo2. http://www.continuousphysics.com/Bullet/phpBB2/", demo);
+    
+    //glutmain(argc, argv,640,480,"Bullet Physics Demo. http://bulletphysics.com",demo);
+    
     
     delete demo;
     return 0;
-    
 }
+
+
