@@ -326,6 +326,11 @@
 			<key>orderHint</key>
 			<integer>66</integer>
 		</dict>
+		<key>INM377ProjTemplateTorqueOrient.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>69</integer>
+		</dict>
 		<key>LinearMath.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -610,6 +615,11 @@
 			<true/>
 		</dict>
 		<key>C7D2A3271E5EF05E00082CE9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C7F7591A1E8846FA0081DEB6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
