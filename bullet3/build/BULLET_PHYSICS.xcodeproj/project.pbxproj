@@ -390,6 +390,10 @@
 		C5F123EB5F194163BD29EEA8 /* DoublePrecisionDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A993C2261314F3E9C8480DE /* DoublePrecisionDemo.cpp */; };
 		C648C7429B594248AEA0CB2D /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDEBA5FA31F847A69FD1D01A /* btConvexPointCloudShape.cpp */; };
 		C736A1641E5E77700063DDEF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C736A1631E5E77700063DDEF /* main.cpp */; };
+		C745521E1E89DB4C00C13BE7 /* MiscObstacles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C745521D1E89DB4C00C13BE7 /* MiscObstacles.cpp */; };
+		C745521F1E89DB5800C13BE7 /* Boid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C745521B1E89DB2C00C13BE7 /* Boid.cpp */; };
+		C74552211E89DB9600C13BE7 /* MyFlockingDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74552201E89DB9600C13BE7 /* MyFlockingDemo.cpp */; };
+		C74552231E89DBB200C13BE7 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74552221E89DBB200C13BE7 /* Obstacle.cpp */; };
 		C746956D1E5FB8E9003BB3F4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C746956C1E5FB8E9003BB3F4 /* main.cpp */; };
 		C74695851E5FBABC003BB3F4 /* INM377ProjTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C74695821E5FBA2A003BB3F4 /* INM377ProjTemplate.cpp */; };
 		C74695861E5FBABC003BB3F4 /* INM377ProjTemplate.h in Sources */ = {isa = PBXBuildFile; fileRef = C74695831E5FBA2A003BB3F4 /* INM377ProjTemplate.h */; };
@@ -3916,6 +3920,10 @@
 		C736A1751E5E7ABB0063DDEF /* INM377ProjTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INM377ProjTemplate.h; sourceTree = "<group>"; };
 		C7443C84ED8B4F08A75ACC93 /* btScaledBvhTriangleMeshShape.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btScaledBvhTriangleMeshShape.h; path = src/BulletCollision/CollisionShapes/btScaledBvhTriangleMeshShape.h; sourceTree = SOURCE_ROOT; };
 		C744D395321F4800BDE91AC4 /* gim_tri_collision.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gim_tri_collision.h; path = src/BulletCollision/Gimpact/gim_tri_collision.h; sourceTree = SOURCE_ROOT; };
+		C745521B1E89DB2C00C13BE7 /* Boid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Boid.cpp; sourceTree = "<group>"; };
+		C745521D1E89DB4C00C13BE7 /* MiscObstacles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiscObstacles.cpp; sourceTree = "<group>"; };
+		C74552201E89DB9600C13BE7 /* MyFlockingDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyFlockingDemo.cpp; sourceTree = "<group>"; };
+		C74552221E89DBB200C13BE7 /* Obstacle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Obstacle.cpp; sourceTree = "<group>"; };
 		C746956A1E5FB8E9003BB3F4 /* AppChainDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AppChainDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		C746956C1E5FB8E9003BB3F4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C74695771E5FB914003BB3F4 /* AppSpringDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AppSpringDemo; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5848,9 +5856,13 @@
 			isa = PBXGroup;
 			children = (
 				C7F7593E1E884D430081DEB6 /* Boid.h */,
+				C745521B1E89DB2C00C13BE7 /* Boid.cpp */,
 				C7F7593F1E884D430081DEB6 /* MiscObstacles.h */,
+				C745521D1E89DB4C00C13BE7 /* MiscObstacles.cpp */,
 				C7F759401E884D430081DEB6 /* MyFlockingDemo.h */,
+				C74552201E89DB9600C13BE7 /* MyFlockingDemo.cpp */,
 				C7F759411E884D430081DEB6 /* Obstacle.h */,
+				C74552221E89DBB200C13BE7 /* Obstacle.cpp */,
 				C7F759381E8848420081DEB6 /* INM377ProjTemplateForcesTorqueOrient.cpp */,
 				C7F759391E8848420081DEB6 /* INM377ProjTemplateForcesTorqueOrient.h */,
 				C7F7591D1E8846FA0081DEB6 /* main.cpp */,
@@ -8670,8 +8682,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7F7593C1E884C0E0081DEB6 /* INM377ProjTemplateForcesTorqueOrient.cpp in Sources */,
+				C74552211E89DB9600C13BE7 /* MyFlockingDemo.cpp in Sources */,
 				C7F7593D1E884C0E0081DEB6 /* INM377ProjTemplateForcesTorqueOrient.h in Sources */,
+				C745521E1E89DB4C00C13BE7 /* MiscObstacles.cpp in Sources */,
 				C7F7591E1E8846FA0081DEB6 /* main.cpp in Sources */,
+				C745521F1E89DB5800C13BE7 /* Boid.cpp in Sources */,
+				C74552231E89DBB200C13BE7 /* Obstacle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -24919,6 +24935,7 @@
 				C7F759221E8846FA0081DEB6 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 		C9D02E28F285477EBDF90021 /* Build configuration list for PBXNativeTarget "OpenGLSupport" */ = {
 			isa = XCConfigurationList;

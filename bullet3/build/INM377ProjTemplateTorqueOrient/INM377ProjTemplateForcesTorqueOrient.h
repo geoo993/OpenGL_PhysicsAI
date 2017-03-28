@@ -25,6 +25,11 @@ subject to the following restrictions:
 
 #include "LinearMath/btAlignedObjectArray.h"
 
+#include "MyFlockingDemo.h"
+#include "MiscObstacles.h"
+#include "Boid.h"
+
+
 class btBroadphaseInterface;
 class btCollisionShape;
 class btOverlappingPairCache;
@@ -33,12 +38,29 @@ class btConstraintSolver;
 struct btCollisionAlgorithmCreateFunc;
 class btDefaultCollisionConfiguration;
 
+class Boid;
+class Flock;
+class BowlObstacle;
+class SphereObstacle;
+class ColumnObstacle;
+class PlaneObstacle;
+
+
 ///CcdPhysicsDemo is good starting point for learning the code base and porting.
 
 class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 {
 		
 	
+    
+    Flock flock;
+    Boid boidObj;
+    BowlObstacle bObstacle;
+    SphereObstacle sObstacle;
+    ColumnObstacle cObstacle;
+    PlaneObstacle pObstacle;
+    
+    
 	//keep the collision shapes, for deletion/cleanup
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
 
@@ -57,7 +79,6 @@ class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 	class btDefaultCollisionConfiguration* m_collisionConfiguration;
 
 	enum
-
 	{
 		USE_CCD=1,
 		USE_NO_CCD

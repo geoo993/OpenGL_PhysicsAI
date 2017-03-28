@@ -5,7 +5,7 @@
 #include "GlutDemoApplication.h"
 #include <vector>
 
-#include "MyCollisionDemo.h"
+//#include "MyCollisionDemo.h"
 #include "Obstacle.h"
 #include "Boid.h"
 
@@ -31,17 +31,17 @@ public:
 	void steer() const;
 };
 
-class MyFlockingDemo : public MyCollisionDemo
-{
-	Flock flock;
-
-	void addSphereObstacle(btSphereShape *shape, const btVector3 &pos);
-	void addColumnObstacle(btCylinderShape *shape, const btVector3 &pos);
-
-public:
-	virtual ~MyFlockingDemo();
-
-	void	initPhysics();
-};
+//class MyFlockingDemo : public MyCollisionDemo
+//{
+//	Flock flock;
+//
+//	void addSphereObstacle(btSphereShape *shape, const btVector3 &pos);
+//	void addColumnObstacle(btCylinderShape *shape, const btVector3 &pos);
+//
+//public:
+//	virtual ~MyFlockingDemo();
+//
+//	void	initPhysics();
+//};
 
 #endif //MY_FLOCKING_DEMO_H
