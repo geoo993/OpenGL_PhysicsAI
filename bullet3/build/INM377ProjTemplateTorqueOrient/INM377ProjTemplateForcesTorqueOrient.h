@@ -25,6 +25,7 @@ subject to the following restrictions:
 
 #include "LinearMath/btAlignedObjectArray.h"
 
+#include <iostream>
 #include "MyFlockingDemo.h"
 #include "MiscObstacles.h"
 #include "Boid.h"
@@ -37,6 +38,8 @@ class btCollisionDispatcher;
 class btConstraintSolver;
 struct btCollisionAlgorithmCreateFunc;
 class btDefaultCollisionConfiguration;
+//class btSequentialImpulseConstraintSolver;
+//class btDiscreteDynamicsWorld;
 
 class Boid;
 class Flock;
@@ -50,26 +53,29 @@ class PlaneObstacle;
 
 class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 {
-		
 	
+public:
+    void createGround();
     
-    Flock flock;
-    Boid boidObj;
-    BowlObstacle bObstacle;
-    SphereObstacle sObstacle;
-    ColumnObstacle cObstacle;
-    PlaneObstacle pObstacle;
+    void createBoids();
     
+    void createObstacle();
+    
+    btRigidBody* body000;
+    btRigidBody* boid;
+   
+private:
+//    Flock flock;
+//    Boid boidObj;
+//    BowlObstacle bObstacle;
+//    SphereObstacle sObstacle;
+//    ColumnObstacle cObstacle;
+//    PlaneObstacle pObstacle;
+//    
     
 	//keep the collision shapes, for deletion/cleanup
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
-
-//	btBroadphaseInterface*	m_broadphase;
-
-//	btCollisionDispatcher*	m_dispatcher;
-
-//	btConstraintSolver*	m_solver;
-
+    
 	class btBroadphaseInterface*	m_overlappingPairCache;
 
 	class btCollisionDispatcher*	m_dispatcher;
@@ -78,6 +84,13 @@ class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 
 	class btDefaultCollisionConfiguration* m_collisionConfiguration;
 
+    
+    //class btSequentialImpulseConstraintSolver*    m_solver;
+    
+    //class btDiscreteDynamicsWorld*                m_world;
+    
+    
+    
 	enum
 	{
 		USE_CCD=1,
@@ -85,12 +98,7 @@ class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 	};
 	int 	m_ccdMode;
 
-//	btDefaultCollisionConfiguration* m_collisionConfiguration;
-
-	public:
-
-		btRigidBody* body000;
-		btRigidBody* boid;
+public:
 
 		INM377ProjTemplateTorqueOrient();
 
@@ -112,8 +120,6 @@ class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 	virtual void	shootBox(const btVector3& destination);
 	virtual void	clientResetScene();
 
-
-	
 	static DemoApplication* Create()
 	{
 		INM377ProjTemplateTorqueOrient* demo = new INM377ProjTemplateTorqueOrient;

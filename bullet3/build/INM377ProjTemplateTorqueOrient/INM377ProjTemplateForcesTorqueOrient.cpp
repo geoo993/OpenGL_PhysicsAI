@@ -155,51 +155,152 @@ void INM377ProjTemplateTorqueOrient::displayCallback(void) {
 	swapBuffers();
 }
 
+void INM377ProjTemplateTorqueOrient::createGround(){
+    
+    ///create a few basic rigid bodies
+    btBoxShape* box = new btBoxShape(btVector3(btScalar(110.),btScalar(1.),btScalar(110.)));
+    //	box->initializePolyhedralFeatures();
+    btCollisionShape* groundShape = box;
+    
+    //	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),50);
+    
+    m_collisionShapes.push_back(groundShape);
+    //m_collisionShapes.push_back(new btCylinderShape (btVector3(CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS)));
+    m_collisionShapes.push_back(new btBoxShape (btVector3(CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS)));
+    
+    btTransform groundTransform;
+    groundTransform.setIdentity();
+    groundTransform.setOrigin(btVector3(0,0,0));
+    
+    //We can also use DemoApplication::localCreateRigidBody, but for clarity it is provided here:
+    {
+        btScalar mass(0.0);
+        
+        //rigidbody is dynamic if and only if mass is non zero, otherwise static
+        bool isDynamic = (mass != 0.0f);
+        
+        btVector3 localInertia(0,0,0);
+        if (isDynamic)
+            groundShape->calculateLocalInertia(mass,localInertia);
+        
+        //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+        btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
+        btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,groundShape,localInertia);
+        btRigidBody* body = new btRigidBody(rbInfo);
+        body->setFriction(0.5f);
+        
+        //body->setRollingFriction(0.3);
+        //add the body to the dynamics world
+        m_dynamicsWorld->addRigidBody(body);
+    }
+}
+
+void INM377ProjTemplateTorqueOrient::createBoids(){
+    
+    //create shape geometry structure
+    //		btCollisionShape* bShape = new btBoxShape(btVector3(5, 3, 5));
+    btConvexHullShape * bShape = new btConvexHullShape();
+    bShape->addPoint(btVector3(10, 0, 0));
+    bShape->addPoint(btVector3(0, 5, 0));
+    bShape->addPoint(btVector3(0, 0, 5));
+    bShape->addPoint(btVector3(0, 0, -5));
+    m_collisionShapes.push_back(bShape);
+    
+    //set position
+    btTransform btrans;
+    btrans.setIdentity();
+    //		btCollisionShape* bshape = m_collisionShapes[3];
+    btVector3 bpos(20, 0, 0);
+    btrans.setOrigin(bpos);
+    
+    //set mass
+    btScalar bmass(1.0f);
+    btVector3 bLocalInertia;
+    bShape->calculateLocalInertia(bmass, bLocalInertia);
+    
+    //bind and create shape with mass, transform, and structure
+    boid = localCreateRigidBody(bmass, btrans, bShape);
+    boid->setAnisotropicFriction(bShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+    boid->setFriction(0.5);
+    //		boid->setLinearVelocity(btVector3(1, 0, 0));
+    boid->activate(true);
+    
+}
+
+void INM377ProjTemplateTorqueOrient::createObstacle(){
+    
+    btCollisionShape* colShape = new btBoxShape(btVector3(5, 3, 5));
+    m_collisionShapes.push_back(colShape);
+    btTransform trans;
+    trans.setIdentity();
+    btCollisionShape* shape = m_collisionShapes[2];
+    btVector3 pos(0, 0, 0);
+    trans.setOrigin(pos);
+    btScalar mass(1.0f);
+    // shape->calculateLocalInertia(mass, LocalInertia);
+    body000 = localCreateRigidBody(mass, trans, shape);
+    body000->setAnisotropicFriction(shape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+    body000->setFriction(0.5);
+    //		body000->setLinearVelocity(btVector3(1, 0, 0));
+    body000->activate(true);
+}
+
+static void updateBoids(btDynamicsWorld *world, const btScalar &timeStep){
+    
+    btRigidBody* bbody0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boid;
+    btScalar bmass = bbody0->getInvMass();
+    btVector3 bvel = bbody0->getLinearVelocity();
+    btVector3 bgravity = bbody0->getGravity();
+    btVector3 bdir = btVector3(0, 0.2, 1);
+    btTransform btrans(bbody0->getOrientation());
+    btVector3 up(0, 1, 0);
+    btVector3 btop = btrans * up;
+    btVector3 front = btrans * btVector3(1, 0, 0);
+    btVector3 bdir1 = bvel.safeNormalize();
+    btVector3  avel = bbody0->getAngularVelocity();
+    btVector3 bthrust = 3.5 * front;
+    btVector3 bdrag = - 3 * bvel;
+    btVector3 blift = - 1.00 * bgravity * bvel.length();
+    bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
+    bbody0->applyTorque(2 * front.cross(bdir) - 5.0*avel);
+    bbody0->applyTorque(- 0.5 * up);
+    bbody0->applyTorque(0.5 * btop.cross(up) - 5*avel);
+}
+
+static void updateObstacles(btDynamicsWorld *world, const btScalar &timeStep){
+    
+    btRigidBody* body0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->body000;
+    btScalar mass = body0->getInvMass();
+    btVector3 vel = body0->getLinearVelocity();
+    btVector3 gravity = body0->getGravity();
+    btVector3 dir = btVector3(0, 0, 1);
+    btVector3 thrust = 7.0 * dir;
+    btVector3 drag = -3 * vel;
+    btVector3 lift = - 0.5 * gravity * vel.length();
+    body0->applyCentralForce(thrust + lift + gravity + drag );
+}
 
 void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
-		world->clearForces();
-		btRigidBody* body0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->body000;
-		btScalar mass = body0->getInvMass();
-		btVector3 vel = body0->getLinearVelocity();
-		btVector3 gravity = body0->getGravity();
-		btVector3 dir = btVector3(0, 0, 1);
-		btVector3 thrust = 7.0 * dir;
-		btVector3 drag = -3 * vel;
-		btVector3 lift = - 0.5 * gravity * vel.length();
-		body0->applyCentralForce(thrust + lift + gravity + drag);
-
-		btRigidBody* bbody0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boid;
-		btScalar bmass = bbody0->getInvMass();
-		btVector3 bvel = bbody0->getLinearVelocity();
-		btVector3 bgravity = bbody0->getGravity();
-		btVector3 bdir = btVector3(0, 0.2, 1);
-		btTransform btrans(bbody0->getOrientation());
-		btVector3 up(0, 1, 0);
-		btVector3 btop = btrans * up;
-		btVector3 front = btrans * btVector3(1, 0, 0);
-		btVector3 bdir1 = bvel.safeNormalize();
-		btVector3  avel = bbody0->getAngularVelocity();
-		btVector3 bthrust = 3.5 * front;
-		btVector3 bdrag = - 3 * bvel;
-		btVector3 blift = - 1.00 * bgravity * bvel.length();
-		bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
-		bbody0->applyTorque(2 * front.cross(bdir) - 5.0*avel);
-		bbody0->applyTorque(- 0.5 * up);
-		bbody0->applyTorque(0.5 * btop.cross(up) - 5*avel);
+    
+    world->clearForces();
+    
+    updateObstacles(world, timeStep);
+    updateBoids(world,timeStep);
+    
+    //std::cout << " my tick call back step: " << timeStep << std::endl;
 }
 
 void	INM377ProjTemplateTorqueOrient::initPhysics()
 {
 	setTexturing(true);
 	setShadows(false);
-
 	setCameraDistance(50.f);
 
 	// init world
 	m_collisionConfiguration = new btDefaultCollisionConfiguration();
 	m_dispatcher = new btCollisionDispatcher(m_collisionConfiguration);
-	btVector3 worldMin(-1000, -1000, -1000);
-	btVector3 worldMax(1000, 1000, 1000);
+	btVector3 worldMin(-2000, -2000, -2000);
+	btVector3 worldMax(2000, 2000, 2000);
 	m_overlappingPairCache = new btAxisSweep3(worldMin, worldMax);
 
 	m_constraintSolver = new btSequentialImpulseConstraintSolver();
@@ -207,106 +308,31 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 	btDiscreteDynamicsWorld* wp = new btDiscreteDynamicsWorld(m_dispatcher, m_overlappingPairCache, m_constraintSolver, m_collisionConfiguration);
 	//	wp->getSolverInfo().m_numIterations = 20; // default is 10
 	m_dynamicsWorld = wp;
+    //m_dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
 	m_dynamicsWorld->setInternalTickCallback(MyTickCallback, static_cast<void *>(this), true);
-	
 
-	///create a few basic rigid bodies
-	btBoxShape* box = new btBoxShape(btVector3(btScalar(110.),btScalar(1.),btScalar(110.)));
-//	box->initializePolyhedralFeatures();
-	btCollisionShape* groundShape = box;
+    //std::cout << " init physics" << std::endl;
+    
 
-//	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),50);
-	
-	m_collisionShapes.push_back(groundShape);
-	//m_collisionShapes.push_back(new btCylinderShape (btVector3(CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS)));
-	m_collisionShapes.push_back(new btBoxShape (btVector3(CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS)));
-
-	btTransform groundTransform;
-	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(0,0,0));
-
-	//We can also use DemoApplication::localCreateRigidBody, but for clarity it is provided here:
-	{
-		btScalar mass(0.);
-
-		//rigidbody is dynamic if and only if mass is non zero, otherwise static
-		bool isDynamic = (mass != 0.f);
-
-		btVector3 localInertia(0,0,0);
-		if (isDynamic)
-			groundShape->calculateLocalInertia(mass,localInertia);
-
-		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,groundShape,localInertia);
-		btRigidBody* body = new btRigidBody(rbInfo);
-		body->setFriction(0.5);
-
-		//body->setRollingFriction(0.3);
-		//add the body to the dynamics world
-		m_dynamicsWorld->addRigidBody(body);
-	}
-
-
+//    //3
+//    m_solver = new btSequentialImpulseConstraintSolver();
+//    
+//    //4
+//    m_world = new btDiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _collisionConfiguration);
+//    
+//    //5
+//    m_world->setGravity(btVector3(0, -9.8, 0));
+    
+    createGround();
+    
 	{
 		//create a few dynamic rigidbodies
 		// Re-using the same collision is better for memory usage and performance
 
-//		btCollisionShape* colShape = new btBoxShape(btVector3(1,1,1));
+        createBoids();
+        createObstacle();
 		
-//		btCollisionShape* colShape = new btSphereShape(btScalar(1.));
-//		m_collisionShapes.push_back(colShape);
-
-		/// Create Dynamic Objects
-//		btTransform startTransform;
-//		startTransform.setIdentity();
-
-//		btScalar	mass(1.f);
-
-		//rigidbody is dynamic if and only if mass is non zero, otherwise static
-//		bool isDynamic = (mass != 0.f);
-
-//		btVector3 localInertia(0,0,0);
-//		if (isDynamic)
-//			colShape->calculateLocalInertia(mass,localInertia);
-
-		btCollisionShape* colShape = new btBoxShape(btVector3(5, 3, 5));
-		m_collisionShapes.push_back(colShape);
-		btTransform trans;
-		trans.setIdentity();
-		btCollisionShape* shape = m_collisionShapes[2];
-		btVector3 pos(0, 0, 0);
-		trans.setOrigin(pos);
-		btScalar mass(1.0f);
-		// shape->calculateLocalInertia(mass, LocalInertia);
-		body000 = localCreateRigidBody(mass, trans, shape);
-		body000->setAnisotropicFriction(shape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-		body000->setFriction(0.5);
-//		body000->setLinearVelocity(btVector3(1, 0, 0));
-		body000->activate(true);
-
-//		btCollisionShape* bShape = new btBoxShape(btVector3(5, 3, 5));
-		btConvexHullShape * bShape = new btConvexHullShape();
-		bShape->addPoint(btVector3(10, 0, 0));
-		bShape->addPoint(btVector3(0, 5, 0));
-		bShape->addPoint(btVector3(0, 0, 5));
-		bShape->addPoint(btVector3(0, 0, -5));
-
-		m_collisionShapes.push_back(bShape);
-		btTransform btrans;
-		btrans.setIdentity();
-//		btCollisionShape* bshape = m_collisionShapes[3];
-		btVector3 bpos(20, 0, 0);
-		btrans.setOrigin(bpos);
-		btScalar bmass(1.0f);
-		btVector3 bLocalInertia;
-		bShape->calculateLocalInertia(bmass, bLocalInertia);
-		boid = localCreateRigidBody(bmass, btrans, bShape);
-		boid->setAnisotropicFriction(bShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-		boid->setFriction(0.5);
-		//		boid->setLinearVelocity(btVector3(1, 0, 0));
-		boid->activate(true);
-
+         
 	}
 
 }
@@ -412,13 +438,9 @@ void	INM377ProjTemplateTorqueOrient::exitPhysics()
 
 	delete m_dynamicsWorld;
 	
-//	delete m_solver;
+	//delete m_solver;
 	
-//	delete m_broadphase;
-	
-//	delete m_dispatcher;
-
-//	delete m_collisionConfiguration;
+	//delete m_world;
 
 	
 }

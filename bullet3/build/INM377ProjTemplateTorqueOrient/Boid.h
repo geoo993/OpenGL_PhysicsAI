@@ -23,8 +23,15 @@ class Boid {
 	btVector3 flockingForce(const std::vector<Boid>& boids) const;
 	btVector3 avoidanceForce(const std::vector<Obstacle *>& obstacles) const;
 
+    
+//    - (instancetype)initWithName:(char *)name
+//    mass:(float)mass   //1
+//    convex:(BOOL)convex  //2
+//    tag:(int)tag      //3
+//    
+    
 public:
-	static btCollisionShape *shape();
+	static btCollisionShape *shape;
 
 	// radius of a bounding sphere of the shape
 	static const btScalar radius;
@@ -32,7 +39,7 @@ public:
 	// mass of each boid
 	static const btScalar mass;
 
-	Boid(btRigidBody* b);
+    Boid(btRigidBody* b){ body= b; }
 
 	// Apply steering forces (called on each iteration of the physics
 	// engine) including physical forces of flight, flocking behaviour
