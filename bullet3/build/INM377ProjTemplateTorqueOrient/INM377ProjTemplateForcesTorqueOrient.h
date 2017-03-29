@@ -23,13 +23,14 @@ subject to the following restrictions:
 #define PlatformDemoApplication GlutDemoApplication
 #endif
 
-#include "LinearMath/btAlignedObjectArray.h"
+//#include "LinearMath/btAlignedObjectArray.h"
 
 #include <iostream>
+
 #include "MyFlockingDemo.h"
 #include "MiscObstacles.h"
 #include "Boid.h"
-
+#include "Extension.h"
 
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -38,15 +39,13 @@ class btCollisionDispatcher;
 class btConstraintSolver;
 struct btCollisionAlgorithmCreateFunc;
 class btDefaultCollisionConfiguration;
-//class btSequentialImpulseConstraintSolver;
-//class btDiscreteDynamicsWorld;
 
 class Boid;
-class Flock;
-class BowlObstacle;
+//class Flock;
+//class BowlObstacle;
 class SphereObstacle;
-class ColumnObstacle;
-class PlaneObstacle;
+//class ColumnObstacle;
+//class PlaneObstacle;
 
 
 ///CcdPhysicsDemo is good starting point for learning the code base and porting.
@@ -61,12 +60,21 @@ public:
     
     void createObstacle();
     
-    btRigidBody* body000;
-    btRigidBody* boid;
+    btVector3 collisionAvoidance(btRigidBody *actor);
+    btVector3 velocityMarching(btRigidBody *actor);
+    btVector3 flockCentering(btRigidBody *actor);
+    
+    //btRigidBody* body000;
+    //btRigidBody* boid;
    
+    const int NUMBER_OF_BOIDS = 20;
+    std::vector<Boid*>	boidObjects;
+    
+    const int NUMBER_OF_OBSTACLES = 4;
+    std::vector<SphereObstacle *> obstacles;
+    
 private:
 //    Flock flock;
-//    Boid boidObj;
 //    BowlObstacle bObstacle;
 //    SphereObstacle sObstacle;
 //    ColumnObstacle cObstacle;
@@ -84,12 +92,6 @@ private:
 
 	class btDefaultCollisionConfiguration* m_collisionConfiguration;
 
-    
-    //class btSequentialImpulseConstraintSolver*    m_solver;
-    
-    //class btDiscreteDynamicsWorld*                m_world;
-    
-    
     
 	enum
 	{

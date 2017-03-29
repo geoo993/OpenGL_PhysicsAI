@@ -9,6 +9,7 @@ class BowlObstacle : public Obstacle {
 	const btScalar radius;
 
 public:
+    BowlObstacle(): radius(0.0){}
 	BowlObstacle(btScalar r) : radius(r) {}
 
 	virtual bool missed(const btVector3 &pos, btVector3 &target) const;
@@ -24,6 +25,7 @@ class SphereObstacle : public Obstacle {
 	const btScalar radius;
 
 public:
+    SphereObstacle(): centre(btVector3(0,0,0)), radius(0.0){}
 	SphereObstacle(const btVector3 &c, btScalar r) :
 		centre(c), radius(r) {}
 
@@ -40,6 +42,7 @@ class ColumnObstacle : public Obstacle {
 	const btScalar radius;
 
 public:
+    ColumnObstacle(): centre(btVector3(0,0,0)), radius(0.0){}
 	ColumnObstacle(const btVector3 &c, btScalar r) :
 		centre(c), radius(r) {}
 
@@ -56,6 +59,7 @@ class PlaneObstacle : public Obstacle {
 	const btVector3 offset;
 
 public:
+    PlaneObstacle(): offset(btVector3(0,0,0)){}
 	PlaneObstacle(const btVector3 &o) : offset(o) {}
 
 	virtual bool missed(const btVector3 &pos, btVector3 &target) const;

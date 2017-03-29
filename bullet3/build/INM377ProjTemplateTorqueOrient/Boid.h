@@ -9,12 +9,35 @@
 
 // A boid is a single agent in the flock
 class Boid {
-	// Body of the boid (deletion managed by the Demo class)
-	btRigidBody* body;
 
-	// Unit vector for the direction in which the boid is heading
-	btVector3 heading() const;
-
+    
+    btConvexHullShape * m_hullShape;
+    
+    btCollisionShape *m_collShape;
+    
+    // radius of a bounding sphere of the shape
+    btScalar m_radius;
+    
+    // mass of each boid
+    btScalar m_mass;
+    
+    btTransform m_trans;
+    
+    //Geometric flight is based on incremental translations along the object's "forward direction," its local positive Z axis
+    btVector3 m_forward;
+    
+    //Velocity is a vector quantity, referring to the combination of heading (forward) and speed.
+    //The magnitude of the turning acceleration varies directly with the object's velocity and with the curvature of its path
+    btVector3 m_velocity; 
+    
+    btScalar m_max_force; 
+    
+    //A maximum acceleration, expressed as a fraction of the maximum speed, is used to truncate over-anxious requests for acceleration, hence providing for smooth changes of speed and heading
+    btScalar m_max_speed; 
+    
+    //between 0 and 1, strenght in which a boid wants to participate in a flock small or strong
+    btScalar m_eagerness; 
+    
 	// Can the boid see the point?
 	bool canSee(const btVector3 &pos) const;
 
@@ -23,29 +46,34 @@ class Boid {
 	btVector3 flockingForce(const std::vector<Boid>& boids) const;
 	btVector3 avoidanceForce(const std::vector<Obstacle *>& obstacles) const;
 
-    
-//    - (instancetype)initWithName:(char *)name
-//    mass:(float)mass   //1
-//    convex:(BOOL)convex  //2
-//    tag:(int)tag      //3
-//    
+  
     
 public:
-	static btCollisionShape *shape;
+    
+    //Boid(btRigidBody* b);
+    Boid();
+    ~Boid();
+    
+    // Body of the boid (deletion managed by the Demo class)
+    btRigidBody* m_body;
 
-	// radius of a bounding sphere of the shape
-	static const btScalar radius;
+    //get boid hull shape
+    btConvexHullShape* GetHullShape() const { return m_hullShape; };
+    //get boid collision shape
+    btCollisionShape* GetCollShape() const { return m_collShape; };
+    //get radius of boid
+    btScalar GetRadius() const { return m_radius; }
+    // get mass of  boid
+    btScalar GetMass() const { return m_mass; }
+    //get transform of boid
+    btTransform GetTrans() const { return m_trans; }
+    
+    // Unit vector for the direction in which the boid is heading
+    btVector3 heading() const { return m_forward; };
+    
+    
+    void Set(const std::vector<btVector3> &shape, const btVector3 &position, const btScalar &radius, const btScalar &mass);
 
-	// mass of each boid
-	static const btScalar mass;
-
-    Boid(btRigidBody* b){ body= b; }
-
-	// Apply steering forces (called on each iteration of the physics
-	// engine) including physical forces of flight, flocking behaviour
-	// and avoiding obstacles.
-	void steer(const std::vector<Boid>& boids,
-		const std::vector<Obstacle *>& obstacles) const;
 };
 
 #endif // BOID_H

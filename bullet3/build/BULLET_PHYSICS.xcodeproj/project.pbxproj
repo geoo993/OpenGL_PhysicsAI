@@ -3914,6 +3914,7 @@
 		C678064F1A604356A8265A62 /* gl_win.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gl_win.h; path = Demos/OpenCLClothDemo/gl_win.h; sourceTree = SOURCE_ROOT; };
 		C6CFDF76AB69456C90985018 /* btMultiBodyLink.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btMultiBodyLink.h; path = src/BulletDynamics/Featherstone/btMultiBodyLink.h; sourceTree = SOURCE_ROOT; };
 		C70A1A8E3CD04FA9BF802B46 /* BspConverter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BspConverter.cpp; path = Demos/BspDemo/BspConverter.cpp; sourceTree = SOURCE_ROOT; };
+		C70FD7831E8C61DA00731093 /* Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Extension.h; sourceTree = "<group>"; };
 		C736A1611E5E77700063DDEF /* INM377ProjTemplate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = INM377ProjTemplate; sourceTree = BUILT_PRODUCTS_DIR; };
 		C736A1631E5E77700063DDEF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C736A1741E5E7ABB0063DDEF /* INM377ProjTemplate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = INM377ProjTemplate.cpp; sourceTree = "<group>"; };
@@ -5855,6 +5856,7 @@
 		C7F7591C1E8846FA0081DEB6 /* INM377ProjTemplateTorqueOrient */ = {
 			isa = PBXGroup;
 			children = (
+				C70FD7831E8C61DA00731093 /* Extension.h */,
 				C7F7593E1E884D430081DEB6 /* Boid.h */,
 				C745521B1E89DB2C00C13BE7 /* Boid.cpp */,
 				C7F7593F1E884D430081DEB6 /* MiscObstacles.h */,

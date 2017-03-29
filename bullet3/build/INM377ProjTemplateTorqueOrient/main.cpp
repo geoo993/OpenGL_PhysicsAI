@@ -38,6 +38,8 @@ int main(int argc,char** argv)
     //	feenableexcept (FE_UNDERFLOW);
 #endif
     
+    srand ( time(nullptr) );
+    
     demo->initPhysics();
     demo->getDynamicsWorld()->setDebugDrawer(&gDebugDrawer);
     

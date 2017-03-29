@@ -40,6 +40,9 @@ static GLDebugDrawer	sDebugDrawer;
 INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
 :m_ccdMode(USE_CCD)
 {
+    boidObjects.reserve(NUMBER_OF_BOIDS);
+    obstacles.reserve(NUMBER_OF_OBSTACLES);
+    
 	setDebugMode(btIDebugDraw::DBG_DrawText+btIDebugDraw::DBG_NoHelpText);
 	setCameraDistance(btScalar(40.));
 }
@@ -197,97 +200,300 @@ void INM377ProjTemplateTorqueOrient::createGround(){
 
 void INM377ProjTemplateTorqueOrient::createBoids(){
     
+    for (unsigned int a = 0; a < NUMBER_OF_BOIDS; ++a){
+        boidObjects.push_back(new Boid);
+    }
+    
+    
     //create shape geometry structure
     //		btCollisionShape* bShape = new btBoxShape(btVector3(5, 3, 5));
-    btConvexHullShape * bShape = new btConvexHullShape();
-    bShape->addPoint(btVector3(10, 0, 0));
-    bShape->addPoint(btVector3(0, 5, 0));
-    bShape->addPoint(btVector3(0, 0, 5));
-    bShape->addPoint(btVector3(0, 0, -5));
-    m_collisionShapes.push_back(bShape);
+    std::vector<btVector3> parts = {
+        btVector3(5, 0, 0),
+        btVector3(0, 2, 0),
+        btVector3(0, 0, 3),
+        btVector3(0, 0, -3)
+    };
     
-    //set position
-    btTransform btrans;
-    btrans.setIdentity();
-    //		btCollisionShape* bshape = m_collisionShapes[3];
-    btVector3 bpos(20, 0, 0);
-    btrans.setOrigin(bpos);
     
-    //set mass
-    btScalar bmass(1.0f);
-    btVector3 bLocalInertia;
-    bShape->calculateLocalInertia(bmass, bLocalInertia);
-    
-    //bind and create shape with mass, transform, and structure
-    boid = localCreateRigidBody(bmass, btrans, bShape);
-    boid->setAnisotropicFriction(bShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-    boid->setFriction(0.5);
-    //		boid->setLinearVelocity(btVector3(1, 0, 0));
-    boid->activate(true);
+    for (unsigned int b = 0; b < NUMBER_OF_BOIDS; ++b){
+        //m_collisionShapes.push_back(boidObject[b].GetHullShape());
+        boidObjects[b]->Set(parts, btVector3(rand() % 50, 0, rand() % 50), 5.0, 1.0);
+        
+        //bind and create shape with mass, transform, and structure
+        boidObjects[b]->m_body = localCreateRigidBody(boidObjects[b]->GetMass(), boidObjects[b]->GetTrans(), boidObjects[b]->GetHullShape());
+        boidObjects[b]->m_body->setAnisotropicFriction(boidObjects[b]->GetHullShape()->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+        boidObjects[b]->m_body->setFriction(0.5);
+        //boidObjects[b]->m_body->setLinearVelocity(btVector3(rand() % 50, 0, rand() % 50));
+        boidObjects[b]->m_body->activate(true);
+    }
     
 }
 
 void INM377ProjTemplateTorqueOrient::createObstacle(){
     
-    btCollisionShape* colShape = new btBoxShape(btVector3(5, 3, 5));
-    m_collisionShapes.push_back(colShape);
-    btTransform trans;
-    trans.setIdentity();
-    btCollisionShape* shape = m_collisionShapes[2];
-    btVector3 pos(0, 0, 0);
-    trans.setOrigin(pos);
-    btScalar mass(1.0f);
-    // shape->calculateLocalInertia(mass, LocalInertia);
-    body000 = localCreateRigidBody(mass, trans, shape);
-    body000->setAnisotropicFriction(shape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-    body000->setFriction(0.5);
-    //		body000->setLinearVelocity(btVector3(1, 0, 0));
-    body000->activate(true);
+    for (unsigned int i = 0; i < NUMBER_OF_OBSTACLES; ++i){
+        obstacles.push_back(new SphereObstacle);
+    }
+    
+//    btCollisionShape* colShape = new btBoxShape(btVector3(5, 3, 5));
+//    m_collisionShapes.push_back(colShape);
+//    
+//    
+//    btTransform trans;
+//    trans.setIdentity();
+//    btCollisionShape* shape = m_collisionShapes[2];
+//    btVector3 pos(0, 0, 0);
+//    trans.setOrigin(pos);
+//    
+//    
+//    btScalar mass(1.0f);
+//    // shape->calculateLocalInertia(mass, LocalInertia);
+//    body000 = localCreateRigidBody(mass, trans, shape);
+//    body000->setAnisotropicFriction(shape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+//    body000->setFriction(0.5);
+//    //		body000->setLinearVelocity(btVector3(1, 0, 0));
+//    body000->activate(true);
+
+    
+}
+btVector3 INM377ProjTemplateTorqueOrient::collisionAvoidance(btRigidBody *actor){
+    
+    
+    //always maintain prudent separation from their neighbors (collision avoidance/seperation)
+    //Collision Avoidance: avoid collisions with nearby flockmates
+    //Generally, one boid's awareness of another is based on the distance and direction of the offset vector between them.
+    //Static collision avoidance and dynamic velocity matching are complementary.
+    //Collision avoidance is the urge to steer a way from an imminent impact.
+    //Static collision avoidance is based on the relative position of the flockmates and ignores their velocity.
+    
+    //Separation is the behavior that causes an agent to steer away from all of its neighbors.
+    
+    btVector3 c;
+    int neighborCount = 0;
+    btScalar neighborhoodSphericalZone = 100.0;// alos known as the neighbor radius
+    
+    //When a neighboring agent is found, the distance from the agent to the neighbor is added to the computation vector.
+    
+    for (unsigned int b = 0; b < boidObjects.size(); ++b){
+        btRigidBody*otherActor = boidObjects[b]->m_body;
+        
+        if (otherActor != actor)
+        {
+            if (actor->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition()) < neighborhoodSphericalZone){
+                btScalar tempX = otherActor->getCenterOfMassPosition().x() - actor->getCenterOfMassPosition().x();
+                btScalar tempY = otherActor->getCenterOfMassPosition().y() - actor->getCenterOfMassPosition().y();
+                btScalar tempZ = otherActor->getCenterOfMassPosition().z() - actor->getCenterOfMassPosition().z();
+               
+                c = btVector3(tempX, tempY, tempZ);
+                neighborCount++;
+            }
+            
+        }
+    }
+    
+    //If no neighbors were found, we simply return the zero vector (the default value of the computation vector).
+    if (neighborCount == 0){
+        return c;
+    }
+    
+    //The computation vector is divided by the corresponding neighbor count, but before normalizing, there is one more crucial step involved. The computed vector needs to be negated in order for the agent to steer away from its neighbors properly.
+    c = btVector3(c.x()/neighborCount, c.y()/neighborCount, c.z()/neighborCount);
+    c *= -1;
+    
+    return c;
 }
 
-static void updateBoids(btDynamicsWorld *world, const btScalar &timeStep){
+
+
+btVector3 INM377ProjTemplateTorqueOrient::velocityMarching(btRigidBody *actor){
     
-    btRigidBody* bbody0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boid;
-    btScalar bmass = bbody0->getInvMass();
-    btVector3 bvel = bbody0->getLinearVelocity();
-    btVector3 bgravity = bbody0->getGravity();
-    btVector3 bdir = btVector3(0, 0.2, 1);
-    btTransform btrans(bbody0->getOrientation());
+    //Alignment is a behavior that causes a particular agent to line up with agents close by.
+    //the flock quickly becomes "polarized", its members heading in approximately the same direction at approximately the same speed (velocity marching or allignment)
+    //Velocity Matching: attempt to match velocity with nearby flockmates
+    //velocity matching is based only on velocity and ignores position. It is a predictive version of collision avoidance: if the boid does a good job of matching velocity with its neighbors, it is unlikely that it will collide with any of them any time soon. 
+    btVector3 v;
+    
+    //in a huge flock spread over vast distances, an individual bird must have a localized and filtered perception of the rest of the flock. A bird might be aware of three categories: itself, it's two or three nearest neighbors, and the rest of the flock.
+    //those close enough to be considered neighbors of the specified actor
+    int neighborCount = 0;
+    //The neighborhood is defined as a spherical zone of sensitivity centered at the boid's local origin.
+    btScalar neighborhoodSphericalZone = 100.0;// alos known as the neighbor radius
+    
+    
+    //If an agent is found within the radius, its velocity is added to the computation vector, and the neighbor count is incremented.
+    
+    for (unsigned int b = 0; b < boidObjects.size(); ++b){
+        btRigidBody*otherActor = boidObjects[b]->m_body;
+        
+        if (otherActor != actor)
+        {
+            //if (Extension::distance(actor->getCenterOfMassPosition(), otherActor->getCenterOfMassPosition()) < neighborhoodSphericalZone){
+            if (actor->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition()) < neighborhoodSphericalZone){
+                btScalar tempX = v.x() + otherActor->getLinearVelocity().x();
+                btScalar tempY = v.y() + otherActor->getLinearVelocity().y();
+                btScalar tempZ = v.z() + otherActor->getLinearVelocity().z();
+                v = btVector3(tempX, tempY, tempZ);
+                neighborCount++;
+            }
+            
+        }
+    }
+    
+    //If no neighbors were found, we simply return the zero vector (the default value of the computation vector).
+    if (neighborCount == 0){
+        return v;
+    }
+    
+    //Finally, we divide the computation vector by the neighbor count and normalize it (divide it by its length to get a vector of length 1), obtaining the final resultant vector.
+    v = btVector3(v.x()/neighborCount, v.y()/neighborCount, v.z()/neighborCount);
+    v.normalize();
+    //v.safeNormalize();
+    
+    return v;
+}
+
+btVector3 INM377ProjTemplateTorqueOrient::flockCentering(btRigidBody *actor){
+    
+    //boids stay near one another (flock centering or cohesion)
+    //Flock Centering: attempt to stay close to nearby flockmates
+    //Flock centering makes a boid want to be near the center of the flock.
+    //Cohesion is a behavior that causes agents to steer towards the "center of mass" - that is, the average position of the agents within a certain radius.
+    
+    btVector3 p;
+    int neighborCount = 0;
+    btScalar neighborhoodSphericalZone = 100.0;// alos known as the neighbor radius
+    
+    for (unsigned int b = 0; b < boidObjects.size(); ++b){
+        btRigidBody*otherActor = boidObjects[b]->m_body;
+        
+        if (otherActor != actor)
+        {
+            //if (Extension::distance(actor->getCenterOfMassPosition(), otherActor->getCenterOfMassPosition()) < neighborhoodSphericalZone){
+            if (actor->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition()) < neighborhoodSphericalZone){
+                btScalar tempX = p.x() + otherActor->getCenterOfMassPosition().x();
+                btScalar tempY = p.y() + otherActor->getCenterOfMassPosition().y();
+                btScalar tempZ = p.z() + otherActor->getCenterOfMassPosition().z();
+                
+                p = btVector3(tempX, tempY, tempZ);
+                neighborCount++;
+            }
+            
+        }
+    }
+    
+    //If no neighbors were found, we simply return the zero vector (the default value of the computation vector).
+    if (neighborCount == 0){
+        return p;
+    }
+    
+    //the computation vector is divided by the neighbor count, resulting in the position that corresponds to the center of mass. However, we don't want the center of mass itself, we want the direction towards the center of mass, so we recompute the vector as the distance from the agent to the center of mass. Finally, this value is normalized and returned.
+    p = btVector3(p.x()/neighborCount, p.y()/neighborCount, p.z()/neighborCount);
+    btVector3 tempP = btVector3(
+                                p.x() - actor->getCenterOfMassPosition().x(), 
+                                p.y() - actor->getCenterOfMassPosition().y(), 
+                                p.z() - actor->getCenterOfMassPosition().z());
+    tempP.normalize();
+    
+    return tempP;
+}
+
+
+
+
+// Apply steering forces (called on each iteration of the physics
+// engine) including physical forces of flight, flocking behaviour
+// and avoiding obstacles.
+static void steer(btDynamicsWorld *world, const btScalar &timeStep){
+    
+
+    std::vector<Boid*> boids = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boidObjects;
+   
+    /*
+    for (unsigned int b = 0; b < boids.size(); ++b){
+        //The computational abstraction that combines process, procedure, and state is called an actor
+        btRigidBody* actor = boids[b]->m_body;
+
+        
+        //std::vector<SphereObstacle *>& obstacles = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->obstacles;
+        
+        btVector3 p = actor->getCenterOfMassPosition();
+        //std::cout << "x: "<< p.x() << ", y:" << p.y()<< " z:" << p.z() <<std::endl;
+        
+        btVector3 separation = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->collisionAvoidance(actor);
+        btVector3 alignment = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->velocityMarching(actor);
+        btVector3 cohesion = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flockCentering(actor);
+        btVector3 tempVel = alignment + cohesion + separation;
+        tempVel.normalize();
+        actor->setLinearVelocity(tempVel);
+        
+        
+        //An acceleration requests is used to determine which way to steer the boid.
+        //The easiest way to combine acceleration requests is to average them. Because of the included "strength" factors, this is actually a weighted average.
+        //Prioritized acceleration allocation is based on a strict priority ordering of all component behaviors, hence of the consideration of their acceleration requests.
+        //The magnitude of each request is measured and added into another accumulator.
+        //This process continues until the sum of the accumulated magnitudes gets larger than the maximum acceleration value, which is a parameter of each boid.
+
+    }
+    */
+    
+    
+    btRigidBody* body = boids[0]->m_body;
+    btScalar bmass = body->getInvMass();
+    btVector3 bvel = body->getLinearVelocity();
+    btVector3 bgravity = body->getGravity();
+    btVector3 bdir = btVector3(0, 0.1, 1);
+    btTransform btrans(body->getOrientation());
     btVector3 up(0, 1, 0);
     btVector3 btop = btrans * up;
     btVector3 front = btrans * btVector3(1, 0, 0);
     btVector3 bdir1 = bvel.safeNormalize();
-    btVector3  avel = bbody0->getAngularVelocity();
+    btVector3  avel = body->getAngularVelocity();
     btVector3 bthrust = 3.5 * front;
-    btVector3 bdrag = - 3 * bvel;
-    btVector3 blift = - 1.00 * bgravity * bvel.length();
-    bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
-    bbody0->applyTorque(2 * front.cross(bdir) - 5.0*avel);
-    bbody0->applyTorque(- 0.5 * up);
-    bbody0->applyTorque(0.5 * btop.cross(up) - 5*avel);
+    btVector3 bdrag = - 4 * bvel;
+    btVector3 blift = - 2.0 * bgravity * bvel.length();
+    body->applyCentralForce(bthrust + blift + bgravity + bdrag);
+    body->applyTorque(2 * front.cross(bdir) - 5.0*avel);
+    body->applyTorque(- 0.5 * up);
+    body->applyTorque(0.5 * btop.cross(up) - 5*avel);
+    
+    
+    //bbody0->setWorldTransform(trans);
+     
+    //btVector3 linVel(destination[0]-currentp[0],destinationp[1]-currentp[1],destinationp[2]-currentp[2]);
+    //linVel.normalize();
+    //linVel*=m_InitialSpeed;
+    //body->getWorldTransform().setOrigin(btVector3(1, 0, 0));//set position
+    //body->getWorldTransform().setRotation(btQuaternion(0,0,0,1));//set rotation
+    //body->setLinearVelocity(linVel); //set liniar velocity
+    //body->setAngularVelocity(btVector3(0,0,0));//set angular velocity
+     
+     
+    
 }
 
 static void updateObstacles(btDynamicsWorld *world, const btScalar &timeStep){
     
-    btRigidBody* body0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->body000;
-    btScalar mass = body0->getInvMass();
-    btVector3 vel = body0->getLinearVelocity();
-    btVector3 gravity = body0->getGravity();
-    btVector3 dir = btVector3(0, 0, 1);
-    btVector3 thrust = 7.0 * dir;
-    btVector3 drag = -3 * vel;
-    btVector3 lift = - 0.5 * gravity * vel.length();
-    body0->applyCentralForce(thrust + lift + gravity + drag );
+   
+    //static_cast<INM377ProjTemplateTorqueOrient*>(world->getWorldUserInfo())->boidObjects[0]->hello = 0.0;
+    
+    
+//    btRigidBody* body0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->body000;
+//    btScalar mass = body0->getInvMass();
+//    btVector3 vel = body0->getLinearVelocity();
+//    btVector3 gravity = body0->getGravity();
+//    btVector3 dir = btVector3(0, 0, 1);
+//    btVector3 thrust = 7.0 * dir;
+//    btVector3 drag = -3 * vel;
+//    btVector3 lift = - 0.5 * gravity * vel.length();
+//    body0->applyCentralForce(thrust + lift + gravity + drag );
 }
 
 void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     
     world->clearForces();
     
-    updateObstacles(world, timeStep);
-    updateBoids(world,timeStep);
+    steer(world, timeStep);
     
-    //std::cout << " my tick call back step: " << timeStep << std::endl;
 }
 
 void	INM377ProjTemplateTorqueOrient::initPhysics()
@@ -313,15 +519,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 
     //std::cout << " init physics" << std::endl;
     
-
-//    //3
-//    m_solver = new btSequentialImpulseConstraintSolver();
-//    
-//    //4
-//    m_world = new btDiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _collisionConfiguration);
-//    
-//    //5
-//    m_world->setGravity(btVector3(0, -9.8, 0));
+    
     
     createGround();
     
@@ -437,11 +635,7 @@ void	INM377ProjTemplateTorqueOrient::exitPhysics()
 	m_collisionShapes.clear();
 
 	delete m_dynamicsWorld;
-	
-	//delete m_solver;
-	
-	//delete m_world;
-
+    
 	
 }
 
