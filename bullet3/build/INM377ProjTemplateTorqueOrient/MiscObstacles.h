@@ -25,7 +25,7 @@ class SphereObstacle : public Obstacle {
 	const btScalar radius;
 
 public:
-    SphereObstacle(): centre(btVector3(0,0,0)), radius(0.0){}
+   // SphereObstacle(): centre(btVector3(0,0,0)), radius(0.0){}
 	SphereObstacle(const btVector3 &c, btScalar r) :
 		centre(c), radius(r) {}
 

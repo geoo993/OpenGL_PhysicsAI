@@ -63,15 +63,13 @@ public:
     btVector3 collisionAvoidance(btRigidBody *actor);
     btVector3 velocityMarching(btRigidBody *actor);
     btVector3 flockCentering(btRigidBody *actor);
-    
-    //btRigidBody* body000;
-    //btRigidBody* boid;
    
-    const int NUMBER_OF_BOIDS = 20;
+    const int NUMBER_OF_BOIDS = 10;
     std::vector<Boid*>	boidObjects;
     
     const int NUMBER_OF_OBSTACLES = 4;
     std::vector<SphereObstacle *> obstacles;
+    std::vector<btRigidBody*> collisionBodies;
     
 private:
 //    Flock flock;

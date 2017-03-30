@@ -10,27 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "build/INM377ProjTemplateTorqueOrient/INM377ProjTemplateForcesTorqueOrient.cpp"
-            timestampString = "512520595.747971"
+            timestampString = "512526478.198598"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374"
-            landmarkName = "INM377ProjTemplateTorqueOrient::flockCentering(btRigidBody *actor)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "build/INM377ProjTemplateTorqueOrient/INM377ProjTemplateForcesTorqueOrient.cpp"
-            timestampString = "512520598.933222"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "333"
-            endingLineNumber = "333"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
             landmarkName = "INM377ProjTemplateTorqueOrient::velocityMarching(btRigidBody *actor)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "build/INM377ProjTemplateTorqueOrient/INM377ProjTemplateForcesTorqueOrient.cpp"
-            timestampString = "512520602.068755"
+            timestampString = "512526478.198598"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "INM377ProjTemplateTorqueOrient::collisionAvoidance(btRigidBody *actor)"
             landmarkType = "7">
          </BreakpointContent>

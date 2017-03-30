@@ -41,7 +41,9 @@ INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
 :m_ccdMode(USE_CCD)
 {
     boidObjects.reserve(NUMBER_OF_BOIDS);
+    
     obstacles.reserve(NUMBER_OF_OBSTACLES);
+    collisionBodies.reserve(NUMBER_OF_OBSTACLES);
     
 	setDebugMode(btIDebugDraw::DBG_DrawText+btIDebugDraw::DBG_NoHelpText);
 	setCameraDistance(btScalar(40.));
@@ -204,7 +206,6 @@ void INM377ProjTemplateTorqueOrient::createBoids(){
         boidObjects.push_back(new Boid);
     }
     
-    
     //create shape geometry structure
     //		btCollisionShape* bShape = new btBoxShape(btVector3(5, 3, 5));
     std::vector<btVector3> parts = {
@@ -216,43 +217,52 @@ void INM377ProjTemplateTorqueOrient::createBoids(){
     
     
     for (unsigned int b = 0; b < NUMBER_OF_BOIDS; ++b){
-        //m_collisionShapes.push_back(boidObject[b].GetHullShape());
-        boidObjects[b]->Set(parts, btVector3(rand() % 50, 0, rand() % 50), 5.0, 1.0);
+        m_collisionShapes.push_back(boidObjects[b]->GetHullShape());
+        btVector3 tempPos(rand() % 50, 0, rand() % 50);
+        btVector3 tempVel(rand() % 20, 0, rand() % 20);
+        
+        boidObjects[b]->Set(parts, tempPos, tempVel, 5.0, 1.0, 0.4, 2.0);
         
         //bind and create shape with mass, transform, and structure
         boidObjects[b]->m_body = localCreateRigidBody(boidObjects[b]->GetMass(), boidObjects[b]->GetTrans(), boidObjects[b]->GetHullShape());
-        boidObjects[b]->m_body->setAnisotropicFriction(boidObjects[b]->GetHullShape()->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-        boidObjects[b]->m_body->setFriction(0.5);
-        //boidObjects[b]->m_body->setLinearVelocity(btVector3(rand() % 50, 0, rand() % 50));
-        boidObjects[b]->m_body->activate(true);
+        
+        boidObjects[b]->Activate();
     }
     
 }
 
 void INM377ProjTemplateTorqueOrient::createObstacle(){
     
+    std::vector<btVector3> positions = {
+        btVector3(-5, 1, 0),
+        btVector3(-30, 1, 20),
+        btVector3(0, 1, 35),
+        btVector3(24, 1, -20)
+    };
+   
     for (unsigned int i = 0; i < NUMBER_OF_OBSTACLES; ++i){
-        obstacles.push_back(new SphereObstacle);
+        
+        btCollisionShape* collisionShape = new btCylinderShape (btVector3(1.0, 10.0, 1.0));
+        //btCollisionShape* collisionShape = new btSphereShape(5.0);
+        //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
+        m_collisionShapes.push_back(collisionShape);
+        
+        btTransform trans;
+        trans.setIdentity();
+        trans.setOrigin(positions[i]);
+        
+        btScalar mass(50.0f);
+        btVector3 cLocalInertia;
+        collisionShape->calculateLocalInertia(mass, cLocalInertia);
+        
+        obstacles.push_back(new SphereObstacle(positions[i], 1.0));
+        
+        collisionBodies[i] = localCreateRigidBody(mass, trans, collisionShape);
+        collisionBodies[i]->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+        collisionBodies[i]->setFriction(0.5);
+        //collisionBodies[i]->setLinearVelocity(btVector3(1, 0, 0));
+        collisionBodies[i]->activate(true);
     }
-    
-//    btCollisionShape* colShape = new btBoxShape(btVector3(5, 3, 5));
-//    m_collisionShapes.push_back(colShape);
-//    
-//    
-//    btTransform trans;
-//    trans.setIdentity();
-//    btCollisionShape* shape = m_collisionShapes[2];
-//    btVector3 pos(0, 0, 0);
-//    trans.setOrigin(pos);
-//    
-//    
-//    btScalar mass(1.0f);
-//    // shape->calculateLocalInertia(mass, LocalInertia);
-//    body000 = localCreateRigidBody(mass, trans, shape);
-//    body000->setAnisotropicFriction(shape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-//    body000->setFriction(0.5);
-//    //		body000->setLinearVelocity(btVector3(1, 0, 0));
-//    body000->activate(true);
 
     
 }
@@ -293,7 +303,7 @@ btVector3 INM377ProjTemplateTorqueOrient::collisionAvoidance(btRigidBody *actor)
     
     //If no neighbors were found, we simply return the zero vector (the default value of the computation vector).
     if (neighborCount == 0){
-        return c;
+        return c.absolute();
     }
     
     //The computation vector is divided by the corresponding neighbor count, but before normalizing, there is one more crucial step involved. The computed vector needs to be negated in order for the agent to steer away from its neighbors properly.
@@ -341,7 +351,7 @@ btVector3 INM377ProjTemplateTorqueOrient::velocityMarching(btRigidBody *actor){
     
     //If no neighbors were found, we simply return the zero vector (the default value of the computation vector).
     if (neighborCount == 0){
-        return v;
+        return v.absolute();
     }
     
     //Finally, we divide the computation vector by the neighbor count and normalize it (divide it by its length to get a vector of length 1), obtaining the final resultant vector.
@@ -379,11 +389,12 @@ btVector3 INM377ProjTemplateTorqueOrient::flockCentering(btRigidBody *actor){
             }
             
         }
+        
     }
     
     //If no neighbors were found, we simply return the zero vector (the default value of the computation vector).
     if (neighborCount == 0){
-        return p;
+        return p.absolute();
     }
     
     //the computation vector is divided by the neighbor count, resulting in the position that corresponds to the center of mass. However, we don't want the center of mass itself, we want the direction towards the center of mass, so we recompute the vector as the distance from the agent to the center of mass. Finally, this value is normalized and returned.
@@ -408,7 +419,7 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
 
     std::vector<Boid*> boids = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boidObjects;
    
-    /*
+    
     for (unsigned int b = 0; b < boids.size(); ++b){
         //The computational abstraction that combines process, procedure, and state is called an actor
         btRigidBody* actor = boids[b]->m_body;
@@ -424,8 +435,8 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
         btVector3 cohesion = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flockCentering(actor);
         btVector3 tempVel = alignment + cohesion + separation;
         tempVel.normalize();
-        actor->setLinearVelocity(tempVel);
-        
+        //actor->setLinearVelocity(tempVel);
+        actor->applyCentralForce(tempVel);
         
         //An acceleration requests is used to determine which way to steer the boid.
         //The easiest way to combine acceleration requests is to average them. Because of the included "strength" factors, this is actually a weighted average.
@@ -434,14 +445,16 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
         //This process continues until the sum of the accumulated magnitudes gets larger than the maximum acceleration value, which is a parameter of each boid.
 
     }
-    */
     
     
+    
+    /*
     btRigidBody* body = boids[0]->m_body;
-    btScalar bmass = body->getInvMass();
+    
+    //btScalar bmass = body->getInvMass();
     btVector3 bvel = body->getLinearVelocity();
     btVector3 bgravity = body->getGravity();
-    btVector3 bdir = btVector3(0, 0.1, 1);
+    btVector3 bdir = btVector3(0, 1, 1);
     btTransform btrans(body->getOrientation());
     btVector3 up(0, 1, 0);
     btVector3 btop = btrans * up;
@@ -455,7 +468,7 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
     body->applyTorque(2 * front.cross(bdir) - 5.0*avel);
     body->applyTorque(- 0.5 * up);
     body->applyTorque(0.5 * btop.cross(up) - 5*avel);
-    
+    */
     
     //bbody0->setWorldTransform(trans);
      
@@ -474,7 +487,8 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
 static void updateObstacles(btDynamicsWorld *world, const btScalar &timeStep){
     
    
-    //static_cast<INM377ProjTemplateTorqueOrient*>(world->getWorldUserInfo())->boidObjects[0]->hello = 0.0;
+    std::vector<SphereObstacle*> collShapes = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->obstacles;
+    
     
     
 //    btRigidBody* body0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->body000;

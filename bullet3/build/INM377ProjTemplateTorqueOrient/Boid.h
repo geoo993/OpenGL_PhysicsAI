@@ -30,14 +30,16 @@ class Boid {
     //The magnitude of the turning acceleration varies directly with the object's velocity and with the curvature of its path
     btVector3 m_velocity; 
     
-    btScalar m_max_force; 
+    btVector3 m_acceleration;
+    
+    btScalar m_maxForce; // Maximum steering force
     
     //A maximum acceleration, expressed as a fraction of the maximum speed, is used to truncate over-anxious requests for acceleration, hence providing for smooth changes of speed and heading
-    btScalar m_max_speed; 
+    btScalar m_maxSpeed; //Maximum speed
     
     //between 0 and 1, strenght in which a boid wants to participate in a flock small or strong
     btScalar m_eagerness; 
-    
+
 	// Can the boid see the point?
 	bool canSee(const btVector3 &pos) const;
 
@@ -71,8 +73,11 @@ public:
     // Unit vector for the direction in which the boid is heading
     btVector3 heading() const { return m_forward; };
     
+    btVector3 GetVelocity() const { return m_velocity; }; 
     
-    void Set(const std::vector<btVector3> &shape, const btVector3 &position, const btScalar &radius, const btScalar &mass);
+    
+    void Set(const std::vector<btVector3> &shape, const btVector3 &position, const btVector3 &velocity, const btScalar &radius, const btScalar &mass, const btScalar &force, const btScalar &speed);
+    void Activate();
 
 };
 

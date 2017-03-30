@@ -27,7 +27,7 @@ Boid::~Boid(){
     delete m_hullShape;
 }
 
-void  Boid::Set(const std::vector<btVector3> &shape, const btVector3 &position, const btScalar &radius, const btScalar &mass){
+void  Boid::Set(const std::vector<btVector3> &shape, const btVector3 &position, const btVector3 &velocity, const btScalar &radius, const btScalar &mass, const btScalar &force, const btScalar &speed){
     
     for (unsigned int i = 0; i < shape.size(); ++i){
         m_hullShape->addPoint(shape[i]);
@@ -38,15 +38,29 @@ void  Boid::Set(const std::vector<btVector3> &shape, const btVector3 &position, 
     m_trans.setIdentity();
     m_trans.setOrigin(position);
 
-    
     //set mass
     m_mass = mass;
     btVector3 bLocalInertia;
     m_hullShape->calculateLocalInertia(m_mass, bLocalInertia);
 
+    //force
+    m_maxForce = force;
+    
+    //speed
+    m_maxSpeed = speed;
+    
+    //velocity
+    m_velocity = velocity;
     
 }
 
+void Boid::Activate(){
+    
+    m_body->setAnisotropicFriction(m_hullShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+    m_body->setFriction(0.5);
+    m_body->setLinearVelocity(m_velocity);
+    m_body->activate(true);
+}
 
 // Can the boid see the point?
 bool Boid::canSee(const btVector3 &pos) const{
