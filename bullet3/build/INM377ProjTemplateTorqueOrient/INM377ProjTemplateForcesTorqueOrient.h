@@ -59,23 +59,15 @@ public:
     void createBoids();
     
     void createObstacle();
-    
-    btVector3 collisionAvoidance(btRigidBody *actor);
-    btVector3 velocityMarching(btRigidBody *actor);
-    btVector3 flockCentering(btRigidBody *actor);
    
-    const int NUMBER_OF_BOIDS = 10;
-    std::vector<Boid*>	boidObjects;
-    
-    const int NUMBER_OF_OBSTACLES = 4;
-    std::vector<Obstacle *> obstacles;
-    
     std::vector<btRigidBody*> collisionBodies;
     
     Flock flock;
 private:
     
-     void initialiseFlock();
+    const int NUMBER_OF_BOIDS = 10;
+    const int NUMBER_OF_OBSTACLES = 4;
+    void initialiseFlock();
     
     
 	//keep the collision shapes, for deletion/cleanup

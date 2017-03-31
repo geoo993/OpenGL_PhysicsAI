@@ -10,21 +10,24 @@
 #include "Boid.h"
 
 class Flock {
-	std::vector<Boid*> m_boids;
-	std::vector<Obstacle *> m_obstacles;
 
 	// declare dummies as private to forbid copying
 	Flock(const Flock &flock) {}
 	Flock & operator=(const Flock &flock) { return *this; }
 
-    btVector3 collisionAvoidance(btRigidBody *actor);
-    btVector3 velocityMarching(btRigidBody *actor);
-    btVector3 flockCentering(btRigidBody *actor);
-        
+    btVector3 CollisionAvoidance(Boid *actor) const ;
+    btVector3 VelocityMarching(Boid *actor) const;
+    btVector3 FlockCentering(Boid *actor) const;
+    
 public:
 	Flock() {}
     
-    void CreateFlock(const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles);
+    btScalar m_borderWidth;
+    btScalar m_borderHeight;
+    std::vector<Boid*> m_boids;
+    std::vector<Obstacle *> m_obstacles;
+    
+    void CreateFlock(const btScalar &width, const btScalar &height, const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles );
 
 	// Add a boid with the given body.
 	// (deletion of the body is handled by the Demo class)
@@ -36,8 +39,14 @@ public:
 	// Apply steering forces to each boid in the flock.
 	void steer() const;
     
-    void flock(const std::vector<Boid*> &boids);
+    void Run();
     
+    void FlockBoids();
+    
+    void Update();
+    
+    void Borders();
+
     
 };
 
