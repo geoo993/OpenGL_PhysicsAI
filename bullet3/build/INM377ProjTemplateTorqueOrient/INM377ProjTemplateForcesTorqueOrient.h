@@ -28,7 +28,7 @@ subject to the following restrictions:
 #include <iostream>
 
 #include "MyFlockingDemo.h"
-#include "MiscObstacles.h"
+#include "Obstacle.h"
 #include "Boid.h"
 #include "Extension.h"
 
@@ -41,7 +41,7 @@ struct btCollisionAlgorithmCreateFunc;
 class btDefaultCollisionConfiguration;
 
 class Boid;
-//class Flock;
+class Flock;
 //class BowlObstacle;
 class SphereObstacle;
 //class ColumnObstacle;
@@ -68,16 +68,15 @@ public:
     std::vector<Boid*>	boidObjects;
     
     const int NUMBER_OF_OBSTACLES = 4;
-    std::vector<SphereObstacle *> obstacles;
+    std::vector<Obstacle *> obstacles;
+    
     std::vector<btRigidBody*> collisionBodies;
     
+    Flock flock;
 private:
-//    Flock flock;
-//    BowlObstacle bObstacle;
-//    SphereObstacle sObstacle;
-//    ColumnObstacle cObstacle;
-//    PlaneObstacle pObstacle;
-//    
+    
+     void initialiseFlock();
+    
     
 	//keep the collision shapes, for deletion/cleanup
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;

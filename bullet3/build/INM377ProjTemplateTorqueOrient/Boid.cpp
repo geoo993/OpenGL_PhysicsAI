@@ -14,9 +14,13 @@ Boid::Boid(){
     m_collShape = nullptr;
     m_hullShape = nullptr;
     
+    m_trans = btTransform();
     m_radius = 0.0;
     m_mass = 0.0;
-    m_trans = btTransform();
+    m_maxForce = 0.0;
+    m_maxSpeed = 0.0;
+    m_velocity = btVector3(0,0,0);
+    m_acceleration = btVector3(0,0,0);
     
     m_hullShape = new btConvexHullShape();
 }
@@ -27,7 +31,7 @@ Boid::~Boid(){
     delete m_hullShape;
 }
 
-void  Boid::Set(const std::vector<btVector3> &shape, const btVector3 &position, const btVector3 &velocity, const btScalar &radius, const btScalar &mass, const btScalar &force, const btScalar &speed){
+void  Boid::Set(const std::vector<btVector3> &shape, const btVector3 &position, const btVector3 &velocity, const btVector3 &acceleration, const btScalar &radius, const btScalar &mass, const btScalar &force, const btScalar &speed){
     
     for (unsigned int i = 0; i < shape.size(); ++i){
         m_hullShape->addPoint(shape[i]);
@@ -52,6 +56,9 @@ void  Boid::Set(const std::vector<btVector3> &shape, const btVector3 &position, 
     //velocity
     m_velocity = velocity;
     
+    //acceleration
+    m_acceleration = m_acceleration;
+    
 }
 
 void Boid::Activate(){
@@ -68,9 +75,13 @@ bool Boid::canSee(const btVector3 &pos) const{
     return false;
 }
 
+void Boid::applyForce(btVector3 force) {
+    // We could add mass here if we want A = F / M
+    m_acceleration = m_acceleration + force;
+}
+
 // Forces on the boid
 btVector3 Boid::physicalForce() const{
-    
     return btVector3(0,0,0);
 }
 btVector3 Boid::flockingForce(const std::vector<Boid>& boids) const{
@@ -81,3 +92,4 @@ btVector3 Boid::avoidanceForce(const std::vector<Obstacle *>& obstacles) const{
     
     return btVector3(0,0,0);
 }
+

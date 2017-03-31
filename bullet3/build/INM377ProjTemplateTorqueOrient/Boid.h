@@ -48,6 +48,7 @@ class Boid {
 	btVector3 flockingForce(const std::vector<Boid>& boids) const;
 	btVector3 avoidanceForce(const std::vector<Obstacle *>& obstacles) const;
 
+    void applyForce(btVector3 force);
   
     
 public:
@@ -76,7 +77,7 @@ public:
     btVector3 GetVelocity() const { return m_velocity; }; 
     
     
-    void Set(const std::vector<btVector3> &shape, const btVector3 &position, const btVector3 &velocity, const btScalar &radius, const btScalar &mass, const btScalar &force, const btScalar &speed);
+    void Set(const std::vector<btVector3> &shape, const btVector3 &position, const btVector3 &velocity, const btVector3 &acceleration, const btScalar &radius, const btScalar &mass, const btScalar &force, const btScalar &speed);
     void Activate();
 
 };
