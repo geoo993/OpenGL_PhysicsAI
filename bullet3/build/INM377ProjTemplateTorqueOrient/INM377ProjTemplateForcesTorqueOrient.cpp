@@ -219,7 +219,8 @@ void INM377ProjTemplateTorqueOrient::createBoids(){
     for (unsigned int b = 0; b < NUMBER_OF_BOIDS; ++b){
         m_collisionShapes.push_back(boidObjects[b]->GetHullShape());
         btVector3 tempPos(rand() % 50, 0, rand() % 50);
-        btVector3 tempVel(rand() % 20, 0, rand() % 20);
+        //btVector3 tempVel(rand() % 20, 0, rand() % 20);
+        btVector3 tempVel(0, rand() % 10, 0);
         
         boidObjects[b]->Set(parts, tempPos, tempVel, 5.0, 1.0, 0.4, 2.0);
         
@@ -416,7 +417,7 @@ btVector3 INM377ProjTemplateTorqueOrient::flockCentering(btRigidBody *actor){
 // and avoiding obstacles.
 static void steer(btDynamicsWorld *world, const btScalar &timeStep){
     
-
+    ///*
     std::vector<Boid*> boids = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boidObjects;
    
     
@@ -430,13 +431,13 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
         btVector3 p = actor->getCenterOfMassPosition();
         //std::cout << "x: "<< p.x() << ", y:" << p.y()<< " z:" << p.z() <<std::endl;
         
-        btVector3 separation = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->collisionAvoidance(actor);
-        btVector3 alignment = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->velocityMarching(actor);
-        btVector3 cohesion = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flockCentering(actor);
-        btVector3 tempVel = alignment + cohesion + separation;
-        tempVel.normalize();
+        //btVector3 separation = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->collisionAvoidance(actor);
+        //btVector3 alignment = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->velocityMarching(actor);
+        //btVector3 cohesion = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flockCentering(actor);
+        //btVector3 tempVel = alignment + cohesion + separation;
+        //tempVel.normalize();
         //actor->setLinearVelocity(tempVel);
-        actor->applyCentralForce(tempVel);
+        //actor->applyCentralForce(tempVel);
         
         //An acceleration requests is used to determine which way to steer the boid.
         //The easiest way to combine acceleration requests is to average them. Because of the included "strength" factors, this is actually a weighted average.
@@ -444,50 +445,37 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
         //The magnitude of each request is measured and added into another accumulator.
         //This process continues until the sum of the accumulated magnitudes gets larger than the maximum acceleration value, which is a parameter of each boid.
 
+        
+        //btScalar bmass = body->getInvMass();
+        btVector3 bvel = actor->getLinearVelocity();
+        btVector3 bgravity = actor->getGravity() * 0.1;
+        btVector3 bdir = btVector3(0, 1, 1);
+        btTransform btrans(actor->getOrientation());
+        btVector3 up(0, 1, 0);
+        btVector3 btop = btrans * up;
+        btVector3 front = btrans * btVector3(1, 0, 0);
+        btVector3 bdir1 = bvel.safeNormalize();
+        btVector3  avel = actor->getAngularVelocity(); 
+        btVector3 bthrust = 3.5 * front; //move forward 
+        btVector3 bdrag = - 4 * bvel; //resist movement forward
+        btVector3 blift = - 2.0 * bgravity * bvel.length(); //pressure agains gravity
+        //actor->applyCentralForce(bthrust + blift + bgravity + bdrag);
+        actor->applyCentralForce(bthrust + bgravity);
+        actor->applyTorque(2 * front.cross(bdir) - 5.0 * avel);
+        actor->applyTorque(- 0.5 * up);
+        actor->applyTorque(0.5 * btop.cross(up) - 5 * avel);
+        
+        
+        
     }
-    
-    
-    
-    /*
-    btRigidBody* body = boids[0]->m_body;
-    
-    //btScalar bmass = body->getInvMass();
-    btVector3 bvel = body->getLinearVelocity();
-    btVector3 bgravity = body->getGravity();
-    btVector3 bdir = btVector3(0, 1, 1);
-    btTransform btrans(body->getOrientation());
-    btVector3 up(0, 1, 0);
-    btVector3 btop = btrans * up;
-    btVector3 front = btrans * btVector3(1, 0, 0);
-    btVector3 bdir1 = bvel.safeNormalize();
-    btVector3  avel = body->getAngularVelocity();
-    btVector3 bthrust = 3.5 * front;
-    btVector3 bdrag = - 4 * bvel;
-    btVector3 blift = - 2.0 * bgravity * bvel.length();
-    body->applyCentralForce(bthrust + blift + bgravity + bdrag);
-    body->applyTorque(2 * front.cross(bdir) - 5.0*avel);
-    body->applyTorque(- 0.5 * up);
-    body->applyTorque(0.5 * btop.cross(up) - 5*avel);
-    */
-    
-    //bbody0->setWorldTransform(trans);
-     
-    //btVector3 linVel(destination[0]-currentp[0],destinationp[1]-currentp[1],destinationp[2]-currentp[2]);
-    //linVel.normalize();
-    //linVel*=m_InitialSpeed;
-    //body->getWorldTransform().setOrigin(btVector3(1, 0, 0));//set position
-    //body->getWorldTransform().setRotation(btQuaternion(0,0,0,1));//set rotation
-    //body->setLinearVelocity(linVel); //set liniar velocity
-    //body->setAngularVelocity(btVector3(0,0,0));//set angular velocity
-     
-     
+    //*/
     
 }
 
 static void updateObstacles(btDynamicsWorld *world, const btScalar &timeStep){
     
    
-    std::vector<SphereObstacle*> collShapes = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->obstacles;
+    //std::vector<SphereObstacle*> collShapes = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->obstacles;
     
     
     
@@ -532,9 +520,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 	m_dynamicsWorld->setInternalTickCallback(MyTickCallback, static_cast<void *>(this), true);
 
     //std::cout << " init physics" << std::endl;
-    
-    
-    
+        
     createGround();
     
 	{

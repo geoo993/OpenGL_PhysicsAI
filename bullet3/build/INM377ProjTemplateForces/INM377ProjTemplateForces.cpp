@@ -315,6 +315,41 @@ void	INM377ProjTemplate::initPhysics()
         
     }
     
+    
+    /*
+     btRigidBody* body = boids[0]->m_body;
+     
+     //btScalar bmass = body->getInvMass();
+     btVector3 bvel = body->getLinearVelocity();
+     btVector3 bgravity = body->getGravity();
+     btVector3 bdir = btVector3(0, 1, 1);
+     btTransform btrans(body->getOrientation());
+     btVector3 up(0, 1, 0);
+     btVector3 btop = btrans * up;
+     btVector3 front = btrans * btVector3(1, 0, 0);
+     btVector3 bdir1 = bvel.safeNormalize();
+     btVector3  avel = body->getAngularVelocity();
+     btVector3 bthrust = 3.5 * front;
+     btVector3 bdrag = - 4 * bvel;
+     btVector3 blift = - 2.0 * bgravity * bvel.length();
+     body->applyCentralForce(bthrust + blift + bgravity + bdrag);
+     body->applyTorque(2 * front.cross(bdir) - 5.0*avel);
+     body->applyTorque(- 0.5 * up);
+     body->applyTorque(0.5 * btop.cross(up) - 5*avel);
+     */
+    
+    //bbody0->setWorldTransform(trans);
+    
+    //btVector3 linVel(destination[0]-currentp[0],destinationp[1]-currentp[1],destinationp[2]-currentp[2]);
+    //linVel.normalize();
+    //linVel*=m_InitialSpeed;
+    //body->getWorldTransform().setOrigin(btVector3(1, 0, 0));//set position
+    //body->getWorldTransform().setRotation(btQuaternion(0,0,0,1));//set rotation
+    //body->setLinearVelocity(linVel); //set liniar velocity
+    //body->setAngularVelocity(btVector3(0,0,0));//set angular velocity
+    
+    
+    
 }
 
 void	INM377ProjTemplate::clientResetScene()
