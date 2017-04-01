@@ -91,7 +91,9 @@ private:
 
 public:
 
-		INM377ProjTemplateTorqueOrient();
+    btRigidBody* boid;
+    
+    INM377ProjTemplateTorqueOrient();
 
 		virtual ~INM377ProjTemplateTorqueOrient()
 	{

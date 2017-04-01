@@ -33,6 +33,12 @@ public:
         return rand() % (max - min) + min + 1;     
     }
     
+    static btScalar percentageWith(btScalar value, btScalar min, btScalar max) 
+    {
+        btScalar difference = (min < 0.0) ? max : max - min;
+        return (btScalar(100.0) * ((value - min) / difference));
+    }
+    
     static btScalar distance(const btVector3 &a, const btVector3 &b){
         float ax = a.x();
         float ay = a.y();

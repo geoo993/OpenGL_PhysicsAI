@@ -64,7 +64,7 @@ void MyChainDemo::initPhysics()
 	}
 
 	{ // chain
-		btScalar mass = btScalar(1.);
+		btScalar mass = btScalar(1.0);
 		btTransform trans;
 		trans.setIdentity();
 		btCollisionShape* shape =

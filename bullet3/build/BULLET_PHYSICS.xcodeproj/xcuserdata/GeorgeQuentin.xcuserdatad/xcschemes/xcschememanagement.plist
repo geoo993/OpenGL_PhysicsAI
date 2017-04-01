@@ -47,7 +47,7 @@
 		<key>AppChainDemo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>67</integer>
+			<integer>50</integer>
 		</dict>
 		<key>AppCharacterDemo.xcscheme</key>
 		<dict>
@@ -217,7 +217,7 @@
 		<key>AppSpringDemo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>68</integer>
+			<integer>51</integer>
 		</dict>
 		<key>AppThreadingDemo.xcscheme</key>
 		<dict>
@@ -252,94 +252,94 @@
 		<key>BulletCollision.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>58</integer>
+			<integer>63</integer>
 		</dict>
 		<key>BulletDynamics.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>59</integer>
+			<integer>64</integer>
 		</dict>
 		<key>BulletFileLoader.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>54</integer>
+			<integer>59</integer>
 		</dict>
 		<key>BulletMultiThreaded.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>62</integer>
+			<integer>67</integer>
 		</dict>
 		<key>BulletSoftBody.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>57</integer>
+			<integer>62</integer>
 		</dict>
 		<key>BulletSoftBodySolvers_OpenCL_Apple.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>64</integer>
+			<integer>69</integer>
 		</dict>
 		<key>BulletSoftBodySolvers_OpenCL_Mini.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>63</integer>
+			<integer>68</integer>
 		</dict>
 		<key>BulletWorldImporter.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>56</integer>
+			<integer>61</integer>
 		</dict>
 		<key>BulletXmlWorldImporter.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>55</integer>
+			<integer>60</integer>
 		</dict>
 		<key>ConvexDecomposition.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>50</integer>
+			<integer>55</integer>
 		</dict>
 		<key>GIMPACTUtils.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>52</integer>
+			<integer>57</integer>
 		</dict>
 		<key>GLUI.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>53</integer>
+			<integer>58</integer>
 		</dict>
 		<key>HACD.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>51</integer>
+			<integer>56</integer>
 		</dict>
 		<key>INM377ProjTemplate.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<true/>
 			<key>orderHint</key>
-			<integer>65</integer>
+			<integer>52</integer>
 		</dict>
 		<key>INM377ProjTemplateForces.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>66</integer>
+			<integer>53</integer>
 		</dict>
 		<key>INM377ProjTemplateTorqueOrient.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>69</integer>
+			<integer>54</integer>
 		</dict>
 		<key>LinearMath.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>60</integer>
+			<integer>65</integer>
 		</dict>
 		<key>MiniCL.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>61</integer>
+			<integer>66</integer>
 		</dict>
 		<key>OpenGLSupport.xcscheme</key>
 		<dict>

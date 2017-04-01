@@ -44,7 +44,7 @@ INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
     initialiseFlock();
     
 	setDebugMode(btIDebugDraw::DBG_DrawText+btIDebugDraw::DBG_NoHelpText);
-	setCameraDistance(btScalar(40.));
+	setCameraDistance(btScalar(40.0));
 }
 
 
@@ -58,7 +58,7 @@ void INM377ProjTemplateTorqueOrient::clientMoveAndDisplay()
 	///step the simulation
 	if (m_dynamicsWorld)
 	{
-		m_dynamicsWorld->stepSimulation(1./60.,0);//ms / 1000000.f);
+		m_dynamicsWorld->stepSimulation(1./60.0,0);//ms / 1000000.f);
 		//optional but useful: debug drawing
 		m_dynamicsWorld->debugDrawWorld();
 	}
@@ -298,7 +298,7 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
     
 //    std::vector<Boid*> boids = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boidObjects;
 //   
-    static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.Run();
+    //static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.Run();
     
    
     
@@ -308,7 +308,111 @@ void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     
     world->clearForces();
     
-    steer(world, timeStep);
+    //steer(world, timeStep);
+    
+    //    std::vector<Boid*> boids = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boidObjects;
+    //   
+    //static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.Run();
+    
+    btScalar bwidth = 5.0;
+    btScalar bheight = 5.0;
+    
+    btRigidBody* bbody0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boid;
+   
+    btQuaternion orientation = bbody0->getOrientation();//orientation in 
+    btVector3 baxisAngles = orientation.getAxis();
+    btScalar bangle = orientation.getAngle();
+    btMatrix3x3 bMatOrientation = btMatrix3x3(orientation); // quat to matrix
+    
+    btVector3 bforward = btVector3(bMatOrientation[0][0], bMatOrientation[0][1], bMatOrientation[0][2]);
+    btVector3 bbackward = bforward.normalize() * -1.0f;
+    btVector3 bup = btVector3(bMatOrientation[1][0], bMatOrientation[1][1], bMatOrientation[1][2]);
+    btVector3 bdown = bup.normalize() * -1.0f;
+    btVector3 bright = btVector3(bMatOrientation[2][0], bMatOrientation[2][1], bMatOrientation[2][2]);
+    btVector3 bleft = bright.normalize() * -1.0f;
+    
+    btScalar bmass = bbody0->getInvMass();
+    btVector3 bvel = bbody0->getLinearVelocity();
+    btVector3 bgravity = bbody0->getGravity();
+    btTransform btrans(orientation);
+    btVector3 up(0, 1, 0);
+    btVector3 btop = btrans * up;
+    btVector3 bfront = btrans * btVector3(1, 0, 0);//forward vector of the boid
+    btVector3 bdir = bvel.safeNormalize();
+    btVector3 bright2 = bfront.cross(bdir);//get normal or left/right vector
+    btVector3 avel = bbody0->getAngularVelocity();//the spin about an axis through the centre of mass
+    btVector3 bAhead = bbody0->getCenterOfMassPosition() + (bforward * 10.0);
+    btScalar btrustBalance = 5.0;
+    
+    
+    
+    
+    btScalar maxHeight = 20.0;
+    btScalar ground = 3.0;
+    btScalar x = bbody0->getCenterOfMassPosition().x();
+    btScalar y = bbody0->getCenterOfMassPosition().y();
+    btScalar z = bbody0->getCenterOfMassPosition().z();
+    btScalar balance = 0.0;
+    //x directions
+    //going to far in negative x direction
+    //going to far in positive x direction
+    //going to far in negative z direction
+    //going to far in positive z direction
+    if( (bAhead.x() < -50.0) || (bAhead.x() > 50.0) || (bAhead.z() < -50.0) || (bAhead.z() > 50.0) ) { 
+        balance = 0.1;
+        btrustBalance = 4.0;
+        //reduce velocity
+        //turn
+    }else {
+        balance = 0.0;
+        btrustBalance = 2.0;
+    }
+    
+    btScalar verticalDifference = maxHeight - y;
+    btScalar verticalPercentageDifference = Extension::percentageWith(verticalDifference, ground, maxHeight);
+    btScalar pressure = verticalPercentageDifference / 100.0;    // -1 to  1
+    btVector3 blift = - (1.00 + pressure) * bgravity * bvel.length();
+    
+    btVector3 bthrust = btrustBalance * bfront;
+    btVector3 bdrag = - 3 * bvel;
+    
+    
+    //btVector3 btorqueOverTime = 2 * bfront.cross(bdir) - 5.0 * avel;
+    btScalar distanceFromCenterPoint = 10.0;// the greater the value the more spin it will have, meaning the further away you apply angular speed from the center of mass the more it will spin
+    btVector3 momentArm = (distanceFromCenterPoint * bdown);//The distance from the pivot point to the point where the force acts is called the moment arm, it is a vector
+    btVector3 forceOfSpin = -1.0 * (avel);
+    btVector3 btorqueOverTime = (momentArm + forceOfSpin) * balance;// 5 is the scalar difference of the force we should apply
+    //torque is the measurement of how much a force acting on an object causes that object to rotate
+    
+   
+    
+    
+    std::cout << std::endl;
+    std::cout << "forward, x: " << bforward.x() << " y: " << bforward.y() << " z: " << bforward.z() << std::endl;
+    std::cout << "front, x: " << bfront.x() << " y: " << bfront.y() << " z: " << bfront.z() << std::endl;
+    std::cout << "ahead, x: " << bAhead.x() << " y: " << bAhead.y() << " z: " << bAhead.z() << std::endl;
+    std::cout << "direction, x: " << bdir.x() << " y: " << bdir.y() << " z: " << bdir.z() << std::endl;
+    
+    std::cout << "velocity, x: " << bvel.x() << " y: " << bvel.y() << " z: " << bvel.z() << std::endl;
+    std::cout << "angular velocity, x: " << avel.x() << " y: " << avel.y() << " z: " << avel.z() << std::endl;
+    //std::cout << "angle: " << bangle << std::endl;
+    std::cout << "angle, x: " << baxisAngles.x() << " y: " << baxisAngles.y() << " z: " << baxisAngles.z() << std::endl;
+    
+    std::cout << "position, x: " << x << " y: " << y << " z: " << z << std::endl;
+    
+    std::cout << "bthrust, x: " << bthrust.x() << " y: " << bthrust.y() << " z: " << bthrust.z() << std::endl;
+    
+    std::cout << "lift, x: " << blift.x() << " y: " << blift.y() << " z: " << blift.z() << std::endl;
+    std::cout << "gravity, x: " << bgravity.x() << " y: " << bgravity.y() << " z: " << bgravity.z() << std::endl;
+    std::cout << "y: " << y << ", vertical difference: " << verticalDifference << ", vertical percentage difference: " << verticalPercentageDifference << ", pressure: " << pressure << std::endl; 
+    
+   
+    //bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
+    bbody0->applyCentralForce(bthrust + blift + bgravity );//force to apply before
+    
+    bbody0->applyTorque(btorqueOverTime);//force to apply before
+    //bbody0->applyTorque(- 0.5 * bup);
+    //bbody0->applyTorque(0.5 * btop.cross(up) - 5 * avel);
     
 }
 
@@ -341,12 +445,35 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 		//create a few dynamic rigidbodies
 		// Re-using the same collision is better for memory usage and performance
 
-        createBoids();
-        createObstacle();
+        //createBoids();
+        //createObstacle();
 		
          
 	}
-
+    
+    
+    //		btCollisionShape* bShape = new btBoxShape(btVector3(5, 3, 5));
+    btConvexHullShape * bShape = new btConvexHullShape();
+    bShape->addPoint(btVector3(10, 0, 0));
+    bShape->addPoint(btVector3(0, 3, 0));
+    bShape->addPoint(btVector3(0, 0, 5));
+    bShape->addPoint(btVector3(0, 0, -5));
+    
+    m_collisionShapes.push_back(bShape);
+    btTransform btrans;
+    btrans.setIdentity();
+    //		btCollisionShape* bshape = m_collisionShapes[3];
+    btVector3 bpos(0, 0, 0);
+    btrans.setOrigin(bpos);
+    btScalar bmass(1.0f);
+    btVector3 bLocalInertia;
+    bShape->calculateLocalInertia(bmass, bLocalInertia);
+    boid = localCreateRigidBody(bmass, btrans, bShape);
+    boid->setAnisotropicFriction(bShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+    boid->setFriction(0.5);
+    //		boid->setLinearVelocity(btVector3(1, 0, 0));
+    boid->activate(true);
+    
 }
 
 void	INM377ProjTemplateTorqueOrient::clientResetScene()
