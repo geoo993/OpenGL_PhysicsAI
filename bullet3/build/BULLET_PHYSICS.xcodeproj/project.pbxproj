@@ -3935,6 +3935,7 @@
 		C78C311A1E6025C800607996 /* MySpringDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MySpringDemo.cpp; sourceTree = "<group>"; };
 		C78C311B1E6025C800607996 /* MySpringDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySpringDemo.h; sourceTree = "<group>"; };
 		C79AA08A9E8343ACB7E33FDC /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = Demos/VehicleDemo/main.cpp; sourceTree = SOURCE_ROOT; };
+		C7AA9DDF1E91A12E004E89ED /* Junk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Junk.h; sourceTree = "<group>"; };
 		C7CA956F272845B98263B48C /* btPolarDecomposition.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = btPolarDecomposition.h; path = src/LinearMath/btPolarDecomposition.h; sourceTree = SOURCE_ROOT; };
 		C7D1610AD02F4C4480328DD4 /* glui_spinner.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = glui_spinner.cpp; path = Extras/glui/glui_spinner.cpp; sourceTree = SOURCE_ROOT; };
 		C7D2A3281E5EF05E00082CE9 /* INM377ProjTemplateForces */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = INM377ProjTemplateForces; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5863,6 +5864,7 @@
 				C7F759381E8848420081DEB6 /* INM377ProjTemplateForcesTorqueOrient.cpp */,
 				C7F759391E8848420081DEB6 /* INM377ProjTemplateForcesTorqueOrient.h */,
 				C7F7591D1E8846FA0081DEB6 /* main.cpp */,
+				C7AA9DDF1E91A12E004E89ED /* Junk.h */,
 			);
 			name = INM377ProjTemplateTorqueOrient;
 			path = build/INM377ProjTemplateTorqueOrient;
