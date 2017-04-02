@@ -304,99 +304,180 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
     
 }
 
-void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
-    
-    world->clearForces();
-    
+static bool isAhead1OutOfBounds = false;
+static bool isAhead2OutOfBounds = false;
+static bool isBothAheadOutOfBounds = false;
+
+static void functionsTest(btDynamicsWorld *world){
     //steer(world, timeStep);
     
     //    std::vector<Boid*> boids = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boidObjects;
     //   
     //static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.Run();
     
-    btScalar bwidth = 5.0;
-    btScalar bheight = 5.0;
-    
     btRigidBody* bbody0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boid;
    
-    btQuaternion orientation = bbody0->getOrientation();//orientation in 
-    btVector3 baxisAngles = orientation.getAxis();
-    btScalar bangle = orientation.getAngle();
-    btMatrix3x3 bMatOrientation = btMatrix3x3(orientation); // quat to matrix
     
+    //// *******  use these to add torque force *******/////////
+    btQuaternion orientation = bbody0->getOrientation();//orientation in 
+    btMatrix3x3 bMatOrientation = btMatrix3x3(orientation); // quat to matrix
+    btVector3 baxisAngles = orientation.getAxis();
+    btScalar getAngle = orientation.getAngle();
+    btScalar bangle = btAcos(( bMatOrientation[0][0] + bMatOrientation[1][1] + bMatOrientation[2][2] - 1)/2);
+    btScalar bdegreeangle = (bangle * 180.0 ) / M_PI ; //btDegrees(bangle);
+    btTransform btrans(orientation);
+    btVector3 bfront = btrans * btVector3(1, 0, 0);//forward vector of the boid
     btVector3 bforward = btVector3(bMatOrientation[0][0], bMatOrientation[0][1], bMatOrientation[0][2]);
-    btVector3 bbackward = bforward.normalize() * -1.0f;
-    btVector3 bup = btVector3(bMatOrientation[1][0], bMatOrientation[1][1], bMatOrientation[1][2]);
-    btVector3 bdown = bup.normalize() * -1.0f;
+    btVector3 bback = bforward.normalize() * -1.0f;
     btVector3 bright = btVector3(bMatOrientation[2][0], bMatOrientation[2][1], bMatOrientation[2][2]);
+    //btVector3 bright = bfront.cross(bdir);//get normal or left/right vector
+    btVector3 bup = btVector3(bMatOrientation[1][0], bMatOrientation[1][1], bMatOrientation[1][2]);
+    btVector3 up(0, 1, 0);
+    btVector3 btop = btrans * up;
+    btVector3 bbot = btrans * -up;
+    btVector3 bdown = bup.normalize() * -1.0f;
     btVector3 bleft = bright.normalize() * -1.0f;
     
+    //btVector3 btorqueOverTime = 2 * bfront.cross(bdir) - 5.0 * avel;
+    btScalar distanceFromCenterPoint = 10.0;// the greater the value the more spin it will have, meaning the further away you apply angular speed from the center of mass the more it will spin
+    btVector3 momentArmLeft = (distanceFromCenterPoint * bup);//The distance from the pivot point to the point where the force acts is called the moment arm, it is a vector
+    btVector3 momentArmRight = (distanceFromCenterPoint * bdown);
+    btVector3 avel = bbody0->getAngularVelocity();//angular velocity, the spin about an axis through the centre of mass
+    btVector3 forceOfSpin = -5.0 * (avel);
+    btVector3 btorqueSpinLeft = (momentArmLeft + forceOfSpin);//(momentArmRight + forceOfSpin) * bmaxavoidanceforce// 5 is the scalar difference of the force we should apply
+    //torque is the measurement of how much a force acting on an object causes that object to rotate
+    btVector3 btorqueSpinRight = (momentArmRight + forceOfSpin) ;
+    
+    
+    
+    
+    ////*******  use these to add central force   *******/////////
     btScalar bmass = bbody0->getInvMass();
     btVector3 bvel = bbody0->getLinearVelocity();
     btVector3 bgravity = bbody0->getGravity();
-    btTransform btrans(orientation);
-    btVector3 up(0, 1, 0);
-    btVector3 btop = btrans * up;
-    btVector3 bfront = btrans * btVector3(1, 0, 0);//forward vector of the boid
-    btVector3 bdir = bvel.safeNormalize();
-    btVector3 bright2 = bfront.cross(bdir);//get normal or left/right vector
-    btVector3 avel = bbody0->getAngularVelocity();//the spin about an axis through the centre of mass
-    btVector3 bAhead = bbody0->getCenterOfMassPosition() + (bforward * 10.0);
-    btScalar btrustBalance = 5.0;
+    btVector3 bposition = bbody0->getCenterOfMassPosition();
+    btVector3 bdir = bvel.safeNormalize();//the velocity vector describes the direction of the character. The direction of the velocity vector will control where the character is heading to while its length (or magnitude) will control how much it will move every frame. The greater the length, the faster the character moves.
+    btScalar maxSeeAhead = 20.0;//this ahead vector length defines how far the character will "see". The greater this is, the earlier the character will start acting to dodge an obstacle, because it will perceive it as a threat even if it's far away.
+    btVector3 bahead = bposition + (bforward * maxSeeAhead);
+    btVector3 bahead2 = bposition + (bforward * maxSeeAhead) * 0.5;
+    //btVector3 bahead = bposition + (bdir * maxSeeAhead);
+    //btVector3 bahead2 = bposition + (bdir * maxSeeAhead) * 0.5;
+   
     
-    
-    
-    
+
+    //intersecting check 
+    //We want to perform a collision or intersecting check to test whether either of those two ahead vectors are inside our the obstacle or over our boundary. That's easily accomplished by comparing the distance between the vector's end and the obstacle center or the boundary line.
     btScalar maxHeight = 20.0;
-    btScalar ground = 3.0;
-    btScalar x = bbody0->getCenterOfMassPosition().x();
-    btScalar y = bbody0->getCenterOfMassPosition().y();
-    btScalar z = bbody0->getCenterOfMassPosition().z();
-    btScalar balance = 0.0;
-    //x directions
-    //going to far in negative x direction
-    //going to far in positive x direction
-    //going to far in negative z direction
-    //going to far in positive z direction
-    if( (bAhead.x() < -50.0) || (bAhead.x() > 50.0) || (bAhead.z() < -50.0) || (bAhead.z() > 50.0) ) { 
-        balance = 0.1;
-        btrustBalance = 4.0;
-        //reduce velocity
-        //turn
-    }else {
-        balance = 0.0;
-        btrustBalance = 2.0;
-    }
+    btScalar ground = 4.0;
+    btScalar x = bposition.x();
+    btScalar y = bposition.y();
+    btScalar z = bposition.z();
+    btVector3 intersectPoint = btVector3(0,0,0);
+    btScalar distanceFromIntersector = 0.0;
+    btScalar xIntersect = 0;
+    btScalar zIntersect = 0;
+    
+    bool mostThreathing = false;//If more than one obstacle is blocking the way, then the closest one (the "most threatening") is selected for calculation
     
     btScalar verticalDifference = maxHeight - y;
     btScalar verticalPercentageDifference = Extension::percentageWith(verticalDifference, ground, maxHeight);
     btScalar pressure = verticalPercentageDifference / 100.0;    // -1 to  1
     btVector3 blift = - (1.00 + pressure) * bgravity * bvel.length();
+    btVector3 bthrust = 2.0  * bforward ;//bfront
+    btVector3 bdrag = -1.0 * bforward;//bvel;
     
-    btVector3 bthrust = btrustBalance * bfront;
-    btVector3 bdrag = - 3 * bvel;
+    
+    //going to far in negative x direction
+    //going to far in positive x direction
+    //going to far in negative z direction
+    //going to far in positive z direction
+    if( (bahead.x() < -50.0) || (bahead.x() > 50.0) || (bahead.z() < -50.0) || (bahead.z() > 50.0) ) { 
+    //if (bahead.x() > 20.0){
+        //balance = 2.0;
+        //reduce velocity
+        //turn
+        isAhead1OutOfBounds = true;
+    }else {
+        //balance = 1.0;
+        isAhead1OutOfBounds = false;
+    }
+    
+    if( (bahead2.x() < -50.0) || (bahead2.x() > 50.0) || (bahead2.z() < -50.0) || (bahead2.z() > 50.0) ) { 
+    //if (bahead2.x() > 20.0){  
+        //balance = 2.0;
+        //reduce velocity
+        //turn
+        isAhead2OutOfBounds = true;
+    }else {
+        //balance = 1.0;
+        isAhead2OutOfBounds = false;
+    }
+    
+    if (isAhead1OutOfBounds){ //&& isAhead2OutOfBounds){
+        //isBothAheadOutOfBounds = true;
+       
+        if ( (bahead.x() > 50.0) ){
+            xIntersect = bahead.x() - 50.0;
+        }
+        if( (bahead.x() < -50.0) ) { 
+            xIntersect = bahead.x() + 50.0;
+        }
+        
+        if ( (bahead.z() > 50.0) ){
+            zIntersect = bahead.z() - 50.0;
+        }
+        if( (bahead.z() < -50.0) ) { 
+            zIntersect = bahead.z() + 50.0;
+        }
+    
+        intersectPoint = bahead - btVector3(xIntersect,bahead.y(),zIntersect);
+        
+        distanceFromIntersector = bahead.distance( intersectPoint);
+        
+        //bbody0->setLinearVelocity(btVector3(0,0,0));
+        //bbody0->applyTorque(btorqueSpinLeft);//allign to the left
+        //bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
+        bbody0->applyCentralForce(bdrag);// + blift + bgravity);
+    }else{
+        //btrustSpeed = 5.0;
+        //bbody0->applyTorque(btorqueSpinLeft);//allign to the left
+        //bbody0->applyTorque(btorqueSpinRight);//allign to the left
+        
+        bbody0->applyCentralForce(bthrust);// + blift + bgravity); //+ bdrag);
+    }
     
     
-    //btVector3 btorqueOverTime = 2 * bfront.cross(bdir) - 5.0 * avel;
-    btScalar distanceFromCenterPoint = 10.0;// the greater the value the more spin it will have, meaning the further away you apply angular speed from the center of mass the more it will spin
-    btVector3 momentArm = (distanceFromCenterPoint * bdown);//The distance from the pivot point to the point where the force acts is called the moment arm, it is a vector
-    btVector3 forceOfSpin = -1.0 * (avel);
-    btVector3 btorqueOverTime = (momentArm + forceOfSpin) * balance;// 5 is the scalar difference of the force we should apply
-    //torque is the measurement of how much a force acting on an object causes that object to rotate
+    //bbody0->applyTorque(btorqueSpinLeft);//allign to the left
+    //bbody0->applyTorque(- 0.5 * up);
+    //bbody0->applyTorque(btorqueSpinRight);//allign to the right
     
-   
+    //bbody0->applyTorque(2 * front.cross(bdir) - 5.0*avel);
+    //bbody0->applyTorque(- 0.5 * up);
+    //bbody0->applyTorque(0.5 * btop.cross(up) - 5*avel);
     
     
     std::cout << std::endl;
+    
+    std::cout << "is seeing ahead1: " << isAhead1OutOfBounds << std::endl;
+    std::cout << "is seeing ahead2: " << isAhead2OutOfBounds << std::endl;
+    std::cout << "is seeing both ahead: " << isBothAheadOutOfBounds << std::endl;
+    std::cout << "intersertion point, x: " << intersectPoint.x() << " y: " << intersectPoint.y() << " z: " << intersectPoint.z() << std::endl;
+    std::cout << "distance From intersertion point: " << distanceFromIntersector << std::endl;
+    std::cout << "top, x: " << btop.x() << " y: " << btop.y() << " z: " << btop.z() << std::endl;
+    std::cout << "bottom, x: " << bbot.x() << " y: " << bbot.y() << " z: " << bbot.z() << std::endl;
+    std::cout << "right, x: " << bright.x() << " y: " << bright.y() << " z: " << bright.z() << std::endl;
+    std::cout << "left, x: " << bleft.x() << " y: " << bleft.y() << " z: " << bleft.z() << std::endl;
     std::cout << "forward, x: " << bforward.x() << " y: " << bforward.y() << " z: " << bforward.z() << std::endl;
     std::cout << "front, x: " << bfront.x() << " y: " << bfront.y() << " z: " << bfront.z() << std::endl;
-    std::cout << "ahead, x: " << bAhead.x() << " y: " << bAhead.y() << " z: " << bAhead.z() << std::endl;
+    std::cout << "ahead, x: " << bahead.x() << " y: " << bahead.y() << " z: " << bahead.z() << std::endl;
+    std::cout << "ahead2, x: " << bahead2.x() << " y: " << bahead2.y() << " z: " << bahead2.z() << std::endl;
     std::cout << "direction, x: " << bdir.x() << " y: " << bdir.y() << " z: " << bdir.z() << std::endl;
     
     std::cout << "velocity, x: " << bvel.x() << " y: " << bvel.y() << " z: " << bvel.z() << std::endl;
     std::cout << "angular velocity, x: " << avel.x() << " y: " << avel.y() << " z: " << avel.z() << std::endl;
-    //std::cout << "angle: " << bangle << std::endl;
-    std::cout << "angle, x: " << baxisAngles.x() << " y: " << baxisAngles.y() << " z: " << baxisAngles.z() << std::endl;
+    std::cout << "angle: " <<  bangle << std::endl;
+    std::cout << "degree angle: " <<  bdegreeangle << std::endl;
+    std::cout << "angles, x: " << baxisAngles.x() << " y: " << baxisAngles.y() << " z: " << baxisAngles.z() << std::endl;
     
     std::cout << "position, x: " << x << " y: " << y << " z: " << z << std::endl;
     
@@ -406,14 +487,15 @@ void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     std::cout << "gravity, x: " << bgravity.x() << " y: " << bgravity.y() << " z: " << bgravity.z() << std::endl;
     std::cout << "y: " << y << ", vertical difference: " << verticalDifference << ", vertical percentage difference: " << verticalPercentageDifference << ", pressure: " << pressure << std::endl; 
     
-   
-    //bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
-    bbody0->applyCentralForce(bthrust + blift + bgravity );//force to apply before
     
-    bbody0->applyTorque(btorqueOverTime);//force to apply before
-    //bbody0->applyTorque(- 0.5 * bup);
-    //bbody0->applyTorque(0.5 * btop.cross(up) - 5 * avel);
     
+}
+
+void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
+    
+    world->clearForces();
+    
+    functionsTest(world);
 }
 
 void	INM377ProjTemplateTorqueOrient::initPhysics()
@@ -463,7 +545,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
     btTransform btrans;
     btrans.setIdentity();
     //		btCollisionShape* bshape = m_collisionShapes[3];
-    btVector3 bpos(0, 0, 0);
+    btVector3 bpos(0, 5, 0);
     btrans.setOrigin(bpos);
     btScalar bmass(1.0f);
     btVector3 bLocalInertia;
