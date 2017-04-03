@@ -43,7 +43,8 @@ void  Boid::Set(
     const btScalar &radius, 
     const btScalar &mass, 
     const btScalar &force, 
-    const btScalar &speed){
+    const btScalar &speed)
+    {
     
     for (unsigned int i = 0; i < shape.size(); ++i){
         m_hullShape->addPoint(shape[i]);

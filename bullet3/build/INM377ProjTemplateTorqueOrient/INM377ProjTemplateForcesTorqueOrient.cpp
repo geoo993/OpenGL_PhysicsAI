@@ -38,7 +38,6 @@ static GLDebugDrawer	sDebugDrawer;
 
 
 INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
-:m_ccdMode(USE_CCD)
 {
     
     initialiseFlock();
@@ -93,25 +92,7 @@ void INM377ProjTemplateTorqueOrient::displayText()
 		glColor3f(0, 0, 0);
 		char buf[124];
 		
-		glRasterPos3f(xStart, yStart, 0);
-		switch (m_ccdMode)
-		{
-		case USE_CCD:
-			{
-				sprintf(buf,"Predictive contacts and motion clamping");
-				break;
-			}
-		case USE_NO_CCD:
-			{
-				sprintf(buf,"CCD handling disabled");
-				break;
-			}
-		default:
-			{
-				sprintf(buf,"unknown CCD setting");
-			};
-		};
-
+		
 		GLDebugDrawString(xStart,20,buf);
 		glRasterPos3f(xStart, yStart, 0);
 		sprintf(buf,"Press 'p' to change CCD mode");
@@ -218,7 +199,7 @@ void INM377ProjTemplateTorqueOrient::initialiseFlock(){
         btVector3(24, 1, -20)
     };
     for (unsigned int i = 0; i < NUMBER_OF_OBSTACLES; ++i){
-        obstacles.push_back(new Obstacle(obstaclesPositions[i], 1.0));
+        obstacles.push_back(new Obstacle(obstaclesPositions[i], 2.0));
     }
     
     flock.CreateFlock(50, 20,boidObjects, obstacles);
@@ -227,9 +208,9 @@ void INM377ProjTemplateTorqueOrient::initialiseFlock(){
 
 void INM377ProjTemplateTorqueOrient::createBoids(){
     
-    btScalar w = 2.0;//width
+    btScalar w = 3.0;//width
     btScalar h = 2.0;//height
-    btScalar r = 6.0;//radius
+    btScalar r = 3.0;//radius
     
     
     //create shape geometry structure
@@ -245,14 +226,15 @@ void INM377ProjTemplateTorqueOrient::createBoids(){
     for (unsigned int b = 0; b < NUMBER_OF_BOIDS; ++b){
         m_collisionShapes.push_back(flock.m_boids[b]->GetHullShape());
         btVector3 tempPos(rand() % 50, 0, rand() % 50);
-        btVector3 tempVel(rand() % 20, 0, rand() % 20);
+        btVector3 tempVel(1, 0, 0);
+        //btVector3 tempVel(rand() % 20, 0, rand() % 20);
         //btVector3 tempVel(0, rand() % 10, 0);
         
-        btScalar angle = rand() % int(btScalar(M_PI_2));
-        tempVel = btVector3(cos(angle), 0, sin(angle));
+        //btScalar angle = rand() % int(btScalar(M_PI_2));
+        //tempVel = btVector3(cos(angle), 0, sin(angle));
         
         
-        flock.m_boids[b]->Set(parts, tempPos, tempVel, tempAcc, w, h, r, 1.0, 0.4, 2.0);
+        flock.m_boids[b]->Set(parts, tempPos, tempVel, tempAcc, w, h, r, 1.0, 4.0, 10.0);
         
         //bind and create shape with mass, transform, and structure
         flock.m_boids[b]->m_body = localCreateRigidBody(flock.m_boids[b]->GetMass(), flock.m_boids[b]->GetTransform(), flock.m_boids[b]->GetHullShape());
@@ -300,13 +282,243 @@ static void steer(btDynamicsWorld *world, const btScalar &timeStep){
 //   
     //static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.Run();
     
-   
+    
     
 }
+
+static btVector3 bvelocity(1,0,0);
+static btVector3 bavelocity(0,0,0);
+static btVector3 bacceleration(0,0,0);
+static btVector3 bdesired(0,0,0);
+static btScalar maxspeed = 10;
+static btScalar maxforce = 7.0;
+static btVector3 bsteer(0,0,0);
+static btTransform btransform;
+static btVector3 bposition(0,0,0);
+static btVector3 btorqueTurnLeft(0,0,0);
+static btVector3 btorqueTurnRight(0,0,0);
+
+static btScalar bdistanceXp;
+static btScalar bdistanceXn;
+static btScalar bimpluseX;
+static btScalar bdistanceYp;
+static btScalar bdistanceYn;
+static btScalar bimpluseY;
+static btScalar bdistanceZp;
+static btScalar bdistanceZn;
+static btScalar bimpluseZ;
+static btScalar bboundary = 100;
+static btScalar bboundaryintersectiondistance = 10;
+
+
+
+static btScalar mytrust = 20.0;
+static btScalar myDrag = 0.99;
+static btScalar myAngularDrag = 2.5;	
+
+
 void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     
-    world->clearForces();
+    //world->clearForces();
     
+    //static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.Run();
+    
+    //Autonomous objects
+    
+    btRigidBody * bbody = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boid;
+    btScalar bmass = bbody->getInvMass();
+    btVector3 bgravity = bbody->getGravity();
+    bposition = bbody->getCenterOfMassPosition();
+    btransform = bbody->getWorldTransform();
+    bavelocity = bbody->getAngularVelocity();
+    btVector3 bdirection = bvelocity.safeNormalize();
+    
+    //btScalar angle = btAtan2(bdirection.x(), bdirection.y());
+    //btScalar angleZ = - btAsin( (bdirection).z() );
+    btQuaternion orientation = bbody->getOrientation();//orientation in 
+    btVector3 baxisAngles = orientation.getAxis();
+    btScalar bangle = orientation.getAngle();
+    //orientation.setRotation(btVector3( 0.0, 0.0, 1.0 ), angle);
+    //orientation.setRotation(btVector3( 0.0, 1.0, 0.0 ), angleZ);
+    btMatrix3x3 bMatOrientation = btMatrix3x3(orientation); // quat to matrix
+    //bbody->getWorldTransform().setBasis(bMatOrientation); 
+    //bbody->setAngularVelocity(bavelocity);
+    btVector3 bforward = btVector3(bMatOrientation[0][0], bMatOrientation[0][1], bMatOrientation[0][2]);
+    btVector3 bback = bforward.normalize() * -1.0f;
+    btVector3 bright = btVector3(bMatOrientation[2][0], bMatOrientation[2][1], bMatOrientation[2][2]);
+    btVector3 bleft = bright.normalize() * -1.0f;
+    btVector3 bup = btVector3(bMatOrientation[1][0], bMatOrientation[1][1], bMatOrientation[1][2]);
+    btVector3 bdown = bup.normalize() * -1.0f;
+    btVector3 bthrust = mytrust  * bforward ;//bfront
+    btVector3 bdrag = -myDrag * bvelocity;//bvelocity;
+    btVector3 bangulardrag = -myAngularDrag * bavelocity;//bavelocity
+    
+    btScalar maxSeeAhead = 20.0;
+    btVector3 bahead = bposition + (bforward * maxSeeAhead);
+    btVector3 bahead2 = bposition + (bforward * maxSeeAhead) * 0.5;
+    
+    btScalar distanceFromCenterPoint = 4.0;
+    btVector3 momentArmLeft = (distanceFromCenterPoint * bup);
+    btVector3 momentArmRight = (distanceFromCenterPoint * bdown);
+    btVector3 forceOfSpin = -5.0 * (bavelocity);
+    //btorqueTurnRight = (momentArmRight + forceOfSpin) ;
+    
+    btVector3 intersectPoint = btVector3(0,0,0);
+    btScalar distanceFromIntersector = 0.0;
+    btScalar distanceUntilIntersectorOccur = 0.0;
+    btScalar xIntersect = 0;
+    btScalar zIntersect = 0;
+    
+    bool isAhead1OutOfBounds = false;
+    //bool isAhead2OutOfBounds = false;
+    
+    
+    //going to far in negative x direction
+    //going to far in positive x direction
+    //going to far in negative z direction
+    //going to far in positive z direction
+   
+    bdistanceXp = bboundary - bposition.x();
+    bdistanceXn = bposition.x();
+    bdistanceYp = bboundary - bposition.y();
+    bdistanceYn = bposition.y();
+    bdistanceZp = bboundary - bposition.z();
+    bdistanceZn = bposition.z();
+    
+    if( bdistanceXp < bboundaryintersectiondistance){
+        bimpluseX = bdistanceXp * 0.2;
+        bbody->applyCentralImpulse(btVector3(bimpluseX,0,0));
+    }else if (bdistanceXn < bboundaryintersectiondistance) { 
+        bimpluseX = bdistanceXn * 0.2;
+        bbody->applyCentralImpulse(btVector3(bimpluseX,0,0));
+    }else{
+        bimpluseX = 0;
+        bbody->setAngularVelocity(btVector3(0,0,0));
+    }
+    
+    if( bdistanceYp < bboundaryintersectiondistance){
+        bimpluseY = bdistanceYp * 0.2;
+        bbody->applyCentralImpulse(btVector3(0,bimpluseY,0));
+    }else if( bdistanceYn < bboundaryintersectiondistance ) { 
+        bimpluseY = bdistanceYn * 0.2;
+        bbody->applyCentralImpulse(btVector3(0,bimpluseY,0));
+    }else{
+        bimpluseY = 0;
+        
+    }
+    
+    if( bdistanceZp < bboundaryintersectiondistance){
+        bimpluseZ = bdistanceZp * 0.2;
+        bbody->applyCentralImpulse(btVector3(0,0,bimpluseZ));
+    }else if( bdistanceZn < bboundaryintersectiondistance ) { 
+        bimpluseZ = bdistanceZn * 0.2;
+        bbody->applyCentralImpulse(btVector3(0,0,bimpluseZ));
+                bbody->applyTorque(btVector3(0,0,25));
+    }else{
+        bimpluseZ = 0;
+    }
+    
+    bbody->setAngularVelocity(btVector3(0,0,0));
+    
+    
+    /*
+    if( (bahead.x() < -50.0) || (bahead.x() > 50.0) || (bahead.z() < -50.0) || (bahead.z() > 50.0) ) { 
+        isAhead1OutOfBounds = true;
+    }else {
+        isAhead1OutOfBounds = false;
+    }
+  
+    if (isAhead1OutOfBounds){ 
+        
+        if ( (bahead.x() > 50.0) ){
+            xIntersect = bahead.x() - 50.0;
+        }
+        if( (bahead.x() < -50.0) ) { 
+            xIntersect = bahead.x() + 50.0;
+        }
+        
+        if ( (bahead.z() > 50.0) ){
+            zIntersect = bahead.z() - 50.0;
+        }
+        if( (bahead.z() < -50.0) ) { 
+            zIntersect = bahead.z() + 50.0;
+        }
+        
+        intersectPoint = bahead - btVector3(xIntersect,bahead.y(),zIntersect);
+        
+        distanceFromIntersector = bahead.distance( intersectPoint);
+        distanceUntilIntersectorOccur = intersectPoint.distance(bposition);
+        
+        //bbody0->setLinearVelocity(btVector3(0,0,0));
+        //bbody->applyTorque(btorqueSpinLeft);//allign to the left
+        //bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
+        
+        //bbody->applyCentralForce(bdrag * distanceUntilIntersectorOccur);// + blift + bgravity);
+         
+//       btTransform btrans = bbody->getWorldTransform();
+//       btVector3 bdir = bvelocity.safeNormalize();
+//       btVector3 bfront = btrans * btVector3(1, 0, 0);
+//       btVector3 target = bfront.cross(bdir);
+//       bdesired = target - bposition;
+//       bdesired = bdesired.normalize() * maxspeed;
+//        
+//       bsteer = bdesired - bvelocity;
+//       bsteer = bsteer.normalize() * maxforce;
+        
+        
+        //bbody->applyForce(bvelocity, bsteer);
+        //applyForce(bsteer);
+        
+        //btorqueTurnLeft = (momentArmLeft * distanceUntilIntersectorOccur);
+        //btorqueTurnRight = (momentArmRight + forceOfSpin) ;
+       
+        //bbody->applyTorque(btorqueTurnLeft);
+        //angReset = true;
+        //Angle between local forward vector and bird center of mass position
+        btScalar angle = bforward.angle(btVector3(bbody->getCenterOfMassPosition().x(), 0.0f, bbody->getCenterOfMassPosition().z()));
+        
+        //Apply torque for short amount of time while under 0.5 Pi
+        //if (angle < (M_PI*0.5)){
+            btVector3 TorqueForce(0, 5.0, 0);
+            //bbody->applyTorque(TorqueForce);
+       //}
+        
+    }else{
+        
+//        if (angReset){
+//            bbody->setAngularVelocity(btVector3(0,0,0) );
+//            angReset = false;
+//        }
+    }
+    */
+    
+    
+    //bbody->setLinearVelocity(bthrust);
+   // bbody->applyCentralForce(bthrust);
+    
+    //thrust
+    //btVector3 worldThrust =  btVector3(mytrust, 0, 0);
+    //btVector3 localThrust =  btVector3((btransform * worldThrust) - btransform.getOrigin());
+    //bbody->applyCentralForce(localThrust);
+    //bbody->applyCentralImpulse(localThrust);
+    
+    //Rotate according to thrust
+    //btVector3 rotation = bforward.cross(localThrust);
+    //bbody->applyTorque(rotation);
+    
+    
+    //Drag:
+    //bbody->applyCentralForce(bdrag);
+    //bbody->applyTorque(bangulardrag);
+    
+    
+    
+    
+    
+    std::cout << "is seeing ahead1: " << isAhead1OutOfBounds << std::endl;
+    std::cout << "velocity, x: " << bvelocity.x() << " y: " << bvelocity.y() << " z: " << bvelocity.z() << std::endl;
+    std::cout << "angular velocity, x: " << bavelocity.x() << " y: " << bavelocity.y() << " z: " << bavelocity.z() << std::endl;
+     
 }
 
 void	INM377ProjTemplateTorqueOrient::initPhysics()
@@ -327,7 +539,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 	btDiscreteDynamicsWorld* wp = new btDiscreteDynamicsWorld(m_dispatcher, m_overlappingPairCache, m_constraintSolver, m_collisionConfiguration);
 	//	wp->getSolverInfo().m_numIterations = 20; // default is 10
 	m_dynamicsWorld = wp;
-    //m_dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
+    m_dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
 	m_dynamicsWorld->setInternalTickCallback(MyTickCallback, static_cast<void *>(this), true);
 
     //std::cout << " init physics" << std::endl;
@@ -352,11 +564,11 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
     bShape->addPoint(btVector3(0, 0, 5));
     bShape->addPoint(btVector3(0, 0, -5));
     
-    m_collisionShapes.push_back(bShape);
+    //m_collisionShapes.push_back(bShape);
     btTransform btrans;
     btrans.setIdentity();
     //		btCollisionShape* bshape = m_collisionShapes[3];
-    btVector3 bpos(0, 5, 0);
+    btVector3 bpos(20, 0, 0);
     btrans.setOrigin(bpos);
     btScalar bmass(1.0f);
     btVector3 bLocalInertia;
@@ -367,6 +579,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
     //		boid->setLinearVelocity(btVector3(1, 0, 0));
     boid->activate(true);
     
+     
 }
 
 void	INM377ProjTemplateTorqueOrient::clientResetScene()
@@ -379,65 +592,13 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
 {
 	if (key=='p')
 	{
-		switch (m_ccdMode)
-		{
-			case USE_CCD:
-			{
-				m_ccdMode = USE_NO_CCD;
-				break;
-			}
-			case USE_NO_CCD:
-			default:
-			{
-				m_ccdMode = USE_CCD;
-			}
-		};
+		
 		clientResetScene();
 	} else
 	{
 		DemoApplication::keyboardCallback(key,x,y);
 	}
 }
-
-
-void	INM377ProjTemplateTorqueOrient::shootBox(const btVector3& destination)
-{
-
-	if (m_dynamicsWorld)
-	{
-		float mass = 1.f;
-		btTransform startTransform;
-		startTransform.setIdentity();
-		btVector3 camPos = getCameraPosition();
-		startTransform.setOrigin(camPos);
-
-		setShootBoxShape ();
-
-
-		btRigidBody* body = this->localCreateRigidBody(mass, startTransform,m_shootBoxShape);
-		body->setLinearFactor(btVector3(1,1,1));
-		//body->setRestitution(1);
-
-		btVector3 linVel(destination[0]-camPos[0],destination[1]-camPos[1],destination[2]-camPos[2]);
-		linVel.normalize();
-		linVel*=m_ShootBoxInitialSpeed;
-
-		body->getWorldTransform().setOrigin(camPos);
-		body->getWorldTransform().setRotation(btQuaternion(0,0,0,1));
-		body->setLinearVelocity(linVel);
-		body->setAngularVelocity(btVector3(0,0,0));
-		body->setContactProcessingThreshold(1e30);
-
-		///when using m_ccdMode, disable regular CCD
-		if (m_ccdMode==USE_CCD)
-		{
-			body->setCcdMotionThreshold(CUBE_HALF_EXTENTS);
-			body->setCcdSweptSphereRadius(0.4f);
-		}
-		
-	}
-}
-
 
 
 

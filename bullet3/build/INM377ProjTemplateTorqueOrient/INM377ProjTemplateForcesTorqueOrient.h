@@ -81,13 +81,6 @@ private:
 
 	class btDefaultCollisionConfiguration* m_collisionConfiguration;
 
-    
-	enum
-	{
-		USE_CCD=1,
-		USE_NO_CCD
-	};
-	int 	m_ccdMode;
 
 public:
 
@@ -110,7 +103,6 @@ public:
 	virtual void keyboardCallback(unsigned char key, int x, int y);
 
 	virtual void displayCallback();
-	virtual void	shootBox(const btVector3& destination);
 	virtual void	clientResetScene();
 
 	static DemoApplication* Create()

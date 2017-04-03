@@ -27,7 +27,8 @@ void Flock::steer() const{
     
 }
 
-btVector3 Flock::CollisionAvoidance(Boid *actor) const{
+//output, computing new force
+btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     
     
     //always maintain prudent separation from their neighbors (collision avoidance/seperation)
@@ -98,7 +99,7 @@ btVector3 Flock::CollisionAvoidance(Boid *actor) const{
 
 
 
-btVector3 Flock::VelocityMarching(Boid *actor) const{
+btVector3 Flock::VelocityMarching(const Boid *actor) const{
     
     //Alignment is a behavior that causes a particular agent to line up with agents close by.
     //the flock quickly becomes "polarized", its members heading in approximately the same direction at approximately the same speed (velocity marching or allignment)
@@ -150,7 +151,7 @@ btVector3 Flock::VelocityMarching(Boid *actor) const{
     
 }
 
-btVector3 Flock::FlockCentering(Boid *actor) const{
+btVector3 Flock::FlockCentering(const Boid *actor) const{
     
     //boids stay near one another (flock centering or cohesion)
     //Flock Centering: attempt to stay close to nearby flockmates
@@ -355,12 +356,12 @@ void Flock::Run(){
     
     FlockBoids();
     Update();
-    Borders();
+    //Borders();
     
     for (unsigned int b = 0; b < m_boids.size(); ++b){
         m_boids[b]->m_body->applyCentralForce(m_boids[b]->m_velocity);
         //m_boids[b]->m_body->setLinearVelocity(m_boids[b]->m_velocity);
-        m_boids[b]->m_transform.setOrigin(m_boids[b]->m_position);
+        //m_boids[b]->m_transform.setOrigin(m_boids[b]->m_position);
     }
     
 }

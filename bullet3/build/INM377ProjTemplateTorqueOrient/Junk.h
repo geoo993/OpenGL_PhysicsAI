@@ -249,5 +249,25 @@ std::cout << "y: " << y << ", vertical difference: " << verticalDifference << ",
 
 
 
+ 
+ 
+ 
+ //btransform.setOrigin(bposition);
+ //bbody->applyCentralForce(bvelocity);
+ //bbody->setLinearVelocity(bvelocity);
+ //bbody->applyTorque(btorqueTurnLeft);//allign to the left
+ //bbody->applyTorque(btorqueTurnRight);//allign to the right
+ 
+ 
+ 
+ //static void applyForce(btVector3 force) {
+ //    bacceleration = bacceleration + (force);
+ //}
+ 
+ 
+ bvelocity = bvelocity + bacceleration;
+ bvelocity = bvelocity.normalize() * maxspeed;
+ bposition =  bposition + bvelocity;
+ bacceleration = bacceleration * 0.0;
 
 */

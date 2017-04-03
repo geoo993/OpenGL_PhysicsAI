@@ -15,9 +15,9 @@ class Flock {
 	Flock(const Flock &flock) {}
 	Flock & operator=(const Flock &flock) { return *this; }
 
-    btVector3 CollisionAvoidance(Boid *actor) const ;
-    btVector3 VelocityMarching(Boid *actor) const;
-    btVector3 FlockCentering(Boid *actor) const;
+    btVector3 CollisionAvoidance(const Boid *actor) const ;
+    btVector3 VelocityMarching(const Boid *actor) const;
+    btVector3 FlockCentering(const Boid *actor) const;
     
 public:
 	Flock() {}
