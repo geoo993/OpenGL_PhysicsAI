@@ -54,20 +54,24 @@ class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 {
 	
 public:
-    void createGround();
+    void CreateGround();
     
-    void createBoids();
+    void CreateBoids();
     
-    void createObstacle();
+    void CreateObstacle();
+    
+    void NewBoids(const unsigned long int &index, const btVector3 &position);
+    
+    void NewObstacle(const unsigned long int &index);
    
     std::vector<btRigidBody*> collisionBodies;
     
     Flock flock;
 private:
     
-    const int NUMBER_OF_BOIDS = 10;
-    const int NUMBER_OF_OBSTACLES = 4;
-    void initialiseFlock();
+    const int NUMBER_OF_BOIDS = 25;
+    const int NUMBER_OF_OBSTACLES = 12;
+    void InitialiseFlock();
     
     
 	//keep the collision shapes, for deletion/cleanup

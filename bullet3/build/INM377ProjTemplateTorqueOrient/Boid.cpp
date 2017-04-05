@@ -15,8 +15,17 @@ Boid::Boid(){
     m_hullShape = nullptr;
     
     m_transform = btTransform();
-    m_velocity = btVector3(0,0,0);
-    m_acceleration = btVector3(0,0,0);
+    
+    m_hullShape = new btConvexHullShape();
+}
+
+Boid::Boid(btRigidBody* body){
+    
+    m_body = body; 
+    m_collShape = nullptr;
+    m_hullShape = nullptr;
+    
+    m_transform = btTransform();
     
     m_hullShape = new btConvexHullShape();
 }
@@ -27,10 +36,7 @@ Boid::~Boid(){
     delete m_hullShape;
 }
 
-void  Boid::Set( 
-    const btVector3 &position, 
-    const btVector3 &velocity, 
-    const btVector3 &acceleration)
+void  Boid::Set( const btVector3 &position)
     {
 
     m_hullShape->addPoint(btVector3(bGet(BoidsValues::BRADIUS), 0, 0));
@@ -38,7 +44,6 @@ void  Boid::Set(
     m_hullShape->addPoint(btVector3(0, 0, bGet(BoidsValues::BWIDTH)));
     m_hullShape->addPoint( btVector3(0, 0, -bGet(BoidsValues::BWIDTH)));
     m_collShape = m_hullShape;
-    
     
     //set position
     m_transform.setIdentity();
@@ -48,32 +53,14 @@ void  Boid::Set(
     btVector3 bLocalInertia;
     m_hullShape->calculateLocalInertia(bGet(BoidsValues::BMASS), bLocalInertia);
     
-    //velocity
-    m_velocity = velocity;
-    
-    //acceleration
-    m_acceleration = m_acceleration;
-    
 }
 
 void Boid::Activate(){
     
     m_body->setAnisotropicFriction(m_hullShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
     m_body->setFriction(0.5);
-    //m_body->setLinearVelocity(m_velocity);
+    m_body->setLinearVelocity(btVector3(1,0,0));
     m_body->activate(true);
-}
-
-void Boid::applyForce(btVector3 force) {
-    // We could add mass here if we want A = F / M
-    m_acceleration = m_acceleration + force;
-}
-
-
-// Can the boid see the point?
-bool Boid::canSee(const btVector3 &pos) const{
-    
-    return false;
 }
 
 btVector3 Boid::Seek(const btVector3 &target) const{
@@ -82,23 +69,46 @@ btVector3 Boid::Seek(const btVector3 &target) const{
     desired.normalize();
     desired = desired * bGet(BoidsValues::BMAXSPEED); //m_maxSpeed;
     
-    btVector3 steer = desired - m_velocity;
+    btVector3 steer = desired - m_body->getLinearVelocity();
     steer = steer.normalize() * bGet(BoidsValues::BMAXFORCE);
     
     return steer;
 }
 
-// Forces on the boid
-btVector3 Boid::physicalForce() const{
-    return btVector3(0,0,0);
-}
-btVector3 Boid::flockingForce(const std::vector<Boid>& boids) const{
+
+btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
     
-    return btVector3(0,0,0);
-}
-btVector3 Boid::avoidanceForce(const std::vector<Obstacle *>& obstacles) const{
+    btVector3 bposition = btVector3(m_body->getCenterOfMassPosition().x(), 0.0,m_body->getCenterOfMassPosition().z());
+    btVector3 oAvoidance = btVector3(0,0,0);
     
-    return btVector3(0,0,0);
+    for (unsigned int o = 0; o < obstacles.size(); ++o){
+        
+        btScalar oRadius = obstacles[o]->getRadius() * 20;
+        btVector3 oCenter = obstacles[o]->getCentre();
+        
+        btScalar aheadDistanceToObstacle = oCenter.distance(bposition);
+        btVector3 bright = GetRight();
+        btScalar oAvoidanceforce = btDot(bright.normalized() ,oCenter.normalized()) ;
+        
+        if ((aheadDistanceToObstacle <= oRadius)){
+            
+            if (oAvoidanceforce < 0){
+                //-1 right
+                oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0);
+                
+                //actor->m_body->applyTorque(oAvoidance);
+            }else if(oAvoidanceforce > 0) {
+                //1 left
+                oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0);
+                //actor->m_body->applyTorque(steer);
+            }
+            
+        } 
+        
+    }
+    
+    return oAvoidance;
+    
 }
 
 

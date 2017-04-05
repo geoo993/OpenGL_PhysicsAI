@@ -15,17 +15,12 @@ void Flock::CreateFlock(const btScalar &boundary, const std::vector<Boid*> boids
 }
 
 void Flock::addBoid(btRigidBody* b){
-    
+    m_boids.push_back(new Boid(b));
 }
 
 // Add an obstacle for boids to avoid.
 void Flock::addObstacle(Obstacle* o){
-    
-}
-
-// Apply steering forces to each boid in the flock.
-void Flock::steer() const{
-    
+    m_obstacles.push_back(o);
 }
 
 //output, computing new force
@@ -41,11 +36,11 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     
     //Separation is the behavior that causes an agent to steer away from all of its neighbors.
     
+    // separation behavior
+    // steer in the oposite direction from each of our nearby neigbhors
+    
     btVector3 c(0,0,0); // or steer
     int neighborCount = 0;
-    btScalar neighborhoodSphericalZone = 20.0;// alos known as the neighbor radius
-    
-    //When a neighboring agent is found, the distance from the agent to the neighbor is added to the computation vector.
     
     for (unsigned int b = 0; b < m_boids.size(); ++b){
         btRigidBody*otherActor = m_boids[b]->m_body;
@@ -53,9 +48,8 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
         if (otherActor != actor->m_body)
         {
             btScalar distance = actor->m_body->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition());
-            
-            if (distance > 0 && distance < neighborhoodSphericalZone){
-                
+            // get all my nearby neighbors inside the Spherical Zone/radius of this current actor
+            if (distance > 0 && distance < m_neighborhoodSphericalZone){
                 
                 btScalar tempX = actor->m_body->getCenterOfMassPosition().x() - otherActor->getCenterOfMassPosition().x() ;
                 btScalar tempY = actor->m_body->getCenterOfMassPosition().y() - otherActor->getCenterOfMassPosition().y();
@@ -88,7 +82,7 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
         
         c.normalize();
         c = c * actor->bGet(Boid::BoidsValues::BMAXSPEED);
-        c = c - actor->m_velocity;
+        c = c - actor->m_body->getLinearVelocity();
         c = c.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE); //limit
     }
     
@@ -102,6 +96,10 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
 
 btVector3 Flock::VelocityMarching(const Boid *actor) const{
     
+    // alignment behavior
+    // steer agent to match the direction and speed of neighbors
+    
+ 
     //Alignment is a behavior that causes a particular agent to line up with agents close by.
     //the flock quickly becomes "polarized", its members heading in approximately the same direction at approximately the same speed (velocity marching or allignment)
     //Velocity Matching: attempt to match velocity with nearby flockmates
@@ -112,7 +110,6 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     //those close enough to be considered neighbors of the specified actor
     int neighborCount = 0;
     //The neighborhood is defined as a spherical zone of sensitivity centered at the boid's local origin.
-    btScalar neighborhoodSphericalZone = 40.0;// alos known as the neighbor radius
     
     
     //If an agent is found within the radius, its velocity is added to the computation vector, and the neighbor count is incremented.
@@ -123,8 +120,8 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
         if (otherActor != actor->m_body)
         {
             btScalar distance = actor->m_body->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition());
-            
-            if (distance > 0 && distance < neighborhoodSphericalZone){
+            // get all my nearby neighbors inside the Spherical Zone/radius of this current actor
+            if (distance > 0 && distance < m_neighborhoodSphericalZone){
                 btScalar tempX = v.x() + otherActor->getLinearVelocity().x();
                 btScalar tempY = v.y() + otherActor->getLinearVelocity().y();
                 btScalar tempZ = v.z() + otherActor->getLinearVelocity().z();
@@ -145,7 +142,7 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     v.normalize();
     v = v * actor->bGet(Boid::BoidsValues::BMAXSPEED);
     
-    btVector3 steer = v - actor->m_velocity;
+    btVector3 steer = v - actor->m_body->getLinearVelocity();
     steer = steer.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE);
     
     return steer;
@@ -159,18 +156,23 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
     //Flock centering makes a boid want to be near the center of the flock.
     //Cohesion is a behavior that causes agents to steer towards the "center of mass" - that is, the average position of the agents within a certain radius.
     
+    // cohesion behavior
+    // return a vector that will steer our curent velocity
+    // towards the center of mass of all nearby neighbors
     btVector3 p(0,0,0);//or sum
     int neighborCount = 0;
-    btScalar neighborhoodSphericalZone = 40.0;// alos known as the neighbor radius
     
+     //When a neighboring actor is found, the distance from the agent to the neighbor is added to the computation vector.
     for (unsigned int b = 0; b < m_boids.size(); ++b){
         btRigidBody*otherActor = m_boids[b]->m_body;
         
         if (otherActor != actor->m_body)
         {
             btScalar distance = actor->m_body->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition());
-            
-            if (distance > 0 && distance < neighborhoodSphericalZone){
+            // get all my nearby neighbors inside the Spherical Zone/radius of this current actor
+            if (distance > 0 && distance < (m_neighborhoodSphericalZone * 2.0)){
+                
+                // find the center of mass of all neighbors
                 btScalar tempX = p.x() + otherActor->getCenterOfMassPosition().x();
                 btScalar tempY = p.y() + otherActor->getCenterOfMassPosition().y();
                 btScalar tempZ = p.z() + otherActor->getCenterOfMassPosition().z();
@@ -200,68 +202,12 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
 }
 
 
-//mult, means mulitply ()
-//sub means subtract
-//add is addition
-//div is divide
-//mag is vector length
-//limit is the normal or direction of a vector multiplied to a certain amount
-void Flock::FlockBoids(){
-
-    for (unsigned int b = 0; b < m_boids.size(); ++b){
-        
-        //The computational abstraction that combines process, procedure, and state is called an actor
-        Boid* actor = m_boids[b];
-        btRigidBody* actorBody = actor->m_body;
-        
-        
-        //std::vector<SphereObstacle *>& obstacles = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->obstacles;
-        
-        btVector3 separation = CollisionAvoidance(actor);//seperation
-        btVector3 alignment = VelocityMarching(actor);//alignement
-        btVector3 cohesion = FlockCentering(actor);//cohesion
-        
-        //btVector3 tempVel = alignment + cohesion + separation;
-        //tempVel.normalize();
-        //actorBody->setLinearVelocity(tempVel);
-        //actorBody->applyCentralForce(tempVel);
-        
-        
-        separation = separation * 1.5;
-        alignment = alignment * 1.0;
-        cohesion = cohesion * 1.0;
-        
-        m_boids[b]->applyForce(separation);
-        m_boids[b]->applyForce(alignment);
-        m_boids[b]->applyForce(cohesion);
-        
-        //An acceleration requests is used to determine which way to steer the boid.
-        //The easiest way to combine acceleration requests is to average them. Because of the included "strength" factors, this is actually a weighted average.
-        //Prioritized acceleration allocation is based on a strict priority ordering of all component behaviors, hence of the consideration of their acceleration requests.
-        //The magnitude of each request is measured and added into another accumulator.
-        //This process continues until the sum of the accumulated magnitudes gets larger than the maximum acceleration value, which is a parameter of each boid.
-        
-
-    }
-
-    
-}
 
 
-
-
-void Flock::Borders(Boid *actor){
-    
+// Apply steering forces to each boid in the flock.
+void Flock::Steer(Boid *actor) const {
     btRigidBody *bbody = actor->m_body;
-    //y axis
-    btScalar bdistanceYp = m_borderboundary - actor->m_body->getCenterOfMassPosition().y();
-    btScalar bdistanceYn = actor->m_body->getCenterOfMassPosition().y();
     
-    if( bdistanceYp < 10.0){
-        bbody->applyCentralForce(btVector3(0, -(actor->bGet(Boid::BoidsValues::BLift)), 0));
-    }else if( bdistanceYn < 10.0 ) { 
-        bbody->applyCentralForce(btVector3(0, (actor->bGet(Boid::BoidsValues::BLift)), 0));
-    }
     
     /////////////////////////
     ///////////////-90/////////
@@ -281,8 +227,8 @@ void Flock::Borders(Boid *actor){
     btScalar angleFromWorld = Extension::getAngleBetweenTwoPoints(bbody->getCenterOfMassPosition().x()
                                                                   ,0,bbody->getCenterOfMassPosition().z(),
                                                                   0.0,0.0,0.0);
-    btScalar angleFromLocal = Extension::getAngleBetweenTwoPoints(actor->Heading().x()
-                                                                  ,0,actor->Heading().z(),
+    btScalar angleFromLocal = Extension::getAngleBetweenTwoPoints(actor->GetHeading().x()
+                                                                  ,0,actor->GetHeading().z(),
                                                                   0.0,0.0,0.0);
         if (bbody->getCenterOfMassPosition().length() > m_borderboundary){
             
@@ -310,42 +256,51 @@ void Flock::Borders(Boid *actor){
 }
 
 
-void Flock::Update(){
-    
-    FlockBoids();
+
+
+void Flock::UpdateFlock(){
     
     for (unsigned int b = 0; b < m_boids.size(); ++b){
-        Boid *actor = m_boids[b];
-        btRigidBody *bbody = actor->m_body;
+        
+        //The computational abstraction that combines process, procedure, and state is called an actor
+        Boid* actor = m_boids[b];
+        btRigidBody* bbody = actor->m_body;
         btTransform btransform = bbody->getWorldTransform();
-        btVector3 bvelocity = bbody->getLinearVelocity();
-        btVector3 bavelocity = bbody->getAngularVelocity();
-       
+        
+        btVector3 separation = CollisionAvoidance(actor);//seperation
+        btVector3 alignment = VelocityMarching(actor);//alignement
+        btVector3 cohesion = FlockCentering(actor);//cohesion
+        btVector3 tempVel = alignment + cohesion + separation;
+        tempVel.normalize();
+        
+
         btVector3 bthrust =  btVector3((btransform * btVector3(actor->bGet(Boid::BoidsValues::BMAXSPEED), 0, 0)) - btransform.getOrigin());
         btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();//bvelocity;
         btVector3 bangulardrag = -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();//bavelocity
         
+        btScalar bdistanceYp = m_borderboundary - actor->m_body->getCenterOfMassPosition().y();
+        btScalar bdistanceYn = actor->m_body->getCenterOfMassPosition().y();
+       // btVector3 blift = btVector3(0,0,0);
+        if( bdistanceYp < 10.0){
+            //blift = btVector3(0, -(actor->bGet(Boid::BoidsValues::BLift)), 0) ;
+            bbody->applyCentralForce(btVector3(0, -(actor->bGet(Boid::BoidsValues::BLift)), 0));
+        }else if( bdistanceYn < 10.0 ) { 
+            //blift = btVector3(0,actor->bGet(Boid::BoidsValues::BLift), 0);
+            bbody->applyCentralForce(btVector3(0,actor->bGet(Boid::BoidsValues::BLift), 0));
+        }
         
-        //update velocity
-        bvelocity = bvelocity + actor->m_acceleration;
-            
-        //Limit velocity speed
-        bvelocity = bvelocity.normalize() *  actor->bGet(Boid::BoidsValues::BMAXSPEED);
-            
+        
+        btVector3 bgravity = actor->m_body->getGravity();
+        bbody->applyCentralForce(bgravity);
+        
         //thrust
-        bbody->applyCentralForce(bthrust );
+        bbody->applyCentralForce(bthrust + tempVel); //+ blift;
         
-        //drag
         bbody->applyCentralForce(bdrag);
-        bbody->applyTorque(bangulardrag);
-        
-        //reset acceleration to 0 each cycle
-        actor->m_acceleration = actor->m_acceleration * 0.0;
-        
-        
+        bbody->applyTorque(bangulardrag + actor->AvoidanceForce(m_obstacles));
         
         //boundary
-        Borders(actor);
+        Steer(actor);
     }
 
     

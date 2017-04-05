@@ -20,6 +20,7 @@ class Flock {
     btVector3 VelocityMarching(const Boid *actor) const;
     btVector3 FlockCentering(const Boid *actor) const;
     
+    const btScalar m_neighborhoodSphericalZone = 30.0;// also known as the neighbor radius
 public:
     Flock() {}
     
@@ -35,15 +36,11 @@ public:
 
 	// Add an obstacle for boids to avoid.
 	void addObstacle(Obstacle* o);
-
+    
 	// Apply steering forces to each boid in the flock.
-	void steer() const;
+	void Steer(Boid *actor ) const;
     
-    void FlockBoids();
-    
-    void Update();
-    
-    void Borders(Boid *actor );
+    void UpdateFlock();
 
     
 };

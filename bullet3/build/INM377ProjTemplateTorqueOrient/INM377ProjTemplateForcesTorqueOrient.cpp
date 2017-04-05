@@ -40,7 +40,7 @@ static GLDebugDrawer	sDebugDrawer;
 INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
 {
     
-    initialiseFlock();
+    InitialiseFlock();
     
 	setDebugMode(btIDebugDraw::DBG_DrawText+btIDebugDraw::DBG_NoHelpText);
 	setCameraDistance(btScalar(40.0));
@@ -139,7 +139,7 @@ void INM377ProjTemplateTorqueOrient::displayCallback(void) {
 	swapBuffers();
 }
 
-void INM377ProjTemplateTorqueOrient::createGround(){
+void INM377ProjTemplateTorqueOrient::CreateGround(){
     
     ///create a few basic rigid bodies
     btBoxShape* box = new btBoxShape(btVector3(btScalar(110.),btScalar(1.),btScalar(110.)));
@@ -179,7 +179,7 @@ void INM377ProjTemplateTorqueOrient::createGround(){
     }
 }
 
-void INM377ProjTemplateTorqueOrient::initialiseFlock(){
+void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
     
     std::vector<Boid*>	boidObjects;
     std::vector<Obstacle *> obstacles;
@@ -193,179 +193,70 @@ void INM377ProjTemplateTorqueOrient::initialiseFlock(){
     }
     
     std::vector<btVector3> obstaclesPositions = {
-        btVector3(-5, 1, 0),
-        btVector3(-30, 1, 20),
-        btVector3(0, 1, 35),
-        btVector3(24, 1, -20)
+        btVector3(-5, 1, 45),
+        btVector3(-60, 1, 20),
+        btVector3(0, 1, -35),
+        btVector3(34, 1, -50),
+        btVector3(75, 1, 35),
+        btVector3(50, 1, 60),
+        btVector3(-70, 1, 32),
+        btVector3(20, 1, -70),
+        btVector3(-75, 1, -35),
+        btVector3(-20, 1, -60),
+        btVector3(50, 1, -62),
+        btVector3(20, 1, -10)
     };
     for (unsigned int i = 0; i < NUMBER_OF_OBSTACLES; ++i){
-        obstacles.push_back(new Obstacle(obstaclesPositions[i], 2.0));
+        obstacles.push_back(new Obstacle(obstaclesPositions[i], 1.0));
     }
     
     flock.CreateFlock(50.0, boidObjects, obstacles);
     
 }
 
-void INM377ProjTemplateTorqueOrient::createBoids(){
+void INM377ProjTemplateTorqueOrient::CreateBoids(){
     
-    btVector3 tempAcc(0, 0, 0);
-    for (unsigned int b = 0; b < NUMBER_OF_BOIDS; ++b){
-        m_collisionShapes.push_back(flock.m_boids[b]->GetHullShape());
+    for (unsigned long int b = 0; b < NUMBER_OF_BOIDS; ++b){
         btVector3 tempPos(rand() % 50, 0, rand() % 50);
-        btVector3 tempVel(rand() % 5, 0, rand() % 5);
-        
-        flock.m_boids[b]->Set(tempPos, tempVel, tempAcc);
-        
-        //bind and create shape with mass, transform, and structure
-        flock.m_boids[b]->m_body = localCreateRigidBody(flock.m_boids[b]->bGet(Boid::BoidsValues::BMASS), flock.m_boids[b]->GetTransform(), flock.m_boids[b]->GetHullShape());
-        
-        flock.m_boids[b]->Activate();
+        NewBoids(b, tempPos);
     }
     
 }
 
-void INM377ProjTemplateTorqueOrient::createObstacle(){
+void INM377ProjTemplateTorqueOrient::CreateObstacle(){
   
-    for (unsigned int o = 0; o < NUMBER_OF_OBSTACLES; ++o){
+    for (unsigned long int o = 0; o < NUMBER_OF_OBSTACLES; ++o){
         
-        btCollisionShape* collisionShape = new btCylinderShape (btVector3(flock.m_obstacles[o]->getRadius(), 10.0, flock.m_obstacles[o]->getRadius()));
-        //btCollisionShape* collisionShape = new btSphereShape(5.0);
-        //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
-        m_collisionShapes.push_back(collisionShape);
+//        btCollisionShape* collisionShape = new btCylinderShape (btVector3(flock.m_obstacles[o]->getRadius(), 20.0, flock.m_obstacles[o]->getRadius()));
+//        //btCollisionShape* collisionShape = new btSphereShape(5.0);
+//        //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
+//        m_collisionShapes.push_back(collisionShape);
+//        
+//        btTransform trans;
+//        trans.setIdentity();
+//        trans.setOrigin(flock.m_obstacles[o]->getCentre());
+//        
+//        btScalar mass(100.0f);
+//        btVector3 cLocalInertia;
+//        collisionShape->calculateLocalInertia(mass, cLocalInertia);
+//        
+//        collisionBodies[o] = localCreateRigidBody(mass, trans, collisionShape);
+//        collisionBodies[o]->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+//        collisionBodies[o]->setFriction(0.5);
+//        //collisionBodies[i]->setLinearVelocity(btVector3(1, 0, 0));
+//        collisionBodies[o]->activate(true);
         
-        btTransform trans;
-        trans.setIdentity();
-        trans.setOrigin(flock.m_obstacles[o]->getCentre());
-        
-        btScalar mass(50.0f);
-        btVector3 cLocalInertia;
-        collisionShape->calculateLocalInertia(mass, cLocalInertia);
-        
-        collisionBodies[o] = localCreateRigidBody(mass, trans, collisionShape);
-        collisionBodies[o]->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-        collisionBodies[o]->setFriction(0.5);
-        //collisionBodies[i]->setLinearVelocity(btVector3(1, 0, 0));
-        collisionBodies[o]->activate(true);
+        NewObstacle(o);
     }
 
     
 }
-
-
-static btScalar bdistanceYp;
-static btScalar bdistanceYn;
-static btScalar bboundary = 50;
-static btScalar bboundaryintersectiondistance = 10;
-
-
-//WORLD SPACE VECTORS
-const btVector3 bworldup(0, 1, 0);
-const btVector3 bworldforward(0, 0, 1);
-const btScalar bceilingForce = 25.0;
-const btScalar bfloorforce = 25.0;
-static btScalar bmaxspeed = 14;
-static btScalar bmaxforce = 7.0;
-static btScalar myDrag = 3.0;
-static btScalar myAngularDrag = 5.0;
-static btScalar torqueRotateBack = 2.0;
-
 
 void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     
     world->clearForces();
     
-    static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.Update();
-    
-    /*
-    btRigidBody * bbody = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->boid;
-    
-    
-    btScalar bmass = bbody->getInvMass();
-    btVector3 bgravity = bbody->getGravity();
-    btVector3 bposition = bbody->getCenterOfMassPosition();
-    btTransform btransform = bbody->getWorldTransform();
-    btVector3 bvelocity = bbody->getLinearVelocity();
-    btVector3 bavelocity = bbody->getAngularVelocity();
-    btVector3 bdirection = bvelocity.safeNormalize();
-    
-    
-    btQuaternion orientation = bbody->getOrientation();//orientation in 
-    btMatrix3x3 bMatOrientation = btMatrix3x3(orientation); // quat to matrix
-    btVector3 bforward = btVector3(bMatOrientation[0][0], bMatOrientation[0][1], bMatOrientation[0][2]);
-    btVector3 bback = bforward.normalize() * -1.0f;
-    btVector3 bright = btVector3(bMatOrientation[2][0], bMatOrientation[2][1], bMatOrientation[2][2]);
-    btVector3 bleft = bright.normalize() * -1.0f;
-    btVector3 bup = btVector3(bMatOrientation[1][0], bMatOrientation[1][1], bMatOrientation[1][2]);
-    btVector3 bdown = bup.normalize() * -1.0f;
-    btVector3 bthrust =  btVector3((btransform * btVector3(bmaxspeed, 0, 0)) - btransform.getOrigin());
-    btVector3 bdrag = -(myDrag) * bbody->getLinearVelocity();//bvelocity;
-    btVector3 bangulardrag = -(myAngularDrag) * bbody->getAngularVelocity();//bavelocity
-    
-    //////////////////////////
-    ///////////////-90/////////
-    ////////////   /   ////////
-    /////////      /     /////
-    //////         /        /////
-    ////           /           ////
-    ///            /            ////-180
-    //0       //////////         ///
-    ///            /             ///180
-    ////           /            ////
-    //////         /           ////
-    ///////        /         //////
-    //////////     /        ///////
-    //////////////     ///////
-    ////////////////90//////
-    btScalar angleFromWorld = Extension::getAngleBetweenTwoPoints(bbody->getCenterOfMassPosition().x()
-                                                                  ,0,bbody->getCenterOfMassPosition().z(),
-                                                                  0.0,0.0,0.0);
-    btScalar angleFromLocal = Extension::getAngleBetweenTwoPoints(bforward.x()
-                                                                  ,0,bforward.z(),
-                                                                  0.0,0.0,0.0);
-
-    btScalar maxSeeAhead = 20.0;
-    btVector3 bahead = bposition + (bforward * maxSeeAhead);
-    btVector3 bahead2 = bposition + (bforward * maxSeeAhead) * 0.5;
-    
-
-    //thrust
-    bbody->applyCentralForce(bthrust);
-    
-    //drag
-    bbody->applyCentralForce(bdrag);
-    bbody->applyTorque(bangulardrag);
-
-    //y axis
-    bdistanceYp = bboundary - bposition.y();
-    bdistanceYn = bposition.y();
-    if( bdistanceYp < bboundaryintersectiondistance){
-        bbody->applyCentralForce(btVector3(0, -bceilingForce, 0));
-    }else if( bdistanceYn < bboundaryintersectiondistance ) { 
-        bbody->applyCentralForce(btVector3(0, bfloorforce, 0));
-    }
-
-    if (bbody->getCenterOfMassPosition().length() > bboundary){
-       
-        btVector3 TorqueForce(0, torqueRotateBack, 0);
-        if(angleFromWorld > 0.0 && angleFromWorld < 90.0 ){
-            if( (angleFromLocal > 0.0 && angleFromLocal < 45.0) || (angleFromLocal <= 0.0 && angleFromLocal > -125.0) ){
-                bbody->applyTorque(TorqueForce);
-            }
-        }else if(angleFromWorld >= 90.0 && angleFromWorld < 180.0 ){
-            if( (angleFromLocal > 125.0 && angleFromLocal < 180.0) || (angleFromLocal <= -45.0 && angleFromLocal > -180.0) ){
-                bbody->applyTorque(TorqueForce);
-            }
-        }else if(angleFromWorld < 0.0 && angleFromWorld > -90.0){
-            if( (angleFromLocal > 0.0 && angleFromLocal < 125.0) || (angleFromLocal <= 0.0 && angleFromLocal > -45.0) ){
-                bbody->applyTorque(TorqueForce);
-            }
-        }else if(angleFromWorld <= -90.0 && angleFromWorld > -180.0 ){
-            if( (angleFromLocal > 45.0 && angleFromLocal < 180.0) || (angleFromLocal <= -125.0 && angleFromLocal > -180.0) ){
-                bbody->applyTorque(TorqueForce);
-            }
-        }
-    }
-    */
+    static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.UpdateFlock();
     
 }
 
@@ -392,41 +283,16 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 
     //std::cout << " init physics" << std::endl;
         
-    createGround();
+    CreateGround();
     
 	{
 		//create a few dynamic rigidbodies
 		// Re-using the same collision is better for memory usage and performance
 
-        createBoids();
-        createObstacle();
+        CreateBoids();
+        CreateObstacle();
 		
 	}
-    
-    
-    //		btCollisionShape* bShape = new btBoxShape(btVector3(5, 3, 5));
-//    btConvexHullShape * bShape = new btConvexHullShape();
-//    bShape->addPoint(btVector3(10, 0, 0));
-//    bShape->addPoint(btVector3(0, 3, 0));
-//    bShape->addPoint(btVector3(0, 0, 5));
-//    bShape->addPoint(btVector3(0, 0, -5));
-//    
-//    //m_collisionShapes.push_back(bShape);
-//    btTransform btrans;
-//    btrans.setIdentity();
-//    //		btCollisionShape* bshape = m_collisionShapes[3];
-//    btVector3 bpos(1, 0, 0);
-//    btrans.setOrigin(bpos);
-//    btScalar bmass(1.0);
-//    btVector3 bLocalInertia;
-//    bShape->calculateLocalInertia(bmass, bLocalInertia);
-//    boid = localCreateRigidBody(bmass, btrans, bShape);
-//    boid->setAnisotropicFriction(bShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-//    boid->setFriction(0.5);
-//    //		boid->setLinearVelocity(btVector3(1, 0, 0));
-//    boid->activate(true);
-//    
-    
 }
 
 void	INM377ProjTemplateTorqueOrient::clientResetScene()
@@ -439,14 +305,29 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
 {
 	if (key=='p')
 	{
-		
 		clientResetScene();
-	} else
+    }else if (key=='b')
+    {
+        btRigidBody *bboid;
+        flock.addBoid(bboid);
+
+        btVector3 tempPos(rand() % 50, 0, rand() % 50);
+        unsigned long int index = (flock.m_boids.size() - 1);
+        NewBoids(index, tempPos);
+        
+    }else if (key=='o')
+    {
+        btVector3 tempPos(rand() % 50, 1, rand() % 50);
+        //Obstacle *obstacle = new Obstacle(tempPos, 1.0);
+        flock.addObstacle( new Obstacle(tempPos, 1.0));
+        unsigned long int index = (flock.m_obstacles.size() - 1);
+        NewObstacle(index);
+    }
+    else
 	{
 		DemoApplication::keyboardCallback(key,x,y);
 	}
 }
-
 
 
 void	INM377ProjTemplateTorqueOrient::exitPhysics()
@@ -482,5 +363,39 @@ void	INM377ProjTemplateTorqueOrient::exitPhysics()
 }
 
 
+void INM377ProjTemplateTorqueOrient::NewBoids(const unsigned long int &index, const btVector3 &position){
+   
+    flock.m_boids[index]->Set(position);
+    m_collisionShapes.push_back(flock.m_boids[index]->GetHullShape());
+    
+    //bind and create shape with mass, transform, and structure
+    flock.m_boids[index]->m_body =
+    localCreateRigidBody(flock.m_boids[ index]->bGet(Boid::BoidsValues::BMASS), flock.m_boids[index]->GetTransform(), flock.m_boids[index]->GetHullShape());
+    flock.m_boids[index]->Activate();
+}
+
+void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index){
+    
+    
+    btCollisionShape* collisionShape = new btCylinderShape (btVector3(flock.m_obstacles[index]->getRadius(), 20.0, flock.m_obstacles[index]->getRadius()));
+    //btCollisionShape* collisionShape = new btSphereShape(5.0);
+    //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
+    m_collisionShapes.push_back(collisionShape);
+    
+    btTransform trans;
+    trans.setIdentity();
+    trans.setOrigin(flock.m_obstacles[index]->getCentre());
+    
+    btScalar mass(100.0f);
+    btVector3 cLocalInertia;
+    collisionShape->calculateLocalInertia(mass, cLocalInertia);
+    
+    collisionBodies[index] = localCreateRigidBody(mass, trans, collisionShape);
+    collisionBodies[index]->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+    collisionBodies[index]->setFriction(0.5);
+    //collisionBodies[i]->setLinearVelocity(btVector3(1, 0, 0));
+    collisionBodies[index]->activate(true);
+    
+}
 
 
