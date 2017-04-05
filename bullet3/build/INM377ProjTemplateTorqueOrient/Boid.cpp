@@ -15,12 +15,6 @@ Boid::Boid(){
     m_hullShape = nullptr;
     
     m_transform = btTransform();
-    m_width = 0.0;
-    m_height = 0.0;
-    m_radius = 0.0;
-    m_mass = 0.0;
-    m_maxForce = 0.0;
-    m_maxSpeed = 0.0;
     m_velocity = btVector3(0,0,0);
     m_acceleration = btVector3(0,0,0);
     
@@ -33,42 +27,26 @@ Boid::~Boid(){
     delete m_hullShape;
 }
 
-void  Boid::Set(
-    const std::vector<btVector3> &shape, 
+void  Boid::Set( 
     const btVector3 &position, 
     const btVector3 &velocity, 
-    const btVector3 &acceleration,
-    const btScalar &width,
-    const btScalar &height,
-    const btScalar &radius, 
-    const btScalar &mass, 
-    const btScalar &force, 
-    const btScalar &speed)
+    const btVector3 &acceleration)
     {
-    
-    for (unsigned int i = 0; i < shape.size(); ++i){
-        m_hullShape->addPoint(shape[i]);
-    }
+
+    m_hullShape->addPoint(btVector3(bGet(BoidsValues::BRADIUS), 0, 0));
+    m_hullShape->addPoint(btVector3(0, bGet(BoidsValues::BHEIGHT), 0));
+    m_hullShape->addPoint(btVector3(0, 0, bGet(BoidsValues::BWIDTH)));
+    m_hullShape->addPoint( btVector3(0, 0, -bGet(BoidsValues::BWIDTH)));
     m_collShape = m_hullShape;
     
-    m_width = width;
-    m_height = height;
     
     //set position
-    m_position = position;
     m_transform.setIdentity();
-    m_transform.setOrigin(m_position);
+    m_transform.setOrigin(position);
 
     //set mass
-    m_mass = mass;
     btVector3 bLocalInertia;
-    m_hullShape->calculateLocalInertia(m_mass, bLocalInertia);
-
-    //force
-    m_maxForce = force;
-    
-    //speed
-    m_maxSpeed = speed;
+    m_hullShape->calculateLocalInertia(bGet(BoidsValues::BMASS), bLocalInertia);
     
     //velocity
     m_velocity = velocity;
@@ -82,7 +60,7 @@ void Boid::Activate(){
     
     m_body->setAnisotropicFriction(m_hullShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
     m_body->setFriction(0.5);
-    m_body->setLinearVelocity(m_velocity);
+    //m_body->setLinearVelocity(m_velocity);
     m_body->activate(true);
 }
 
@@ -100,12 +78,12 @@ bool Boid::canSee(const btVector3 &pos) const{
 
 btVector3 Boid::Seek(const btVector3 &target) const{
     
-    btVector3 desired = target - m_position;
+    btVector3 desired = target - m_body->getCenterOfMassPosition();
     desired.normalize();
-    desired = desired * m_maxSpeed;
+    desired = desired * bGet(BoidsValues::BMAXSPEED); //m_maxSpeed;
     
     btVector3 steer = desired - m_velocity;
-    steer = steer.normalize() * m_maxForce;
+    steer = steer.normalize() * bGet(BoidsValues::BMAXFORCE);
     
     return steer;
 }

@@ -8,9 +8,10 @@
 
 #include "MyFlockingDemo.h"
 
-void Flock::CreateFlock(const btScalar &width, const btScalar &height,const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles){
+void Flock::CreateFlock(const btScalar &boundary, const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles){
     m_boids = boids; 
     m_obstacles = obstacles;
+    m_borderboundary = boundary;
 }
 
 void Flock::addBoid(btRigidBody* b){
@@ -86,9 +87,9 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     if (c.length() > 0){
         
         c.normalize();
-        c = c * actor->m_maxSpeed;
+        c = c * actor->bGet(Boid::BoidsValues::BMAXSPEED);
         c = c - actor->m_velocity;
-        c = c.normalize() * actor->m_maxForce; //limit
+        c = c.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE); //limit
     }
     
     //c *= -1;
@@ -142,10 +143,10 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     //Finally, we divide the computation vector by the neighbor count and normalize it (divide it by its length to get a vector of length 1), obtaining the final resultant vector.
     v = btVector3( v.x() / btScalar(neighborCount), v.y() / btScalar(neighborCount), v.z() / btScalar(neighborCount));
     v.normalize();
-    v = v * actor->m_maxSpeed;
+    v = v * actor->bGet(Boid::BoidsValues::BMAXSPEED);
     
     btVector3 steer = v - actor->m_velocity;
-    steer = steer.normalize() * actor->m_maxForce;
+    steer = steer.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE);
     
     return steer;
     
@@ -240,129 +241,113 @@ void Flock::FlockBoids(){
         //The magnitude of each request is measured and added into another accumulator.
         //This process continues until the sum of the accumulated magnitudes gets larger than the maximum acceleration value, which is a parameter of each boid.
         
-        
-        
-        
-        
-        /*
-        btVector3 bvel = actorBody->getLinearVelocity();
-        btVector3 bgravity = actorBody->getGravity() * 0.1;
-        btVector3 bdir = btVector3(0, 1, 1);
-        btTransform btrans(actor->getOrientation());
-        btVector3 up(0, 1, 0);
-        btVector3 btop = btrans * up;
-        btVector3 front = btrans * btVector3(1, 0, 0);
-        btVector3 bdir1 = bvel.safeNormalize();
-        btVector3  avel = actor->getAngularVelocity(); 
-        btVector3 bthrust = 3.5 * front; //move forward 
-        btVector3 bdrag = - 4 * bvel; //resist movement forward
-        btVector3 blift = - 2.0 * bgravity * bvel.length(); //pressure agains gravity
-        //actorBody->applyCentralForce(bthrust + blift + bgravity + bdrag);
-        actorBody->applyCentralForce(bthrust + bgravity);
-        actorBody->applyTorque(2 * front.cross(bdir) - 5.0 * avel);
-        actorBody->applyTorque(- 0.5 * up);
-        actorBody->applyTorque(0.5 * btop.cross(up) - 5 * avel);
-        */
+
     }
 
-
     
-        //std::vector<SphereObstacle*> collShapes = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->obstacles;
-        
-        
-        
-        //    btRigidBody* body0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->body000;
-        //    btScalar mass = body0->getInvMass();
-        //    btVector3 vel = body0->getLinearVelocity();
-        //    btVector3 gravity = body0->getGravity();
-        //    btVector3 dir = btVector3(0, 0, 1);
-        //    btVector3 thrust = 7.0 * dir;
-        //    btVector3 drag = -3 * vel;
-        //    btVector3 lift = - 0.5 * gravity * vel.length();
-        //    body0->applyCentralForce(thrust + lift + gravity + drag );
+}
+
+
+
+
+void Flock::Borders(Boid *actor){
+    
+    btRigidBody *bbody = actor->m_body;
+    //y axis
+    btScalar bdistanceYp = m_borderboundary - actor->m_body->getCenterOfMassPosition().y();
+    btScalar bdistanceYn = actor->m_body->getCenterOfMassPosition().y();
+    
+    if( bdistanceYp < 10.0){
+        bbody->applyCentralForce(btVector3(0, -(actor->bGet(Boid::BoidsValues::BLift)), 0));
+    }else if( bdistanceYn < 10.0 ) { 
+        bbody->applyCentralForce(btVector3(0, (actor->bGet(Boid::BoidsValues::BLift)), 0));
+    }
+    
+    /////////////////////////
+    ///////////////-90/////////
+    ////////////   /   ////////
+    /////////      /     /////
+    //////         /        /////
+    ////           /           ////
+    ///            /            ////-180
+    //0       //////////         ///
+    ///            /             ///180
+    ////           /            ////
+    //////         /           ////
+    ///////        /         //////
+    //////////     /        ///////
+    //////////////     ///////
+    ////////////////90//////
+    btScalar angleFromWorld = Extension::getAngleBetweenTwoPoints(bbody->getCenterOfMassPosition().x()
+                                                                  ,0,bbody->getCenterOfMassPosition().z(),
+                                                                  0.0,0.0,0.0);
+    btScalar angleFromLocal = Extension::getAngleBetweenTwoPoints(actor->Heading().x()
+                                                                  ,0,actor->Heading().z(),
+                                                                  0.0,0.0,0.0);
+        if (bbody->getCenterOfMassPosition().length() > m_borderboundary){
+            
+            btVector3 steer(0, actor->bGet(Boid::BoidsValues::BROTATEBACK), 0);
+            
+            if(angleFromWorld > 0.0 && angleFromWorld < 90.0 ){
+                if( (angleFromLocal > 0.0 && angleFromLocal < 45.0) || (angleFromLocal <= 0.0 && angleFromLocal > -125.0) ){
+                    bbody->applyTorque(steer);
+                }
+            }else if(angleFromWorld >= 90.0 && angleFromWorld < 180.0 ){
+                if( (angleFromLocal > 125.0 && angleFromLocal < 180.0) || (angleFromLocal <= -45.0 && angleFromLocal > -180.0) ){
+                    bbody->applyTorque(steer);
+                }
+            }else if(angleFromWorld < 0.0 && angleFromWorld > -90.0){
+                if( (angleFromLocal > 0.0 && angleFromLocal < 125.0) || (angleFromLocal <= 0.0 && angleFromLocal > -45.0) ){
+                    bbody->applyTorque(steer);
+                }
+            }else if(angleFromWorld <= -90.0 && angleFromWorld > -180.0 ){
+                if( (angleFromLocal > 45.0 && angleFromLocal < 180.0) || (angleFromLocal <= -125.0 && angleFromLocal > -180.0) ){
+                    bbody->applyTorque(steer);
+                }
+            }
+        }
     
 }
 
 
 void Flock::Update(){
-
+    
+    FlockBoids();
+    
     for (unsigned int b = 0; b < m_boids.size(); ++b){
-        
         Boid *actor = m_boids[b];
+        btRigidBody *bbody = actor->m_body;
+        btTransform btransform = bbody->getWorldTransform();
+        btVector3 bvelocity = bbody->getLinearVelocity();
+        btVector3 bavelocity = bbody->getAngularVelocity();
+       
+        btVector3 bthrust =  btVector3((btransform * btVector3(actor->bGet(Boid::BoidsValues::BMAXSPEED), 0, 0)) - btransform.getOrigin());
+        btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();//bvelocity;
+        btVector3 bangulardrag = -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();//bavelocity
+        
         
         //update velocity
-        actor->m_velocity = actor->m_velocity + actor->m_acceleration;
-        
+        bvelocity = bvelocity + actor->m_acceleration;
+            
         //Limit velocity speed
-        actor->m_velocity = actor->m_velocity.normalize() * actor->m_maxSpeed;
+        bvelocity = bvelocity.normalize() *  actor->bGet(Boid::BoidsValues::BMAXSPEED);
+            
+        //thrust
+        bbody->applyCentralForce(bthrust );
         
-        //set position
-        actor->m_position = actor->m_body->getCenterOfMassPosition() + actor->m_velocity;
+        //drag
+        bbody->applyCentralForce(bdrag);
+        bbody->applyTorque(bangulardrag);
         
         //reset acceleration to 0 each cycle
         actor->m_acceleration = actor->m_acceleration * 0.0;
+        
+        
+        
+        //boundary
+        Borders(actor);
     }
 
-}
-
-
-void Flock::Borders(){
-    
-    
-    //wrap around
-    //apply force when out of bound of x 
-    //apply force when out of bound of z 
-    //apply gravity force force when too high 
-    //apply lift force when too low  
-    
-    for (unsigned int b = 0; b < m_boids.size(); ++b){
-        Boid *actor = m_boids[b];
-        actor->m_position = actor->m_body->getCenterOfMassPosition();
-        
-        btScalar x = actor->m_position.x();
-        btScalar y = actor->m_position.y();
-        btScalar z = actor->m_position.z();
-        
-        //x directions
-        if(x < (-(m_borderWidth) + (actor->m_radius) ) ) { //going to far in negative x direction
-            //x = m_borderWidth +(actor->m_radius); 
-        }
-        if(x > ( (m_borderWidth)-(actor->m_radius) ) ) {//going to far in positive x direction
-            //x = -(actor->m_radius); 
-        }
-        
-        //z directions
-        if(z < (-(m_borderWidth) + (actor->m_radius) ) ) {//going to far in negative z direction
-            //z = (actor->m_width)+(actor->m_radius); 
-        }
-        if(z > ( (m_borderWidth)-(actor->m_radius) ) ) {//going to far in positive z direction
-            //z = -(actor->m_radius); 
-        }
-        
-        //y direction
-        if(y < (actor->m_height) ) { //going to far doing or falling too much
-            //y = -(actor->m_radius); 
-        }
-        if(y > m_borderHeight-(actor->m_height) ) {//going to far up or rising too high
-            //y = (actor->m_width)+(actor->m_radius); 
-        }
-        
-        actor->m_position = btVector3(x, y, z);
-    }
-}
-
-
-void Flock::Run(){
-    
-    FlockBoids();
-    Update();
-    //Borders();
-    
-    for (unsigned int b = 0; b < m_boids.size(); ++b){
-        m_boids[b]->m_body->applyCentralForce(m_boids[b]->m_velocity);
-        //m_boids[b]->m_body->setLinearVelocity(m_boids[b]->m_velocity);
-        //m_boids[b]->m_transform.setOrigin(m_boids[b]->m_position);
-    }
     
 }
 

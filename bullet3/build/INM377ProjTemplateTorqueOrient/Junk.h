@@ -487,4 +487,93 @@ std::cout << "y: " << y << ", vertical difference: " << verticalDifference << ",
  btScalar angletodegrees = (angle * 180 / M_PI);
  
  
+ 
+ //y axis
+ bdistanceYp = bboundary - bposition.y();
+ bdistanceYn = bposition.y();
+ if( bdistanceYp < bboundaryintersectiondistance){
+ //bbody->applyCentralImpulse(btVector3(0,bimpluseY,0));
+ bbody->applyCentralForce(btVector3(0, -bceilingForce, 0));
+ }else if( bdistanceYn < bboundaryintersectiondistance ) { 
+ //bbody->applyCentralImpulse(btVector3(0,bimpluseY,0));
+ bbody->applyCentralForce(btVector3(0, bfloorforce, 0));
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ //std::vector<SphereObstacle*> collShapes = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->obstacles;
+ 
+ 
+ 
+ //    btRigidBody* body0 = static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->body000;
+ //    btScalar mass = body0->getInvMass();
+ //    btVector3 vel = body0->getLinearVelocity();
+ //    btVector3 gravity = body0->getGravity();
+ //    btVector3 dir = btVector3(0, 0, 1);
+ //    btVector3 thrust = 7.0 * dir;
+ //    btVector3 drag = -3 * vel;
+ //    btVector3 lift = - 0.5 * gravity * vel.length();
+ //    body0->applyCentralForce(thrust + lift + gravity + drag );
+ 
+ 
+ 
+ 
+ 
+ 
+ /*
+ btVector3 bvel = actorBody->getLinearVelocity();
+ btVector3 bgravity = actorBody->getGravity() * 0.1;
+ btVector3 bdir = btVector3(0, 1, 1);
+ btTransform btrans(actor->getOrientation());
+ btVector3 up(0, 1, 0);
+ btVector3 btop = btrans * up;
+ btVector3 front = btrans * btVector3(1, 0, 0);
+ btVector3 bdir1 = bvel.safeNormalize();
+ btVector3  avel = actor->getAngularVelocity(); 
+ btVector3 bthrust = 3.5 * front; //move forward 
+ btVector3 bdrag = - 4 * bvel; //resist movement forward
+ btVector3 blift = - 2.0 * bgravity * bvel.length(); //pressure agains gravity
+ //actorBody->applyCentralForce(bthrust + blift + bgravity + bdrag);
+ actorBody->applyCentralForce(bthrust + bgravity);
+ actorBody->applyTorque(2 * front.cross(bdir) - 5.0 * avel);
+ actorBody->applyTorque(- 0.5 * up);
+ actorBody->applyTorque(0.5 * btop.cross(up) - 5 * avel);
+ */
+
+
+
+//btVector3 localForwardVector;
+//btTransform trans = bbody->getWorldTransform();
+//localForwardVector = (trans * btVector3(1, 0, 0) - trans.getOrigin());//switch
+//btVector3 rotation = localForwardVector.cross(localThrust);
+//bbody->applyTorque(rotation);
+
+/*
+ btScalar bmass = bbody->getInvMass();
+ btVector3 bgravity = bbody->getGravity();
+ btVector3 bposition = bbody->getCenterOfMassPosition();
+ btTransform btransform = bbody->getWorldTransform();
+ btVector3 bvelocity = bbody->getLinearVelocity();
+ btVector3 bavelocity = bbody->getAngularVelocity();
+ btVector3 bdirection = bvelocity.safeNormalize();
+ 
+ 
+ btQuaternion orientation = bbody->getOrientation();//orientation in 
+ btMatrix3x3 bMatOrientation = btMatrix3x3(orientation); // quat to matrix
+ btScalar bangle2 = btAcos(( bMatOrientation[0][0] + bMatOrientation[1][1] + bMatOrientation[2][2] - 1)/2);
+ btVector3 bforward = btVector3(bMatOrientation[0][0], bMatOrientation[0][1], bMatOrientation[0][2]);
+ btVector3 bback = bforward.normalize() * -1.0f;
+ btVector3 bright = btVector3(bMatOrientation[2][0], bMatOrientation[2][1], bMatOrientation[2][2]);
+ btVector3 bleft = bright.normalize() * -1.0f;
+ btVector3 bup = btVector3(bMatOrientation[1][0], bMatOrientation[1][1], bMatOrientation[1][2]);
+ btVector3 bdown = bup.normalize() * -1.0f;
+ btVector3 bthrust =  btVector3((btransform * btVector3(bmaxspeed, 0, 0)) - btransform.getOrigin());
+ btVector3 bdrag = -(myDrag) * bbody->getLinearVelocity();//bvelocity;
+ btVector3 bangulardrag = -(myAngularDrag) * bbody->getAngularVelocity();//bavelocity
+ 
  */

@@ -8,6 +8,7 @@
 //#include "MyCollisionDemo.h"
 #include "Obstacle.h"
 #include "Boid.h"
+#include "Extension.h"
 
 class Flock {
 
@@ -20,14 +21,13 @@ class Flock {
     btVector3 FlockCentering(const Boid *actor) const;
     
 public:
-	Flock() {}
+    Flock() {}
     
-    btScalar m_borderWidth;
-    btScalar m_borderHeight;
+    btScalar m_borderboundary;
     std::vector<Boid*> m_boids;
     std::vector<Obstacle *> m_obstacles;
     
-    void CreateFlock(const btScalar &width, const btScalar &height, const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles );
+    void CreateFlock(const btScalar &boundary, const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles );
 
 	// Add a boid with the given body.
 	// (deletion of the body is handled by the Demo class)
@@ -39,28 +39,14 @@ public:
 	// Apply steering forces to each boid in the flock.
 	void steer() const;
     
-    void Run();
-    
     void FlockBoids();
     
     void Update();
     
-    void Borders();
+    void Borders(Boid *actor );
 
     
 };
 
-//class MyFlockingDemo : public MyCollisionDemo
-//{
-//	Flock flock;
-//
-//	void addSphereObstacle(btSphereShape *shape, const btVector3 &pos);
-//	void addColumnObstacle(btCylinderShape *shape, const btVector3 &pos);
-//
-//public:
-//	virtual ~MyFlockingDemo();
-//
-//	void	initPhysics();
-//};
 
 #endif //MY_FLOCKING_DEMO_H
