@@ -270,4 +270,221 @@ std::cout << "y: " << y << ", vertical difference: " << verticalDifference << ",
  bposition =  bposition + bvelocity;
  bacceleration = bacceleration * 0.0;
 
-*/
+ 
+ 
+ 
+ 
+ //       btVector3 target = btVector3(0,0,0);
+ //       bdesired = target - bbody->getCenterOfMassPosition();
+ //       bdesired = bdesired.normalize() * bmaxspeed;
+ //        
+ //       bsteer = bdesired - bvelocity;
+ //       bsteer = bsteer.normalize() * bmaxforce;
+ //       bbody->applyCentralForce(bsteer);
+ 
+ //bbody->applyForce(bvelocity, bsteer);
+ //applyForce(bsteer);
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ if( (bahead.x() < -bboundary2) || (bahead.x() > bboundary2) || (bahead.z() < -bboundary2) || (bahead.z() > bboundary2) ) { 
+ isAhead1OutOfBounds = true;
+ }else {
+ isAhead1OutOfBounds = false;
+ }
+ 
+ if (isAhead1OutOfBounds){ 
+ 
+ if ( (bahead.x() > 50.0) ){
+ xIntersect = bahead.x() - 50.0;
+ }
+ if( (bahead.x() < -50.0) ) { 
+ xIntersect = bahead.x() + 50.0;
+ }
+ 
+ if ( (bahead.z() > 50.0) ){
+ zIntersect = bahead.z() - 50.0;
+ }
+ if( (bahead.z() < -50.0) ) { 
+ zIntersect = bahead.z() + 50.0;
+ }
+ 
+ intersectPoint = bahead - btVector3(xIntersect,bahead.y(),zIntersect);
+ 
+ distanceFromIntersector = bahead.distance( intersectPoint);
+ distanceUntilIntersectorOccur = intersectPoint.distance(bposition);
+ 
+ //bbody0->setLinearVelocity(btVector3(0,0,0));
+ //bbody->applyTorque(btorqueSpinLeft);//allign to the left
+ //bbody0->applyCentralForce(bthrust + blift + bgravity + bdrag);
+ 
+ //bbody->applyCentralForce(bdrag * distanceUntilIntersectorOccur);// + blift + bgravity);
+ 
+ //       btTransform btrans = bbody->getWorldTransform();
+ //       btVector3 bdir = bvelocity.safeNormalize();
+ //       btVector3 bfront = btrans * btVector3(1, 0, 0);
+ //       btVector3 target = bfront.cross(bdir);
+ //       bdesired = target - bposition;
+ //       bdesired = bdesired.normalize() * bmaxspeed;
+ //        
+ //       bsteer = bdesired - bvelocity;
+ //       bsteer = bsteer.normalize() * bmaxforce;
+ //        
+ //        
+ //bbody->applyForce(bvelocity, bsteer);
+ //bbody->applyCentralForce(bsteer);
+ //applyForce(bsteer);
+ 
+ 
+ 
+ 
+ //if (angletodegrees > 100){
+ //bbody->applyTorque(btVector3(0, distanceUntilIntersectorOccur ,0));
+ //bbody->applyTorque(btVector3(0, -(distanceUntilIntersectorOccur ) ,0));
+ //btVector3 TorqueForce(0, rotateBackForce, 0);
+ //bbody->applyTorque(TorqueForce);
+ //}
+ //bbody->setDamping(1.0, 0.5);
+ //btVector3 torque(0,distanceUntilIntersectorOccur,0);
+ //bbody->getInvInertiaTensorWorld().inverse()*(bbody->getWorldTransform().getBasis() * torque);
+ }
+ //bbody->setLinearVelocity(bthrust);
+ //bbody->applyCentralForce(bthrust);
+ 
+ 
+ 
+ 
+ 
+ 
+ std::cout << std::endl;
+ //std::cout << "is seeing ahead1: " << isAhead1OutOfBounds << std::endl;
+ std::cout << "length: " << bbody->getCenterOfMassPosition().length() << std::endl;
+ std::cout << "from local angle: " << ( angleFromLocal ) << ", from world angle: " << ( angleFromWorld ) << ", bangle: " << (bangle * 180 / M_PI) << ", bangle2: " << (bangle2 * 180 / M_PI) << ", angle: " << angle << ", angle in degree: " << angletodegrees << std::endl;
+ 
+ //std::cout << "velocity, x: " << bvelocity.x() << " y: " << bvelocity.y() << " z: " << bvelocity.z() << std::endl;
+ //std::cout << "angular velocity, x: " << bavelocity.x() << " y: " << bavelocity.y() << " z: " << bavelocity.z() << std::endl;
+ std::cout << "position, x: " << bposition.x() << " y: " << bposition.y() << " z: " << bposition.z() << std::endl;
+ 
+ 
+ //    btQuaternion orient = bbody->getOrientation();//orientation in 
+ //    btMatrix3x3 bMatOrient= btMatrix3x3(orient); // quat to matrix
+ //    bMatOrient.setEulerYPR(orient.getX() , orient.getY() + 20 , orient.getZ());
+ //    bbody->getWorldTransform().setBasis(bMatOrient); //set new rotation for the object
+ //    
+ ////    btTransform tr;
+ ////    tr.setIdentity();
+ ////    btQuaternion quat = bbody->getOrientation();
+ ////    quat.setEuler(quat.x(),quat.z(),quat.y() ); //or quat.setEulerZYX depending on the ordering you want
+ ////    tr.setRotation(quat);
+ //    //bbody->setCenterOfMassTransform(tr);
+ //    
+ //    
+ //    btScalar angle = bforward.angle(btVector3(bbody->getCenterOfMassPosition().x(), 0.0, bbody->getCenterOfMassPosition().z()));
+ //    btScalar angletodegrees = (angle * 180 / M_PI);
+ //    
+ //    
+ //    std::cout << std::endl;
+ //    std::cout << "angle " << angletodegrees << std::endl;
+ //
+ 
+ 
+ 
+ //    if( bdistanceZp < bboundaryintersectiondistance){
+ //        //bimpluseZ = bdistanceZp * 0.2;
+ //        //bbody->applyCentralImpulse(btVector3(0,0,bimpluseZ));
+ //        //bbody->applyCentralForce(btVector3(0, 0, -bsidesforce));
+ //        
+ //        btScalar pScale = Extension::percentageWith(bdistanceZp, 0, bboundaryintersectiondistance); 
+ //        btClamp(pScale, btScalar(0.0), btScalar(100.0));
+ //        pScale = 100.0 - pScale;
+ //        btScalar temp = bsidesforce * (pScale/100.0);
+ //        //bbody->applyCentralForce(btVector3(0,0,-temp));
+ //        //bbody->applyCentralImpulse(btVector3(0,0,-temp));
+ //        
+ //    }else if( bdistanceZn < bboundaryintersectiondistance ) { 
+ //        //bimpluseZ = bdistanceZn * 0.2;
+ //        //bbody->applyCentralImpulse(btVector3(0,0,bimpluseZ));
+ //        //bbody->applyTorque(btVector3(0,0,25));
+ //        //bbody->applyCentralForce(btVector3(0,0,bsidesforce));
+ //        
+ //        btScalar pScale = Extension::percentageWith(bdistanceZn, 0, bboundaryintersectiondistance); 
+ //        btClamp(pScale, btScalar(0.0), btScalar(100.0));
+ //        pScale = 100.0 - pScale;
+ //        btScalar temp = bsidesforce * (pScale/100.0);
+ //        bbody->applyCentralForce(btVector3(0,0,temp));
+ //        //bbody->applyCentralImpulse(btVector3(0,0,temp));
+ //    }
+ //    //bbody->setAngularVelocity(btVector3(0,0,0));
+ 
+ 
+ 
+ 
+ //    if( bdistanceXp < bboundaryintersectiondistance){
+ //        
+ //        btScalar pScale = Extension::percentageWith(bdistanceXp, 0, bboundaryintersectiondistance); 
+ //        btClamp(pScale, btScalar(0.0), btScalar(100.0));
+ //        pScale = 100.0 - pScale;
+ //        btScalar temp = bsidesforce * (pScale/100.0);
+ //        std::cout << std::endl;
+ //        std::cout << "scale: " << pScale << ", temp: " << temp << std::endl;
+ //        //bbody->applyCentralImpulse(btVector3(-temp, 0, 0));
+ //        //bbody->applyCentralForce(btVector3(-temp, 0, 0));
+ //        //bbody->applyCentralForce(btVector3(-bsidesforce, 0, 0));
+ //        //bbody->applyCentralImpulse(btVector3(-temp,0,0));
+ //    }else if (bdistanceXn < bboundaryintersectiondistance) { 
+ //        btScalar pScale = Extension::percentageWith(bdistanceXn, 0, bboundaryintersectiondistance); 
+ //        btClamp(pScale, btScalar(0.0), btScalar(100.0));
+ //        pScale = 100.0 - pScale;
+ //        btScalar temp = bsidesforce * (pScale/100.0);
+ //        //bbody->applyCentralForce(btVector3(temp ,0,0));
+ //        //bbody->applyCentralForce(btVector3(bsidesforce, 0, 0));
+ //        //bbody->applyCentralImpulse(btVector3(temp,0,0));
+ //    }
+ 
+ 
+ 
+ bdistanceXp = bboundary - bposition.x();
+ bdistanceXn = bposition.x();
+ bdistanceYp = bboundary - bposition.y();
+ bdistanceYn = bposition.y();
+ bdistanceZp = bboundary - bposition.z();
+ bdistanceZn = bposition.z();
+ 
+ 
+ //    btScalar distanceFromCenterPoint = 6.0;
+ //    btVector3 momentArmLeft = (distanceFromCenterPoint * bup);
+ //    btVector3 momentArmRight = (distanceFromCenterPoint * bdown);
+ //    btVector3 forceOfSpin = -4.0 * (bavelocity);
+ //    //btorqueTurnLeft = (momentArmLeft + forceOfSpin);
+ //    //btorqueTurnRight = (momentArmRight + forceOfSpin) ;
+ 
+ 
+ 
+ btVector3 intersectPoint = btVector3(0,0,0);
+ btScalar distanceFromIntersector = 0.0;
+ btScalar distanceUntilIntersectorOccur = 0.0;
+ btScalar xIntersect = 0;
+ btScalar zIntersect = 0;
+ 
+ 
+ btVector3 baxisAngles = orientation.getAxis();
+ btScalar bangle = orientation.getAngle();
+ //orientation.setRotation(btVector3( 0.0, 0.0, 1.0 ), angle);
+ //orientation.setRotation(btVector3( 0.0, 1.0, 0.0 ), angleZ);
+ //btAtan2(bbody->getCenterOfMassPosition().z(), bbody->getCenterOfMassPosition().x());
+ btScalar angle = bbody->getCenterOfMassPosition().angle(btVector3(bbody->getCenterOfMassPosition().x(), 0.0, bbody->getCenterOfMassPosition().z()));
+ btScalar angletodegrees = (angle * 180 / M_PI);
+ 
+ 
+ */

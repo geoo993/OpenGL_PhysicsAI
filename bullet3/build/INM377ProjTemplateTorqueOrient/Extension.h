@@ -16,6 +16,12 @@ class Extension {
     
 public:
     
+    static btScalar getAngleBetweenTwoPoints (btScalar x1,btScalar y1,btScalar z1,btScalar x2,btScalar y2,btScalar z2)
+    {
+        btScalar theta = btAtan2(z1-z2,x1-x2);
+        return -theta*180/3.1415926;
+    }
+    
     static btScalar randFloat(){
         return btScalar( (double)rand() / (RAND_MAX + 1.0));
         //return  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
