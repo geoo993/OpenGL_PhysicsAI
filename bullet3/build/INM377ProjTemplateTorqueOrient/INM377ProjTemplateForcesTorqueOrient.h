@@ -43,7 +43,7 @@ class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 	
 private:
     
-    const int NUMBER_OF_BOIDS = 30;
+    const int NUMBER_OF_BOIDS = 50;
     const int NUMBER_OF_OBSTACLES = 12;
     void InitialiseFlock();
     void CreateGround();

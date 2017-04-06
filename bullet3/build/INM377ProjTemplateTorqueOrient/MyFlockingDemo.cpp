@@ -204,28 +204,37 @@ void Flock::UpdateFlock(){
         btVector3 separation = CollisionAvoidance(actor);//seperation
         btVector3 alignment = VelocityMarching(actor);//alignement
         btVector3 cohesion = FlockCentering(actor);//cohesion
-        btVector3 combined = (alignment * 1.5) + cohesion + separation;
+        btVector3 combined = (alignment * 1.6) + cohesion + separation;
         combined.safeNormalize();
         
         btScalar bmass = bbody->getInvMass();
         btVector3 bgravity = bbody->getGravity();
-        btTransform btransform(bbody->getOrientation());
+        btTransform btransform = btTransform(bbody->getOrientation());
         btVector3 worldup(0, 1, 0);
-        btVector3 btop = actor->GetUp();//btransform * worldup;
-        btVector3 front = btransform * btVector3(1, 0, 0);
-        btVector3 bdir = actor->GetHeading();
-        btVector3 bthrust = actor->bGet(Boid::BoidsValues::BMAXSPEED) * front;
+        btVector3 btop = actor->GetUp();
+        btVector3 bfront = btransform * btVector3(1, 0, 0);
+        btVector3 bdirection = actor->GetHeading();
+        btVector3 bthrust = actor->bGet(Boid::BoidsValues::BMAXSPEED) * bfront;
         btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();
         btVector3 bangulardrag =  -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();
         btVector3 blift = actor->LiftForce(actor->bGet(Boid::BoidsValues::BBORDERBOUNDARY)) - bgravity ;
         
         bbody->applyCentralForce((bthrust + combined + blift + bgravity + bdrag) * bmass);
-        bbody->applyTorque(2.0 * front.cross(bdir) - 5.0 * bbody->getAngularVelocity());
+        
+        //This aligns the boid’s orientation to bdir with some drag torque (depending on the angular velocity)
+        bbody->applyTorque(2.0 * bfront.cross(bdirection) + bangulardrag);
+        
+        //This turns the boid around the vertical axis
         bbody->applyTorque(-0.5 * worldup);
-        bbody->applyTorque(0.5 * btop.cross(worldup) - 5.0 * bbody->getAngularVelocity());
+        
+        //This flattens the boid (with some drag torque)
+        bbody->applyTorque(0.5 * btop.cross(worldup) + bangulardrag );
+        
+        //avoid obsatcles
         bbody->applyTorque(bangulardrag + actor->AvoidanceForce(m_obstacles) );
         
-        actor->SteerBack();//turn to face the scene, never go off the scene
+        //this steers the boids back around, so they never go off the scene
+        actor->SteerBack();
         
     }
     

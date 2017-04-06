@@ -23,7 +23,6 @@ struct Boid {
         BMAXFORCE, // Maximum steering force
         BMASS,   // mass of each boid
         BROTATEBACK, //turn boids around 
-        BMAXSEEAHEAD,//this ahead vector length defines how far the character will "see". The greater this is, the earlier the character will start acting to dodge an obstacle, because it will perceive it as a threat even if it's far away.
         BMAXAVOIDANCEFORCE,//boid obscacle avoidance voice
         BBORDERBOUNDARY,// boundary of the scene
     };
@@ -33,15 +32,14 @@ struct Boid {
         switch (value)
         {
             case BoidsValues::BLift : return 2.0;//15.0;
-            case BoidsValues::BDRAG : return 3.0;
+            case BoidsValues::BDRAG : return 4.0;//3.0
             case BoidsValues::BANGULARDRAG : return 5.0;
             case BoidsValues::BROTATEBACK: return 10.0;//2.0;
             case BoidsValues::BMAXSPEED: return 20;//14.0;
             case BoidsValues::BMAXFORCE : return 8.0;//1.0;
             case BoidsValues::BMASS : return 1.0;
-            case BoidsValues::BMAXSEEAHEAD : return 10;
             case BoidsValues::BMAXAVOIDANCEFORCE : return 4.0;//2.0;
-            case BoidsValues::BBORDERBOUNDARY : return 50;
+            case BoidsValues::BBORDERBOUNDARY : return 60.0;
         }
     }
     
@@ -66,17 +64,8 @@ struct Boid {
     //get transform of boid
     btTransform GetTransform() const { return m_transform; }
     
-    btVector3 GetPosition() const { return m_body->getCenterOfMassPosition(); }
-    
     btMatrix3x3 GetMatOrientation() const { return btMatrix3x3(m_body->getOrientation());} // quat to matrix
-    
-    btScalar GetMass() const { 
-        return m_body->getInvMass();
-    };
-    btVector3 GetGravity() const { 
-        return m_body->getGravity();
-    };
-    
+
     // Unit vector for the direction in which the boid is heading
     //Geometric flight is based on incremental translations along the object's "forward direction," its local positive Z axis
     btVector3 GetHeading() const { 
@@ -102,8 +91,6 @@ struct Boid {
     btVector3 GetDown() const { 
         return GetUp().normalized() * -1.0;
     };
-    
-    btVector3 GetVelocity() const { return m_body->getLinearVelocity(); }; 
     
     void Set(const btVector3 &position);
     void Activate();
