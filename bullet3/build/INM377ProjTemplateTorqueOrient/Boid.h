@@ -22,9 +22,6 @@ struct Boid {
 
         BMAXFORCE, // Maximum steering force
         BMASS,   // mass of each boid
-        BRADIUS, // radius of a bounding sphere of the shape
-        BWIDTH,
-        BHEIGHT,
         BROTATEBACK, //turn boids around 
         BMAXSEEAHEAD,//this ahead vector length defines how far the character will "see". The greater this is, the earlier the character will start acting to dodge an obstacle, because it will perceive it as a threat even if it's far away.
         BMAXAVOIDANCEFORCE,//boid obscacle avoidance voice
@@ -42,9 +39,6 @@ struct Boid {
             case BoidsValues::BMAXSPEED: return 20;//14.0;
             case BoidsValues::BMAXFORCE : return 8.0;//1.0;
             case BoidsValues::BMASS : return 1.0;
-            case BoidsValues::BRADIUS : return 4.0;
-            case BoidsValues::BWIDTH : return 3.0;
-            case BoidsValues::BHEIGHT : return 2.0;
             case BoidsValues::BMAXSEEAHEAD : return 10;
             case BoidsValues::BMAXAVOIDANCEFORCE : return 4.0;//2.0;
             case BoidsValues::BBORDERBOUNDARY : return 50;

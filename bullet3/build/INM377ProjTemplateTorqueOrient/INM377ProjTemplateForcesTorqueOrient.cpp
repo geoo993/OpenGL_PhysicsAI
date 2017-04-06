@@ -124,7 +124,7 @@ void INM377ProjTemplateTorqueOrient::displayCallback(void) {
 	
 	renderme();
 
-	displayText();
+	//displayText();
 
 	//optional but useful: debug drawing to detect problems
 	if (m_dynamicsWorld)
@@ -162,7 +162,7 @@ void INM377ProjTemplateTorqueOrient::CreateGround(){
         btScalar mass(0.0);
         
         //rigidbody is dynamic if and only if mass is non zero, otherwise static
-        bool isDynamic = (mass != 0.0f);
+        bool isDynamic = (mass != 0.0);
         
         btVector3 localInertia(0,0,0);
         if (isDynamic)
@@ -172,7 +172,7 @@ void INM377ProjTemplateTorqueOrient::CreateGround(){
         btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
         btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,groundShape,localInertia);
         btRigidBody* body = new btRigidBody(rbInfo);
-        body->setFriction(0.5f);
+        body->setFriction(0.5);
         
         //body->setRollingFriction(0.3);
         //add the body to the dynamics world
@@ -217,7 +217,7 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
 void INM377ProjTemplateTorqueOrient::CreateBoids(){
     
     for (unsigned long int b = 0; b < NUMBER_OF_BOIDS; ++b){
-        btVector3 tempPos((rand() % 60) - 30, 1, (rand() % 60) - 30 ); // -30 and 30
+        btVector3 tempPos( Extension::randomFloatBetween(-30, 30), Extension::randomFloatBetween(2, 30), Extension::randomFloatBetween(-30, 30));//-30 and 30
         NewBoids(b, tempPos);
     }
     
@@ -243,7 +243,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 {
 	setTexturing(true);
 	setShadows(false);
-	setCameraDistance(50.f);
+	setCameraDistance(50.0f);
 
 	// init world
 	m_collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -260,8 +260,6 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
     m_dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
 	m_dynamicsWorld->setInternalTickCallback(MyTickCallback, static_cast<void *>(this), true);
 
-    //std::cout << " init physics" << std::endl;
-        
     CreateGround();
     
 	{
@@ -289,13 +287,13 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
         btRigidBody *bboid;
         flock.addBoid(bboid);
 
-        btVector3 tempPos( (rand() % 60) - 30, rand() % 30, (rand() % 60) - 30);//-30 and 30
+        btVector3 tempPos( Extension::randomFloatBetween(-30, 30), Extension::randomFloatBetween(2, 30), Extension::randomFloatBetween(-30, 30));//-30 and 30
         unsigned long int index = (flock.m_boids.size() - 1);
         NewBoids(index, tempPos);
         
     }else if (key=='o')
     {
-        btVector3 tempPos((rand() % 160) - 80, 1, (rand() % 160) - 80 ); // -80 and 80
+        btVector3 tempPos(Extension::randomFloatBetween(-80, 80) , 1, Extension::randomFloatBetween(-80, 80) ); // -80 and 80
         flock.addObstacle( new Obstacle(tempPos, 2.0));
         unsigned long int index = (flock.m_obstacles.size() - 1);
         NewObstacle(index);
@@ -355,7 +353,7 @@ void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index)
     
     btCollisionShape* collisionShape = new btCylinderShape (
                                                             btVector3(flock.m_obstacles[index]->getRadius(), 
-                                                                      20.0, 
+                                                                      50.0, 
                                                                       flock.m_obstacles[index]->getRadius())
                                                             );
     //btCollisionShape* collisionShape = new btSphereShape(5.0);
@@ -368,7 +366,7 @@ void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index)
     trans.setIdentity();
     trans.setOrigin(flock.m_obstacles[index]->getCentre());
     
-    btScalar mass(1000.0);
+    btScalar mass(0.0);
     btVector3 cLocalInertia(0,0,0);
     collisionShape->calculateLocalInertia(mass, cLocalInertia);
     

@@ -23,7 +23,6 @@ subject to the following restrictions:
 #define PlatformDemoApplication GlutDemoApplication
 #endif
 
-//#include "LinearMath/btAlignedObjectArray.h"
 
 #include <iostream>
 

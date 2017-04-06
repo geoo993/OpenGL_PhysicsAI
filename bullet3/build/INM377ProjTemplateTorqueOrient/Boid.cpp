@@ -36,13 +36,53 @@ Boid::~Boid(){
     delete m_hullShape;
 }
 
-void  Boid::Set( const btVector3 &position)
-    {
-
-    m_hullShape->addPoint(btVector3(bGet(BoidsValues::BRADIUS), 0, 0));
-    m_hullShape->addPoint(btVector3(0, bGet(BoidsValues::BHEIGHT), 0));
-    m_hullShape->addPoint(btVector3(0, 0, bGet(BoidsValues::BWIDTH)));
-    m_hullShape->addPoint( btVector3(0, 0, -bGet(BoidsValues::BWIDTH)));
+void  Boid::Set( const btVector3 &position){
+        
+    int r = rand() % 3;    
+    
+    if ( r == 1){
+        m_hullShape->addPoint(btVector3(3.5, 0, 0));
+        m_hullShape->addPoint(btVector3(0, 1.0, 0));
+        m_hullShape->addPoint(btVector3(0, 0, 1.8));
+        m_hullShape->addPoint( btVector3(0, 0, -1.8));
+    }else if (r == 2){
+        m_hullShape->addPoint(btVector3(3.0, 0, 0));
+        m_hullShape->addPoint(btVector3(0, 1.0, 0));
+        m_hullShape->addPoint(btVector3(1.5, 0, 1.0));
+        m_hullShape->addPoint(btVector3(1.5, 0, -1.0));
+        m_hullShape->addPoint(btVector3(-0.6, 0, 1));
+        m_hullShape->addPoint(btVector3(-0.6, 0, -1));
+        m_hullShape->addPoint(btVector3(-1.5, 0, 0.5));
+        m_hullShape->addPoint(btVector3(-1.5, 0, -0.5));
+    }else{
+        m_hullShape->addPoint(btVector3(3.0, 0, 0));
+        m_hullShape->addPoint(btVector3(0, 1.0, 0));
+        
+        m_hullShape->addPoint(btVector3(2.8, 0, 0.2));
+        m_hullShape->addPoint(btVector3(2.5, 0, 0.4));
+        m_hullShape->addPoint(btVector3(2.2, 0, 0.8));
+        m_hullShape->addPoint(btVector3(1.9, 0, 1.1));
+        m_hullShape->addPoint(btVector3(1.6, 0, 1.3));
+        m_hullShape->addPoint(btVector3(1.3, 0, 1.5));
+        m_hullShape->addPoint(btVector3(1.0, 0, 1.8));
+        m_hullShape->addPoint(btVector3(0.7, 0, 2.0));
+        m_hullShape->addPoint(btVector3(0.3, 0, 1.8));
+        m_hullShape->addPoint(btVector3(0.0, 0, 1.5));
+        m_hullShape->addPoint(btVector3(-0.3, 0, 1.0));
+        
+        m_hullShape->addPoint(btVector3(2.8, 0, -0.2));
+        m_hullShape->addPoint(btVector3(2.5, 0, -0.4));
+        m_hullShape->addPoint(btVector3(2.2, 0, -0.8));
+        m_hullShape->addPoint(btVector3(1.9, 0, -1.1));
+        m_hullShape->addPoint(btVector3(1.6, 0, -1.3));
+        m_hullShape->addPoint(btVector3(1.3, 0, -1.5));
+        m_hullShape->addPoint(btVector3(1.0, 0, -1.8));
+        m_hullShape->addPoint(btVector3(0.7, 0, -2.0));
+        m_hullShape->addPoint(btVector3(0.3, 0, -1.8));
+        m_hullShape->addPoint(btVector3(0.0, 0, -1.5));
+        m_hullShape->addPoint(btVector3(-0.3, 0, -1.0));
+        
+    }
     m_collShape = m_hullShape;
     
     //set position

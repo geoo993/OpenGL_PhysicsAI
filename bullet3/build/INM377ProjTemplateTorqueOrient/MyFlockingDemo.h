@@ -27,6 +27,7 @@ public:
     std::vector<Boid*> m_boids;
     std::vector<Obstacle *> m_obstacles;
     
+    //create flock of boids and obstacles
     void CreateFlock(const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles );
 
 	// Add a boid with the given body.
