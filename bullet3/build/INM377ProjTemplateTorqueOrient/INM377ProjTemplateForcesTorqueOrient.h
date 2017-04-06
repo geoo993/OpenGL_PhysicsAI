@@ -34,26 +34,19 @@ subject to the following restrictions:
 
 class btBroadphaseInterface;
 class btCollisionShape;
-class btOverlappingPairCache;
 class btCollisionDispatcher;
 class btConstraintSolver;
-struct btCollisionAlgorithmCreateFunc;
 class btDefaultCollisionConfiguration;
-
-class Boid;
 class Flock;
-//class BowlObstacle;
-class SphereObstacle;
-//class ColumnObstacle;
-//class PlaneObstacle;
-
-
-///CcdPhysicsDemo is good starting point for learning the code base and porting.
 
 class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 {
 	
-public:
+private:
+    
+    const int NUMBER_OF_BOIDS = 25;
+    const int NUMBER_OF_OBSTACLES = 12;
+    void InitialiseFlock();
     void CreateGround();
     
     void CreateBoids();
@@ -64,16 +57,6 @@ public:
     
     void NewObstacle(const unsigned long int &index);
    
-    std::vector<btRigidBody*> collisionBodies;
-    
-    Flock flock;
-private:
-    
-    const int NUMBER_OF_BOIDS = 25;
-    const int NUMBER_OF_OBSTACLES = 12;
-    void InitialiseFlock();
-    
-    
 	//keep the collision shapes, for deletion/cleanup
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
     
@@ -88,14 +71,11 @@ private:
 
 public:
 
-    btRigidBody* boid;
+    Flock flock;
     
     INM377ProjTemplateTorqueOrient();
-
-		virtual ~INM377ProjTemplateTorqueOrient()
-	{
-		exitPhysics();
-	}
+    virtual~INM377ProjTemplateTorqueOrient();
+    
 	void	initPhysics();
 
 	void	exitPhysics();
@@ -107,7 +87,7 @@ public:
 	virtual void keyboardCallback(unsigned char key, int x, int y);
 
 	virtual void displayCallback();
-	virtual void	clientResetScene();
+	virtual void clientResetScene();
 
 	static DemoApplication* Create()
 	{

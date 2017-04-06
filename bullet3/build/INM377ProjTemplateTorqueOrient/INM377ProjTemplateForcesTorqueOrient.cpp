@@ -46,25 +46,29 @@ INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
 	setCameraDistance(btScalar(40.0));
 }
 
+INM377ProjTemplateTorqueOrient::~INM377ProjTemplateTorqueOrient()
+{
+    exitPhysics();
+}
 
 void INM377ProjTemplateTorqueOrient::clientMoveAndDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
 	//simple dynamics world doesn't handle fixed-time-stepping
-	//float ms = getDeltaTimeMicroseconds();
+	float ms = getDeltaTimeMicroseconds();
 	
 	///step the simulation
 	if (m_dynamicsWorld)
 	{
-		m_dynamicsWorld->stepSimulation(1./60.0,0);//ms / 1000000.f);
+        m_dynamicsWorld->stepSimulation(ms/1000000,0);
 		//optional but useful: debug drawing
 		m_dynamicsWorld->debugDrawWorld();
 	}
 		
 	renderme(); 
 
-//	displayText();
+	//displayText();
 #if 0
 	for (int i=0;i<debugContacts.size();i++)
 	{
@@ -143,10 +147,8 @@ void INM377ProjTemplateTorqueOrient::CreateGround(){
     
     ///create a few basic rigid bodies
     btBoxShape* box = new btBoxShape(btVector3(btScalar(110.),btScalar(1.),btScalar(110.)));
-    //	box->initializePolyhedralFeatures();
+	box->initializePolyhedralFeatures();
     btCollisionShape* groundShape = box;
-    
-    //	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),50);
     
     m_collisionShapes.push_back(groundShape);
     //m_collisionShapes.push_back(new btCylinderShape (btVector3(CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS)));
@@ -186,7 +188,6 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
     
     boidObjects.reserve(NUMBER_OF_BOIDS);
     obstacles.reserve(NUMBER_OF_OBSTACLES);
-    collisionBodies.reserve(NUMBER_OF_OBSTACLES);
     
     for (unsigned int a = 0; a < NUMBER_OF_BOIDS; ++a){
         boidObjects.push_back(new Boid);
@@ -207,7 +208,7 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
         btVector3(20, 1, -10)
     };
     for (unsigned int i = 0; i < NUMBER_OF_OBSTACLES; ++i){
-        obstacles.push_back(new Obstacle(obstaclesPositions[i], 1.0));
+        obstacles.push_back(new Obstacle(obstaclesPositions[i], 2.0));
     }
     
     flock.CreateFlock(50.0, boidObjects, obstacles);
@@ -226,30 +227,9 @@ void INM377ProjTemplateTorqueOrient::CreateBoids(){
 void INM377ProjTemplateTorqueOrient::CreateObstacle(){
   
     for (unsigned long int o = 0; o < NUMBER_OF_OBSTACLES; ++o){
-        
-//        btCollisionShape* collisionShape = new btCylinderShape (btVector3(flock.m_obstacles[o]->getRadius(), 20.0, flock.m_obstacles[o]->getRadius()));
-//        //btCollisionShape* collisionShape = new btSphereShape(5.0);
-//        //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
-//        m_collisionShapes.push_back(collisionShape);
-//        
-//        btTransform trans;
-//        trans.setIdentity();
-//        trans.setOrigin(flock.m_obstacles[o]->getCentre());
-//        
-//        btScalar mass(100.0f);
-//        btVector3 cLocalInertia;
-//        collisionShape->calculateLocalInertia(mass, cLocalInertia);
-//        
-//        collisionBodies[o] = localCreateRigidBody(mass, trans, collisionShape);
-//        collisionBodies[o]->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-//        collisionBodies[o]->setFriction(0.5);
-//        //collisionBodies[i]->setLinearVelocity(btVector3(1, 0, 0));
-//        collisionBodies[o]->activate(true);
-        
         NewObstacle(o);
     }
 
-    
 }
 
 void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
@@ -288,7 +268,6 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 	{
 		//create a few dynamic rigidbodies
 		// Re-using the same collision is better for memory usage and performance
-
         CreateBoids();
         CreateObstacle();
 		
@@ -358,7 +337,6 @@ void	INM377ProjTemplateTorqueOrient::exitPhysics()
 
 	delete m_dynamicsWorld;
     
-	
 }
 
 
@@ -381,6 +359,8 @@ void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index)
     //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
     m_collisionShapes.push_back(collisionShape);
     
+    btRigidBody* body = nullptr;
+    
     btTransform trans;
     trans.setIdentity();
     trans.setOrigin(flock.m_obstacles[index]->getCentre());
@@ -389,11 +369,12 @@ void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index)
     btVector3 cLocalInertia;
     collisionShape->calculateLocalInertia(mass, cLocalInertia);
     
-    collisionBodies[index] = localCreateRigidBody(mass, trans, collisionShape);
-    collisionBodies[index]->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-    collisionBodies[index]->setFriction(0.5);
-    //collisionBodies[i]->setLinearVelocity(btVector3(1, 0, 0));
-    collisionBodies[index]->activate(true);
+    btMotionState* motionState = nullptr;
+    body = new btRigidBody(mass, motionState, collisionShape, cLocalInertia);
+    body = localCreateRigidBody(mass, trans, collisionShape);
+    body->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+    body->setFriction(0.5);
+    body->activate(true);
     
 }
 

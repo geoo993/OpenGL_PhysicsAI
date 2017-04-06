@@ -95,16 +95,17 @@ btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
             if (oAvoidanceforce < 0){
                 //-1 right
                 oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0);
-                
-                //actor->m_body->applyTorque(oAvoidance);
             }else if(oAvoidanceforce > 0) {
                 //1 left
                 oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0);
-                //actor->m_body->applyTorque(steer);
             }
             
         } 
         
+        
+        if (obstacles[o] == nullptr ){
+            std::cout << "null actor" << o <<std::endl; 
+        }
     }
     
     return oAvoidance;

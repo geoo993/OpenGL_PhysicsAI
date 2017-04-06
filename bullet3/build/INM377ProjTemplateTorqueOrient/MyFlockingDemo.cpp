@@ -41,6 +41,7 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     
     btVector3 c(0,0,0); // or steer
     int neighborCount = 0;
+    const btScalar m_neighborhoodSphericalZone = 20.0;// also known as the neighbor radius
     
     for (unsigned int b = 0; b < m_boids.size(); ++b){
         btRigidBody*otherActor = m_boids[b]->m_body;
@@ -107,7 +108,7 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     //those close enough to be considered neighbors of the specified actor
     int neighborCount = 0;
     //The neighborhood is defined as a spherical zone of sensitivity centered at the boid's local origin.
-    
+    const btScalar m_neighborhoodSphericalZone = 40.0;// also known as the neighbor radius
     
     //If an agent is found within the radius, its velocity is added to the computation vector, and the neighbor count is incremented.
     
@@ -158,6 +159,7 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
     // towards the center of mass of all nearby neighbors
     btVector3 p(0,0,0);//or sum
     int neighborCount = 0;
+    btScalar m_neighborhoodSphericalZone = 40.0;// also known as the neighbor radius
     
      //When a neighboring actor is found, the distance from the agent to the neighbor is added to the computation vector.
     for (unsigned int b = 0; b < m_boids.size(); ++b){
@@ -261,7 +263,7 @@ void Flock::UpdateFlock(){
         btVector3 alignment = VelocityMarching(actor);//alignement
         btVector3 cohesion = FlockCentering(actor);//cohesion
         btVector3 combined = (alignment * 1.5) + cohesion + separation;
-        combined.normalize();
+        combined.safeNormalize();
         
         /*
         btVector3 bthrust =  btVector3((btransform * btVector3(actor->bGet(Boid::BoidsValues::BMAXSPEED), 0, 0)) - btransform.getOrigin());
@@ -299,15 +301,14 @@ void Flock::UpdateFlock(){
         btVector3 bthrust = actor->bGet(Boid::BoidsValues::BMAXSPEED) * front;
         btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();
         btVector3 bangulardrag =  -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();
-        //btVector3 blift = - 1.00 * bgravity * bvel.length();
-        btVector3 blift = actor->LiftForce(m_borderboundary);
+        btVector3 blift = actor->LiftForce(m_borderboundary);//- 1.00 * bgravity * bvel.length()
         bbody->applyCentralForce((bthrust + combined + blift + bgravity + bdrag) * bmass);
         bbody->applyTorque(2 * front.cross(bdir) - 5.0 * bbody->getAngularVelocity());
         bbody->applyTorque(- 0.5 * up);
         bbody->applyTorque(0.5 * btop.cross(up) - 5.0 * bbody->getAngularVelocity());
         
         btVector3 avoidObs(0,actor->AvoidanceForce(m_obstacles).y(),0);
-        bbody->applyTorque(bangulardrag );
+        bbody->applyTorque(bangulardrag );//+ avoidObs);
         
         //boundary
         Steer(actor);

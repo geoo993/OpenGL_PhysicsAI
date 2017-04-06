@@ -20,7 +20,6 @@ class Flock {
     btVector3 VelocityMarching(const Boid *actor) const;
     btVector3 FlockCentering(const Boid *actor) const;
     
-    const btScalar m_neighborhoodSphericalZone = 40.0;// also known as the neighbor radius
 public:
     Flock() {}
     

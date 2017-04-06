@@ -4,6 +4,7 @@
 #include "btBulletDynamicsCommon.h"
 
 #include "Obstacle.h"
+#include <iostream>
 #include <vector>
 
 // A boid is a single agent in the flock
@@ -37,7 +38,7 @@ struct Boid {
             case BoidsValues::BANGULARDRAG : return 5.0;
             case BoidsValues::BROTATEBACK: return 10.0;//2.0;
             case BoidsValues::BMAXSPEED: return 20;//14.0;
-            case BoidsValues::BMAXFORCE : return 4.0;//1.0;
+            case BoidsValues::BMAXFORCE : return 8.0;//1.0;
             case BoidsValues::BMASS : return 1.0;
             case BoidsValues::BRADIUS : return 4.0;
             case BoidsValues::BWIDTH : return 3.0;
