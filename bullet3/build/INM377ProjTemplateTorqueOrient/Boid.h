@@ -6,6 +6,7 @@
 #include "Obstacle.h"
 #include <iostream>
 #include <vector>
+#include "Extension.h"
 
 // A boid is a single agent in the flock
 struct Boid {
@@ -33,7 +34,7 @@ struct Boid {
     {
         switch (value)
         {
-            case BoidsValues::BLift : return 6.0;//15.0;
+            case BoidsValues::BLift : return 2.0;//15.0;
             case BoidsValues::BDRAG : return 3.0;
             case BoidsValues::BANGULARDRAG : return 5.0;
             case BoidsValues::BROTATEBACK: return 10.0;//2.0;
@@ -44,7 +45,7 @@ struct Boid {
             case BoidsValues::BWIDTH : return 3.0;
             case BoidsValues::BHEIGHT : return 2.0;
             case BoidsValues::BMAXSEEAHEAD : return 10;
-            case BoidsValues::BMAXAVOIDANCEFORCE : return 4.0;//2.0;
+            case BoidsValues::BMAXAVOIDANCEFORCE : return 8.0;//2.0;//4
         }
     }
     

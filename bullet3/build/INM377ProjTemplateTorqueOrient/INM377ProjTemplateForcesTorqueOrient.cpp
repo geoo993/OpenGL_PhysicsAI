@@ -96,7 +96,6 @@ void INM377ProjTemplateTorqueOrient::displayText()
 		glColor3f(0, 0, 0);
 		char buf[124];
 		
-		
 		GLDebugDrawString(xStart,20,buf);
 		glRasterPos3f(xStart, yStart, 0);
 		sprintf(buf,"Press 'p' to change CCD mode");
@@ -218,7 +217,7 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
 void INM377ProjTemplateTorqueOrient::CreateBoids(){
     
     for (unsigned long int b = 0; b < NUMBER_OF_BOIDS; ++b){
-        btVector3 tempPos(rand() % 50, 0, rand() % 50);
+        btVector3 tempPos(rand() % 50, rand() % 30, rand() % 50);
         NewBoids(b, tempPos);
     }
     
@@ -290,14 +289,14 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
         btRigidBody *bboid;
         flock.addBoid(bboid);
 
-        btVector3 tempPos(rand() % 50, 0, rand() % 50);
+        btVector3 tempPos(rand() % 50, rand() % 30, rand() % 50);
         unsigned long int index = (flock.m_boids.size() - 1);
         NewBoids(index, tempPos);
         
     }else if (key=='o')
     {
         btVector3 tempPos((rand() % 160) - 80, 1, (rand() % 160) - 80 );
-        flock.addObstacle( new Obstacle(tempPos, 1.0));
+        flock.addObstacle( new Obstacle(tempPos, 2.0));
         unsigned long int index = (flock.m_obstacles.size() - 1);
         NewObstacle(index);
     }
@@ -354,7 +353,11 @@ void INM377ProjTemplateTorqueOrient::NewBoids(const unsigned long int &index, co
 void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index){
     
     
-    btCollisionShape* collisionShape = new btCylinderShape (btVector3(flock.m_obstacles[index]->getRadius(), 20.0, flock.m_obstacles[index]->getRadius()));
+    btCollisionShape* collisionShape = new btCylinderShape (
+                                                            btVector3(flock.m_obstacles[index]->getRadius(), 
+                                                                      20.0, 
+                                                                      flock.m_obstacles[index]->getRadius())
+                                                            );
     //btCollisionShape* collisionShape = new btSphereShape(5.0);
     //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
     m_collisionShapes.push_back(collisionShape);
@@ -365,8 +368,8 @@ void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index)
     trans.setIdentity();
     trans.setOrigin(flock.m_obstacles[index]->getCentre());
     
-    btScalar mass(100.0f);
-    btVector3 cLocalInertia;
+    btScalar mass(1000.0);
+    btVector3 cLocalInertia(0,0,0);
     collisionShape->calculateLocalInertia(mass, cLocalInertia);
     
     btMotionState* motionState = nullptr;

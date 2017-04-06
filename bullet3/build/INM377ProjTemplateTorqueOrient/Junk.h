@@ -577,3 +577,30 @@ std::cout << "y: " << y << ", vertical difference: " << verticalDifference << ",
  btVector3 bangulardrag = -(myAngularDrag) * bbody->getAngularVelocity();//bavelocity
  
  */
+
+
+
+ /*
+ btVector3 bthrust =  btVector3((btransform * btVector3(actor->bGet(Boid::BoidsValues::BMAXSPEED), 0, 0)) - btransform.getOrigin());
+ btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();//bvelocity;
+ btVector3 bangulardrag = -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();//bavelocity
+ 
+ //lift
+ if( (m_borderboundary - actor->m_body->getCenterOfMassPosition().y()) < 20.0){
+ bbody->applyCentralForce(btVector3(0, -(actor->bGet(Boid::BoidsValues::BLift)), 0));
+ }else if( (actor->m_body->getCenterOfMassPosition().y()) < 20.0 ) { 
+ bbody->applyCentralForce(btVector3(0,actor->bGet(Boid::BoidsValues::BLift), 0));
+ }
+ 
+ //gravity
+ btVector3 bgravity = actor->m_body->getGravity();
+ bbody->applyCentralForce(bgravity);
+ 
+ //thrust
+ bbody->applyCentralForce(bthrust + combined + bgravity);
+ 
+ //drag
+ bbody->applyCentralForce(bdrag);
+ bbody->applyTorque(bangulardrag + actor->AvoidanceForce(m_obstacles));
+ 
+ */
