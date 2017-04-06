@@ -76,6 +76,20 @@ btVector3 Boid::Seek(const btVector3 &target) const{
 }
 
 
+btVector3 Boid::LiftForce(const btScalar & boundary) const{
+    
+    //lift
+    if( (boundary - m_body->getCenterOfMassPosition().y())  < 20.0){
+        return btVector3(0, -(bGet(Boid::BoidsValues::BLift)), 0);
+    }else if( (m_body->getCenterOfMassPosition().y()) < 20.0 ) { 
+        return btVector3(0,bGet(Boid::BoidsValues::BLift), 0);
+    }else{
+        return btVector3(0,0, 0);
+    }
+    
+}
+
+
 btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
     
     btVector3 bposition = btVector3(m_body->getCenterOfMassPosition().x(), 0.0,m_body->getCenterOfMassPosition().z());
@@ -102,56 +116,45 @@ btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
             btScalar actorLocalAngle = Extension::getAngleBetweenTwoPoints(GetHeading().x()
                                                                            ,0,GetHeading().z(),
                                                                            0.0,0.0,0.0);
-            
+
             if(angleBasedOnDirection > 0.0 && angleBasedOnDirection < 90.0 ){
                 
                 if( actorLocalAngle > 90.0 && actorLocalAngle < 180.0 ){
                     //45->-125     then left is 45 to 125 and right is 125 to -125
-                    
-                    bool right = (actorLocalAngle < 90.0 && actorLocalAngle > 125.0);//90->124
-                    bool left = (actorLocalAngle <= 125.0 && actorLocalAngle > 180.0);//125->179
+                    bool right = ( (actorLocalAngle > 125.0 && actorLocalAngle < 180.0) || (actorLocalAngle <= -125.0 && actorLocalAngle > -180.0) ) ;
+                    bool left = (actorLocalAngle > 45.0 && actorLocalAngle <= 125.0);
                     if (right){
-                        //-1 right
-                        m_body->applyTorque(btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0) );
-                        std::cout << "go right: " << std::endl;
+                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
                     }
                     if (left){
-                        //left
-                        m_body->applyTorque(btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0));
+                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
                     }
                 }
             }else if(angleBasedOnDirection >= 90.0 && angleBasedOnDirection < 180.0 ){
                 if( actorLocalAngle > 0.0 && actorLocalAngle < 90.0 ){
                     //-45->125     then left is -45 to 45 and right is 45 to 125
-                    
-                    
-                    bool right = (actorLocalAngle < 0.0 && actorLocalAngle > 45.0);//0->44
-                    bool left = (actorLocalAngle <= 45.0 && actorLocalAngle > 90.0);//45->89
+                    bool right = (actorLocalAngle < 125.0 && actorLocalAngle > 45.0);
+                    bool left = ((actorLocalAngle <= 45.0 && actorLocalAngle > 0.0) || (actorLocalAngle < 0.0 && actorLocalAngle > -45.0));
                     if (right){
-                        //-1 right
-                        m_body->applyTorque(btVector3( 0, bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE), 0) );
-                        std::cout << "go right: " << o << std::endl;
+                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
                     }
                     if (left){
-                        //left
-                        m_body->applyTorque(btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0));
+                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
                     }
                 }
+                
             }else if(angleBasedOnDirection < 0.0 && angleBasedOnDirection > -90.0){
                 if( actorLocalAngle < -90.0 && actorLocalAngle > -180.0 ){
                     
                     //-45->125     then left is -125 to 125 and right is -45 to -125
-                    bool right = (actorLocalAngle < -90.0 && actorLocalAngle > -125.0);//-90->-124
-                    bool left = (actorLocalAngle <= -125.0 && actorLocalAngle > -180.0);//-125->-179
+                    bool right = (actorLocalAngle < -45.0 && actorLocalAngle > -125.0);
+                    bool left = ((actorLocalAngle <= -125.0 && actorLocalAngle > -180.0) || (actorLocalAngle < 180.0 && actorLocalAngle > 125.0));
                     
                     if (right){
-                        //-1 right
-                        m_body->applyTorque(btVector3( 0, bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE), 0) );
-                        std::cout << "go right: " << o << std::endl;
+                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
                     }
                     if (left){
-                        //left
-                        m_body->applyTorque(btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0));
+                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
                     }
                 }
             }else if(angleBasedOnDirection <= -90.0 && angleBasedOnDirection > -180.0 ){
@@ -159,17 +162,14 @@ btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
                     
                     //45->-125     then left is -45 to -125 and right is -45 to 45
                     
-                    bool right = (actorLocalAngle < 0.0 && actorLocalAngle > -45.0);//0->-44
-                    bool left = (actorLocalAngle <= -45.0 && actorLocalAngle > -90.0);//-45->-89
+                    bool right = ((actorLocalAngle < 0.0 && actorLocalAngle > -45.0) || (actorLocalAngle < 45.0 && actorLocalAngle > 0.0));
+                    bool left = (actorLocalAngle <= -45.0 && actorLocalAngle > -125.0);
                     
                     if (right){
-                        //-1 right
-                        m_body->applyTorque(btVector3( 0, bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE), 0) );
-                        std::cout << "go right: " << o << std::endl;
+                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
                     }
                     if (left){
-                        //left
-                        m_body->applyTorque(btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)), 0));
+                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
                     }
                     
                 }
@@ -186,15 +186,51 @@ btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
     
 }
 
-btVector3 Boid::LiftForce(const btScalar & boundary) const{
+//steer back to the scene
+void Boid::SteerBack(){
     
-    //lift
-    if( (boundary - m_body->getCenterOfMassPosition().y())  < 20.0){
-        return btVector3(0, -(bGet(Boid::BoidsValues::BLift)), 0);
-    }else if( (m_body->getCenterOfMassPosition().y()) < 20.0 ) { 
-        return btVector3(0,bGet(Boid::BoidsValues::BLift), 0);
-    }else{
-        return btVector3(0,0, 0);
+    /////////////////////////
+    ///////////////-90/////////
+    ////////////   /   ////////
+    /////////      /     /////
+    //////         /        /////
+    ////           /           ////
+    ///            /            ////-180
+    //0       //////////         ///
+    ///            /             ///180
+    ////           /            ////
+    //////         /           ////
+    ///////        /         //////
+    //////////     /        ///////
+    //////////////     ///////
+    ////////////////90//////
+    btScalar angleFromWorld = Extension::getAngleBetweenTwoPoints(m_body->getCenterOfMassPosition().x()
+                                                                  ,0,m_body->getCenterOfMassPosition().z(),
+                                                                  0.0,0.0,0.0);
+    btScalar angleFromLocal = Extension::getAngleBetweenTwoPoints(GetHeading().x()
+                                                                  ,0,GetHeading().z(),
+                                                                  0.0,0.0,0.0);
+    if (m_body->getCenterOfMassPosition().length() > bGet(Boid::BoidsValues::BBORDERBOUNDARY)){
+        
+        btVector3 steer(0, bGet(Boid::BoidsValues::BROTATEBACK), 0);
+        
+        if(angleFromWorld > 0.0 && angleFromWorld < 90.0 ){
+            if( (angleFromLocal > 0.0 && angleFromLocal < 45.0) || (angleFromLocal <= 0.0 && angleFromLocal > -125.0) ){
+                m_body->applyTorque(steer);
+            }
+        }else if(angleFromWorld >= 90.0 && angleFromWorld < 180.0 ){
+            if( (angleFromLocal > 125.0 && angleFromLocal < 180.0) || (angleFromLocal <= -45.0 && angleFromLocal > -180.0) ){
+                m_body->applyTorque(steer);
+            }
+        }else if(angleFromWorld < 0.0 && angleFromWorld > -90.0){
+            if( (angleFromLocal > 0.0 && angleFromLocal < 125.0) || (angleFromLocal <= 0.0 && angleFromLocal > -45.0) ){
+                m_body->applyTorque(steer);
+            }
+        }else if(angleFromWorld <= -90.0 && angleFromWorld > -180.0 ){
+            if( (angleFromLocal > 45.0 && angleFromLocal < 180.0) || (angleFromLocal <= -125.0 && angleFromLocal > -180.0) ){
+                m_body->applyTorque(steer);
+            }
+        }
     }
     
 }

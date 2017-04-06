@@ -3,9 +3,9 @@
 
 #include "btBulletDynamicsCommon.h"
 #include "GlutDemoApplication.h"
+
 #include <vector>
 
-//#include "MyCollisionDemo.h"
 #include "Obstacle.h"
 #include "Boid.h"
 #include "Extension.h"
@@ -23,11 +23,11 @@ class Flock {
 public:
     Flock() {}
     
-    btScalar m_borderboundary;
+    //btScalar m_borderboundary;
     std::vector<Boid*> m_boids;
     std::vector<Obstacle *> m_obstacles;
     
-    void CreateFlock(const btScalar &boundary, const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles );
+    void CreateFlock(const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles );
 
 	// Add a boid with the given body.
 	// (deletion of the body is handled by the Demo class)
@@ -36,9 +36,7 @@ public:
 	// Add an obstacle for boids to avoid.
 	void addObstacle(Obstacle* o);
     
-	// Apply steering forces to each boid in the flock.
-	void Steer(Boid *actor ) const;
-    
+    //update the flocking
     void UpdateFlock();
 
     

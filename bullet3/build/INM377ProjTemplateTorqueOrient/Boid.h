@@ -28,6 +28,7 @@ struct Boid {
         BROTATEBACK, //turn boids around 
         BMAXSEEAHEAD,//this ahead vector length defines how far the character will "see". The greater this is, the earlier the character will start acting to dodge an obstacle, because it will perceive it as a threat even if it's far away.
         BMAXAVOIDANCEFORCE,//boid obscacle avoidance voice
+        BBORDERBOUNDARY,// boundary of the scene
     };
     
     btScalar bGet(BoidsValues value) const
@@ -45,7 +46,8 @@ struct Boid {
             case BoidsValues::BWIDTH : return 3.0;
             case BoidsValues::BHEIGHT : return 2.0;
             case BoidsValues::BMAXSEEAHEAD : return 10;
-            case BoidsValues::BMAXAVOIDANCEFORCE : return 8.0;//2.0;//4
+            case BoidsValues::BMAXAVOIDANCEFORCE : return 4.0;//2.0;
+            case BoidsValues::BBORDERBOUNDARY : return 50;
         }
     }
     
@@ -117,6 +119,9 @@ struct Boid {
     btVector3 Seek(const btVector3 &target) const;
     btVector3 LiftForce(const btScalar & boundary) const;
     btVector3 AvoidanceForce(const std::vector<Obstacle *>& obstacles) const;
+    
+    // Apply steering toque force to each boid in the flock to turn them back in the scene.
+    void SteerBack();
     
 };
 

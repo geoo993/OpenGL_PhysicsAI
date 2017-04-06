@@ -8,10 +8,9 @@
 
 #include "MyFlockingDemo.h"
 
-void Flock::CreateFlock(const btScalar &boundary, const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles){
+void Flock::CreateFlock(const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles){
     m_boids = boids; 
     m_obstacles = obstacles;
-    m_borderboundary = boundary;
 }
 
 void Flock::addBoid(btRigidBody* b){
@@ -194,59 +193,6 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
     return actor->Seek(p);
 }
 
-
-// Apply steering forces to each boid in the flock.
-void Flock::Steer(Boid *actor) const {
-    btRigidBody *bbody = actor->m_body;
-    
-    
-    /////////////////////////
-    ///////////////-90/////////
-    ////////////   /   ////////
-    /////////      /     /////
-    //////         /        /////
-    ////           /           ////
-    ///            /            ////-180
-    //0       //////////         ///
-    ///            /             ///180
-    ////           /            ////
-    //////         /           ////
-    ///////        /         //////
-    //////////     /        ///////
-    //////////////     ///////
-    ////////////////90//////
-    btScalar angleFromWorld = Extension::getAngleBetweenTwoPoints(bbody->getCenterOfMassPosition().x()
-                                                                  ,0,bbody->getCenterOfMassPosition().z(),
-                                                                  0.0,0.0,0.0);
-    btScalar angleFromLocal = Extension::getAngleBetweenTwoPoints(actor->GetHeading().x()
-                                                                  ,0,actor->GetHeading().z(),
-                                                                  0.0,0.0,0.0);
-        if (bbody->getCenterOfMassPosition().length() > m_borderboundary){
-            
-            btVector3 steer(0, actor->bGet(Boid::BoidsValues::BROTATEBACK), 0);
-            
-            if(angleFromWorld > 0.0 && angleFromWorld < 90.0 ){
-                if( (angleFromLocal > 0.0 && angleFromLocal < 45.0) || (angleFromLocal <= 0.0 && angleFromLocal > -125.0) ){
-                    bbody->applyTorque(steer);
-                }
-            }else if(angleFromWorld >= 90.0 && angleFromWorld < 180.0 ){
-                if( (angleFromLocal > 125.0 && angleFromLocal < 180.0) || (angleFromLocal <= -45.0 && angleFromLocal > -180.0) ){
-                    bbody->applyTorque(steer);
-                }
-            }else if(angleFromWorld < 0.0 && angleFromWorld > -90.0){
-                if( (angleFromLocal > 0.0 && angleFromLocal < 125.0) || (angleFromLocal <= 0.0 && angleFromLocal > -45.0) ){
-                    bbody->applyTorque(steer);
-                }
-            }else if(angleFromWorld <= -90.0 && angleFromWorld > -180.0 ){
-                if( (angleFromLocal > 45.0 && angleFromLocal < 180.0) || (angleFromLocal <= -125.0 && angleFromLocal > -180.0) ){
-                    bbody->applyTorque(steer);
-                }
-            }
-        }
-    
-}
-
-
 void Flock::UpdateFlock(){
     
     for (unsigned int b = 0; b < m_boids.size(); ++b){
@@ -271,20 +217,15 @@ void Flock::UpdateFlock(){
         btVector3 bthrust = actor->bGet(Boid::BoidsValues::BMAXSPEED) * front;
         btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();
         btVector3 bangulardrag =  -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();
-        btVector3 blift = actor->LiftForce(m_borderboundary) - bgravity ;
+        btVector3 blift = actor->LiftForce(actor->bGet(Boid::BoidsValues::BBORDERBOUNDARY)) - bgravity ;
         
         bbody->applyCentralForce((bthrust + combined + blift + bgravity + bdrag) * bmass);
         bbody->applyTorque(2.0 * front.cross(bdir) - 5.0 * bbody->getAngularVelocity());
         bbody->applyTorque(-0.5 * worldup);
         bbody->applyTorque(0.5 * btop.cross(worldup) - 5.0 * bbody->getAngularVelocity());
+        bbody->applyTorque(bangulardrag + actor->AvoidanceForce(m_obstacles) );
         
-        actor->AvoidanceForce(m_obstacles);
-        //btVector3 avoidObstacles(0,actor->AvoidanceForce(m_obstacles).y(),0);//boid avoid obstacles
-        bbody->applyTorque(bangulardrag );//+ avoidObstacles);
-        
-        //boundary
-        Steer(actor);
-        
+        actor->SteerBack();//turn to face the scene, never go off the scene
         
     }
     

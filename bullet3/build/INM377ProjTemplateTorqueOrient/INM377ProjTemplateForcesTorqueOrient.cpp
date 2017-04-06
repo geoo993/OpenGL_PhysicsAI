@@ -210,14 +210,14 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
         obstacles.push_back(new Obstacle(obstaclesPositions[i], 2.0));
     }
     
-    flock.CreateFlock(50.0, boidObjects, obstacles);
+    flock.CreateFlock(boidObjects, obstacles);
     
 }
 
 void INM377ProjTemplateTorqueOrient::CreateBoids(){
     
     for (unsigned long int b = 0; b < NUMBER_OF_BOIDS; ++b){
-        btVector3 tempPos(rand() % 50, rand() % 30, rand() % 50);
+        btVector3 tempPos((rand() % 60) - 30, 1, (rand() % 60) - 30 ); // -30 and 30
         NewBoids(b, tempPos);
     }
     
@@ -289,13 +289,13 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
         btRigidBody *bboid;
         flock.addBoid(bboid);
 
-        btVector3 tempPos(rand() % 50, rand() % 30, rand() % 50);
+        btVector3 tempPos( (rand() % 60) - 30, rand() % 30, (rand() % 60) - 30);//-30 and 30
         unsigned long int index = (flock.m_boids.size() - 1);
         NewBoids(index, tempPos);
         
     }else if (key=='o')
     {
-        btVector3 tempPos((rand() % 160) - 80, 1, (rand() % 160) - 80 );
+        btVector3 tempPos((rand() % 160) - 80, 1, (rand() % 160) - 80 ); // -80 and 80
         flock.addObstacle( new Obstacle(tempPos, 2.0));
         unsigned long int index = (flock.m_obstacles.size() - 1);
         NewObstacle(index);
