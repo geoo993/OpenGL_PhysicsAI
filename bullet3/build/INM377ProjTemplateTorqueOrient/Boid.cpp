@@ -111,7 +111,18 @@ btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
     
 }
 
-
+btVector3 Boid::LiftForce(const btScalar & boundary) const{
+    
+    //lift
+    if( (boundary - m_body->getCenterOfMassPosition().y())  < 20.0){
+        return btVector3(0, -(bGet(Boid::BoidsValues::BLift)), 0);
+    }else if( (m_body->getCenterOfMassPosition().y()) < 20.0 ) { 
+        return btVector3(0,bGet(Boid::BoidsValues::BLift), 0);
+    }else{
+        return btVector3(0,0, 0);
+    }
+    
+}
 
 
 

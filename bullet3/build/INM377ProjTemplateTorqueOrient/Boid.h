@@ -32,18 +32,18 @@ struct Boid {
     {
         switch (value)
         {
-            case BoidsValues::BLift : return 15.0;
+            case BoidsValues::BLift : return 6.0;//15.0;
             case BoidsValues::BDRAG : return 3.0;
             case BoidsValues::BANGULARDRAG : return 5.0;
-            case BoidsValues::BROTATEBACK: return 2.0;
-            case BoidsValues::BMAXSPEED: return 14.0;
-            case BoidsValues::BMAXFORCE : return 1.0;
+            case BoidsValues::BROTATEBACK: return 10.0;//2.0;
+            case BoidsValues::BMAXSPEED: return 20;//14.0;
+            case BoidsValues::BMAXFORCE : return 4.0;//1.0;
             case BoidsValues::BMASS : return 1.0;
             case BoidsValues::BRADIUS : return 4.0;
             case BoidsValues::BWIDTH : return 3.0;
             case BoidsValues::BHEIGHT : return 2.0;
             case BoidsValues::BMAXSEEAHEAD : return 10;
-            case BoidsValues::BMAXAVOIDANCEFORCE : return 2.0;
+            case BoidsValues::BMAXAVOIDANCEFORCE : return 4.0;//2.0;
         }
     }
     
@@ -113,8 +113,7 @@ struct Boid {
     
     // Forces on the boid
     btVector3 Seek(const btVector3 &target) const;
-    btVector3 flockingForce(const std::vector<Boid>& boids) const;
-    
+    btVector3 LiftForce(const btScalar & boundary) const;
     btVector3 AvoidanceForce(const std::vector<Obstacle *>& obstacles) const;
     
 };

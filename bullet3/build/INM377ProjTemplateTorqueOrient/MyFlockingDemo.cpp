@@ -86,9 +86,6 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
         c = c.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE); //limit
     }
     
-    //c *= -1;
-   
-    
     return c;
 }
 
@@ -170,7 +167,7 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
         {
             btScalar distance = actor->m_body->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition());
             // get all my nearby neighbors inside the Spherical Zone/radius of this current actor
-            if (distance > 0 && distance < (m_neighborhoodSphericalZone * 2.0)){
+            if (distance > 0 && distance < (m_neighborhoodSphericalZone)){
                 
                 // find the center of mass of all neighbors
                 btScalar tempX = p.x() + otherActor->getCenterOfMassPosition().x();
@@ -192,12 +189,6 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
     
     //the computation vector is divided by the neighbor count, resulting in the position that corresponds to the center of mass. However, we don't want the center of mass itself, we want the direction towards the center of mass, so we recompute the vector as the distance from the agent to the center of mass. Finally, this value is normalized and returned.
     p = btVector3( p.x() / btScalar(neighborCount), p.y() / btScalar(neighborCount), p.z() / btScalar(neighborCount));
-    //btVector3 tempP = btVector3(
-    //                            p.x() - actor->m_body->getCenterOfMassPosition().x(), 
-    //                            p.y() - actor->m_body->getCenterOfMassPosition().y(), 
-    //                            p.z() - actor->m_body->getCenterOfMassPosition().z());
-    //tempP.normalize();
-    
     return actor->Seek(p);
 }
 
@@ -265,44 +256,68 @@ void Flock::UpdateFlock(){
         //The computational abstraction that combines process, procedure, and state is called an actor
         Boid* actor = m_boids[b];
         btRigidBody* bbody = actor->m_body;
-        btTransform btransform = bbody->getWorldTransform();
         
         btVector3 separation = CollisionAvoidance(actor);//seperation
         btVector3 alignment = VelocityMarching(actor);//alignement
         btVector3 cohesion = FlockCentering(actor);//cohesion
-        btVector3 tempVel = alignment + cohesion + separation;
-        tempVel.normalize();
+        btVector3 combined = (alignment * 1.5) + cohesion + separation;
+        combined.normalize();
         
-
+        /*
         btVector3 bthrust =  btVector3((btransform * btVector3(actor->bGet(Boid::BoidsValues::BMAXSPEED), 0, 0)) - btransform.getOrigin());
         btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();//bvelocity;
         btVector3 bangulardrag = -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();//bavelocity
         
-        btScalar bdistanceYp = m_borderboundary - actor->m_body->getCenterOfMassPosition().y();
-        btScalar bdistanceYn = actor->m_body->getCenterOfMassPosition().y();
-       // btVector3 blift = btVector3(0,0,0);
-        if( bdistanceYp < 10.0){
-            //blift = btVector3(0, -(actor->bGet(Boid::BoidsValues::BLift)), 0) ;
+        //lift
+        if( (m_borderboundary - actor->m_body->getCenterOfMassPosition().y()) < 20.0){
             bbody->applyCentralForce(btVector3(0, -(actor->bGet(Boid::BoidsValues::BLift)), 0));
-        }else if( bdistanceYn < 10.0 ) { 
-            //blift = btVector3(0,actor->bGet(Boid::BoidsValues::BLift), 0);
+        }else if( (actor->m_body->getCenterOfMassPosition().y()) < 20.0 ) { 
             bbody->applyCentralForce(btVector3(0,actor->bGet(Boid::BoidsValues::BLift), 0));
         }
         
-        
+        //gravity
         btVector3 bgravity = actor->m_body->getGravity();
         bbody->applyCentralForce(bgravity);
         
         //thrust
-        bbody->applyCentralForce(bthrust + tempVel); //+ blift;
+        bbody->applyCentralForce(bthrust + combined + bgravity);
         
+        //drag
         bbody->applyCentralForce(bdrag);
         bbody->applyTorque(bangulardrag + actor->AvoidanceForce(m_obstacles));
         
+        */
+       
+        
+        btScalar bmass = bbody->getInvMass();
+        btVector3 bgravity = bbody->getGravity();
+        btTransform btransform(bbody->getOrientation());
+        btVector3 up(0, 1, 0);
+        btVector3 btop = btransform * up;
+        btVector3 front = btransform * btVector3(1, 0, 0);
+        btVector3 bdir = actor->GetHeading();
+        btVector3 bthrust = actor->bGet(Boid::BoidsValues::BMAXSPEED) * front;
+        btVector3 bdrag = -(actor->bGet(Boid::BoidsValues::BDRAG)) * bbody->getLinearVelocity();
+        btVector3 bangulardrag =  -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();
+        //btVector3 blift = - 1.00 * bgravity * bvel.length();
+        btVector3 blift = actor->LiftForce(m_borderboundary);
+        bbody->applyCentralForce((bthrust + combined + blift + bgravity + bdrag) * bmass);
+        bbody->applyTorque(2 * front.cross(bdir) - 5.0 * bbody->getAngularVelocity());
+        bbody->applyTorque(- 0.5 * up);
+        bbody->applyTorque(0.5 * btop.cross(up) - 5.0 * bbody->getAngularVelocity());
+        
+        btVector3 avoidObs(0,actor->AvoidanceForce(m_obstacles).y(),0);
+        bbody->applyTorque(bangulardrag );
+        
         //boundary
         Steer(actor);
+        
+        
+        if (actor == nullptr ){
+            std::cout << "null actor" << b <<std::endl; 
+        }
     }
-
+    
     
 }
 

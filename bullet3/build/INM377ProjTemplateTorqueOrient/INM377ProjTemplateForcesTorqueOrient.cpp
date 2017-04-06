@@ -317,8 +317,7 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
         
     }else if (key=='o')
     {
-        btVector3 tempPos(rand() % 50, 1, rand() % 50);
-        //Obstacle *obstacle = new Obstacle(tempPos, 1.0);
+        btVector3 tempPos((rand() % 160) - 80, 1, (rand() % 160) - 80 );
         flock.addObstacle( new Obstacle(tempPos, 1.0));
         unsigned long int index = (flock.m_obstacles.size() - 1);
         NewObstacle(index);
