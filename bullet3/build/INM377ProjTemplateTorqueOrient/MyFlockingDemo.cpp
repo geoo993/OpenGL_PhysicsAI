@@ -42,20 +42,14 @@ void Flock::addObstacle(Obstacle* o){
 //collision avoidance or seperation always maintain prudent separation from their neighbors
 btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     
-    
-    //always maintain prudent separation from their neighbors (collision avoidance/seperation)
     //Collision Avoidance: avoid collisions with nearby flockmates
     //Generally, one boid's awareness of another is based on the distance and direction of the offset vector between them.
     //Static collision avoidance and dynamic velocity matching are complementary.
     //Collision avoidance is the urge to steer a way from an imminent impact.
     //Static collision avoidance is based on the relative position of the flockmates and ignores their velocity.
+    //Separation/collision avoidaance is the behavior that causes an actor to steer away from all of its neighbors.
     
-    //Separation is the behavior that causes an agent to steer away from all of its neighbors.
-    
-    // separation behavior
-    // steer in the oposite direction from each of our nearby neigbhors
-    
-    btVector3 c(0,0,0); // or steer
+    btVector3 c(0,0,0);
     int neighborCount = 0;
     const btScalar m_neighborhoodSphericalZone = 20.0;// also known as the neighbor radius
     
@@ -106,11 +100,11 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     return c;
 }
 
-// velocity marching or allignment to steer actor to match the direction and speed of neighbors
+//velocity marching or allignment to steer actor to match the direction and speed of neighbors
 btVector3 Flock::VelocityMarching(const Boid *actor) const{
     
-    //Alignment is a behavior that causes a particular agent to line up with agents close by.
-    //the flock quickly becomes "polarized", its members heading in approximately the same direction at approximately the same speed (velocity marching or allignment)
+    //Alignment is a behavior that causes a particular actor to line up with actors close by.
+    //the flock quickly becomes "polarized", its members heading in approximately the same direction at approximately the same speed.
     //Velocity Matching: attempt to match velocity with nearby flockmates
     //velocity matching is based only on velocity and ignores position. It is a predictive version of collision avoidance: if the boid does a good job of matching velocity with its neighbors, it is unlikely that it will collide with any of them any time soon. 
     btVector3 v(0,0,0);//or sum
@@ -121,8 +115,7 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     //The neighborhood is defined as a spherical zone of sensitivity centered at the boid's local origin.
     const btScalar m_neighborhoodSphericalZone = 40.0;// also known as the neighbor radius
     
-    //If an agent is found within the radius, its velocity is added to the computation vector, and the neighbor count is incremented.
-    
+    //If an actor is found within the radius, its velocity is added to the computation vector, and the neighbor count is incremented.
     for (unsigned int b = 0; b < m_boids.size(); ++b){
         btRigidBody*otherActor = m_boids[b]->m_body;
         
@@ -155,7 +148,6 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     steer = steer.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE);
     
     return steer;
-    
 }
 
 //boids stay near one another (flock centering or cohesion)
@@ -163,11 +155,10 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
     
     //Flock Centering: attempt to stay close to nearby flockmates
     //Flock centering makes a boid want to be near the center of the flock.
-    //Cohesion is a behavior that causes agents to steer towards the "center of mass" - that is, the average position of the agents within a certain radius.
+    //Cohesion is a behavior that causes actor to steer towards the "center of mass" - that is, the average position of the actors within a certain radius.
     
     // cohesion behavior
-    // return a vector that will steer our curent velocity
-    // towards the center of mass of all nearby neighbors
+    // return a vector that will steer our current velocity towards the center of mass of all nearby neighbors
     btVector3 p(0,0,0);//or sum
     int neighborCount = 0;
     btScalar m_neighborhoodSphericalZone = 40.0;// also known as the neighbor radius
@@ -200,9 +191,14 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
         return btVector3(0,0,0) ;
     }
     
-    //the computation vector is divided by the neighbor count, resulting in the position that corresponds to the center of mass. However, we don't want the center of mass itself, we want the direction towards the center of mass, so we recompute the vector as the distance from the agent to the center of mass. Finally, this value is normalized and returned.
+    //the computation vector is divided by the neighbor count, resulting in the position that corresponds to the center of mass. However, we don't want the center of mass itself, we want the direction towards the center of mass, so we recompute the vector as the distance from the actor to the center of mass. 
     p = btVector3( p.x() / btScalar(neighborCount), p.y() / btScalar(neighborCount), p.z() / btScalar(neighborCount));
-    return actor->Seek(p);
+    
+    //Finally, this value is normalized and returned.
+    p = actor->Seek(p);
+    p.normalize();
+    
+    return p;
 }
 
 
@@ -215,11 +211,18 @@ void Flock::UpdateFlock(){
         Boid* actor = m_boids[b];
         btRigidBody* bbody = actor->m_body;
         
-        btVector3 separation = CollisionAvoidance(actor);//seperation
-        btVector3 alignment = VelocityMarching(actor);//alignement
-        btVector3 cohesion = FlockCentering(actor);//cohesion
-        btVector3 combined = (alignment * 1.6) + cohesion + separation;
-        combined.safeNormalize();
+        // separation behavior to steer in the oposite direction from each of our nearby neigbhors
+        btVector3 separation = CollisionAvoidance(actor);
+        
+        //alignement behavior that causes a particular actor to line up with actors close by.
+        btVector3 alignment = VelocityMarching(actor);
+        
+        //cohesion behavior: attempts to stay close to nearby flockmates
+        btVector3 cohesion = FlockCentering(actor);
+        
+        //combine all behaviours
+        btVector3 combinedbehaviours = (alignment * 2.0) + cohesion + separation;
+        combinedbehaviours.safeNormalize();
         
         btScalar bmass = bbody->getInvMass();
         btVector3 bgravity = bbody->getGravity();
@@ -233,7 +236,8 @@ void Flock::UpdateFlock(){
         btVector3 bangulardrag =  -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();
         btVector3 blift = actor->LiftForce(actor->bGet(Boid::BoidsValues::BBORDERBOUNDARY)) - bgravity ;
         
-        bbody->applyCentralForce((bthrust + combined + blift + bgravity + bdrag) * bmass);
+        //applying linear force to move the boids
+        bbody->applyCentralForce((bthrust + combinedbehaviours + blift + bgravity + bdrag) * bmass);
         
         //This aligns the boid’s orientation to bdir with some drag torque (depending on the angular velocity)
         bbody->applyTorque(2.0 * bfront.cross(bdirection) + bangulardrag);
@@ -244,7 +248,7 @@ void Flock::UpdateFlock(){
         //This flattens the boid (with some drag torque)
         bbody->applyTorque(0.5 * btop.cross(worldup) + bangulardrag );
         
-        //avoid obsatcles
+        //This makes the boid avoid obsatcles
         bbody->applyTorque(bangulardrag + actor->AvoidanceForce(m_obstacles) );
         
         //this steers the boids back around, so they never go off the scene

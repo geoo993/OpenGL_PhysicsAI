@@ -126,10 +126,11 @@ void INM377ProjTemplateTorqueOrient::displayCallback(void) {
 	swapBuffers();
 }
 
+//create gound in the scene
 void INM377ProjTemplateTorqueOrient::CreateGround(){
     
     ///create a few basic rigid bodies
-    btBoxShape* box = new btBoxShape(btVector3(btScalar(110.),btScalar(1.),btScalar(110.)));
+    btBoxShape* box = new btBoxShape(btVector3(btScalar(200.0),btScalar(1.0),btScalar(200.0)));
 	box->initializePolyhedralFeatures();
     btCollisionShape* groundShape = box;
     
@@ -164,6 +165,7 @@ void INM377ProjTemplateTorqueOrient::CreateGround(){
     }
 }
 
+//set the boid and obstacle position and creating the flock
 void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
     
     std::vector<Boid*>	boidObjects;
@@ -177,7 +179,7 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
     }
     
     std::vector<btVector3> obstaclesPositions = {
-        btVector3(-5, 1, 45),
+        btVector3(-5, 1, 40),
         btVector3(-60, 1, 20),
         btVector3(0, 1, -35),
         btVector3(34, 1, -50),
@@ -188,7 +190,15 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
         btVector3(-75, 1, -35),
         btVector3(-20, 1, -60),
         btVector3(50, 1, -62),
-        btVector3(20, 1, -10)
+        btVector3(20, 1, -10),
+        btVector3(15, 1, 25),
+        btVector3(60, 1, 4),
+        btVector3(-30, 1, 12),
+        btVector3(-20, 1, 50),
+        btVector3(-75, 1, 8),
+        btVector3(-6, 1, 60),
+        btVector3(40, 1, -22),
+        btVector3(70, 1, -10)
     };
     for (unsigned int i = 0; i < NUMBER_OF_OBSTACLES; ++i){
         obstacles.push_back(new Obstacle(obstaclesPositions[i], 2.0));
@@ -198,6 +208,7 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
     
 }
 
+//creating the boids and passing in their position and refering to boid in the list of boids
 void INM377ProjTemplateTorqueOrient::CreateBoids(){
     
     for (unsigned long int b = 0; b < NUMBER_OF_BOIDS; ++b){
@@ -207,6 +218,7 @@ void INM377ProjTemplateTorqueOrient::CreateBoids(){
     
 }
 
+//creating the obstacle and refering to obstacle in the list of obstacles
 void INM377ProjTemplateTorqueOrient::CreateObstacle(){
   
     for (unsigned long int o = 0; o < NUMBER_OF_OBSTACLES; ++o){
@@ -214,7 +226,7 @@ void INM377ProjTemplateTorqueOrient::CreateObstacle(){
     }
 }
 
-
+//adding boid in the flock
 void INM377ProjTemplateTorqueOrient::NewBoids(const unsigned long int &index, const btVector3 &position){
     
     flock.m_boids[index]->SetPosition(position);
@@ -226,6 +238,7 @@ void INM377ProjTemplateTorqueOrient::NewBoids(const unsigned long int &index, co
     flock.m_boids[index]->Activate();
 }
 
+//adding obsctacle in the scene
 void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index){
     
     btCollisionShape* collisionShape = new btCylinderShape (
@@ -261,6 +274,7 @@ void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     
     world->clearForces();
     
+    //updating flock in each frame
     static_cast<INM377ProjTemplateTorqueOrient *>(world->getWorldUserInfo())->flock.UpdateFlock();
     
 }
@@ -319,7 +333,7 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
         
     }else if (key=='o')
     {
-        btVector3 tempPos(Extension::randomFloatBetween(-80, 80) , 1, Extension::randomFloatBetween(-80, 80) ); // -80 and 80
+        btVector3 tempPos(Extension::randomFloatBetween(-100, 100) , 1, Extension::randomFloatBetween(-100, 100) ); // -100 and 100
         flock.addObstacle( new Obstacle(tempPos, 2.0));
         unsigned long int index = (flock.m_obstacles.size() - 1);
         NewObstacle(index);

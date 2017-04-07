@@ -22,7 +22,8 @@ bool Obstacle::InPath(const btVector3 &boidPosition) const{
 btVector3 Obstacle::GetAvoidanceForce(const btScalar &obstacleDirectionAngle, const btScalar &boidLocalAngle, const btScalar &avoidanceForce) const{
     
     btVector3 obstacleAvoidanceForce = btVector3(0,0,0);
-
+    
+    //comparing boid angle relative to the obstacle postion and getting the boid to turn right or left 
     if(obstacleDirectionAngle > 0.0 && obstacleDirectionAngle < 90.0 ){
         
         if( boidLocalAngle > 90.0 && boidLocalAngle < 180.0 ){

@@ -33,12 +33,12 @@ struct Boid {
     {
         switch (value)
         {
-            case BoidsValues::BLift : return 2.0;//15.0;
+            case BoidsValues::BLift : return 3.0;//15.0;
             case BoidsValues::BDRAG : return 4.0;//3.0
             case BoidsValues::BANGULARDRAG : return 5.0;
             case BoidsValues::BROTATEBACK: return 10.0;//2.0;
             case BoidsValues::BMAXSPEED: return 25;//14.0;
-            case BoidsValues::BMAXFORCE : return 8.0;//1.0;
+            case BoidsValues::BMAXFORCE : return 10.0;
             case BoidsValues::BMASS : return 1.0;
             case BoidsValues::BMAXAVOIDANCEFORCE : return 6.0;//2.0;
             case BoidsValues::BBORDERBOUNDARY : return 60.0;
