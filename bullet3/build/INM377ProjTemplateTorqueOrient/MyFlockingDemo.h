@@ -11,13 +11,13 @@
 
 class Flock {
     
-    //collision avoidance or seperation
+    //collision avoidance or seperation to always maintain prudent separation from their neighbors
     btVector3 CollisionAvoidance(const Boid *actor) const ;
-    
-    //velocity matching or allingment 
+     
+    //velocity marching or allignment to steer actor to match the direction and speed of neighbors
     btVector3 VelocityMarching(const Boid *actor) const;
     
-    //flock centering or cohesion
+    //boids stay near one another (flock centering or cohesion)
     btVector3 FlockCentering(const Boid *actor) const;
     
 public:
@@ -26,7 +26,6 @@ public:
     Flock();
     ~Flock();
     
-    //btScalar m_borderboundary;
     std::vector<Boid*> m_boids;
     std::vector<Obstacle *> m_obstacles;
     

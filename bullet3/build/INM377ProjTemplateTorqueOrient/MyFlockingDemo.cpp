@@ -22,11 +22,14 @@ Flock::~Flock() {
     }
 }
 
+//create flock of boids and obstacles
 void Flock::CreateFlock(const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles){
     m_boids = boids; 
     m_obstacles = obstacles;
 }
 
+// Add a boid with the given body.
+// (deletion of the body is handled by the Demo class)
 void Flock::addBoid(btRigidBody* b){
     m_boids.push_back(new Boid(b));
 }
@@ -36,7 +39,7 @@ void Flock::addObstacle(Obstacle* o){
     m_obstacles.push_back(o);
 }
 
-//output, computing new force
+//collision avoidance or seperation always maintain prudent separation from their neighbors
 btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     
     
@@ -103,14 +106,9 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     return c;
 }
 
-
-
+// velocity marching or allignment to steer actor to match the direction and speed of neighbors
 btVector3 Flock::VelocityMarching(const Boid *actor) const{
     
-    // alignment behavior
-    // steer agent to match the direction and speed of neighbors
-    
- 
     //Alignment is a behavior that causes a particular agent to line up with agents close by.
     //the flock quickly becomes "polarized", its members heading in approximately the same direction at approximately the same speed (velocity marching or allignment)
     //Velocity Matching: attempt to match velocity with nearby flockmates
@@ -160,9 +158,9 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     
 }
 
+//boids stay near one another (flock centering or cohesion)
 btVector3 Flock::FlockCentering(const Boid *actor) const{
     
-    //boids stay near one another (flock centering or cohesion)
     //Flock Centering: attempt to stay close to nearby flockmates
     //Flock centering makes a boid want to be near the center of the flock.
     //Cohesion is a behavior that causes agents to steer towards the "center of mass" - that is, the average position of the agents within a certain radius.
@@ -207,6 +205,8 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
     return actor->Seek(p);
 }
 
+
+//update the flocking boids
 void Flock::UpdateFlock(){
     
     for (unsigned int b = 0; b < m_boids.size(); ++b){

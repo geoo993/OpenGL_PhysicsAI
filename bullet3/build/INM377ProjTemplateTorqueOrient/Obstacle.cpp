@@ -8,16 +8,17 @@
 
 #include "Obstacle.h"
 
-
+//returns true if this obstacle lies within boundingRadius of an obstacle
 bool Obstacle::InPath(const btVector3 &boidPosition) const{
     
-    btScalar obstacleRadius = getRadius() * 50;
+    btScalar obstacleRadius = getRadius() * 60;
     btVector3 obstacleCenter = getCentre();
     btScalar aheadDistanceToObstacle = obstacleCenter.distance(boidPosition);
   
     return aheadDistanceToObstacle <= obstacleRadius;
 }
 
+//returns the obstacle avoidance force when boid is in path of an obstacle 
 btVector3 Obstacle::GetAvoidanceForce(const btScalar &obstacleDirectionAngle, const btScalar &boidLocalAngle, const btScalar &avoidanceForce) const{
     
     btVector3 obstacleAvoidanceForce = btVector3(0,0,0);
@@ -82,6 +83,3 @@ btVector3 Obstacle::GetAvoidanceForce(const btScalar &obstacleDirectionAngle, co
     return obstacleAvoidanceForce;
 }
 
-Obstacle::~Obstacle(){
-    
-}

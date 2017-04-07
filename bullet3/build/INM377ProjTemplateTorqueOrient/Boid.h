@@ -40,7 +40,7 @@ struct Boid {
             case BoidsValues::BMAXSPEED: return 25;//14.0;
             case BoidsValues::BMAXFORCE : return 8.0;//1.0;
             case BoidsValues::BMASS : return 1.0;
-            case BoidsValues::BMAXAVOIDANCEFORCE : return 4.0;//2.0;
+            case BoidsValues::BMAXAVOIDANCEFORCE : return 6.0;//2.0;
             case BoidsValues::BBORDERBOUNDARY : return 60.0;
         }
     }

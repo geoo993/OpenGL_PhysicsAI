@@ -109,7 +109,6 @@ btVector3 Boid::Seek(const btVector3 &target) const{
 //returns a lift force used to make boids rise off the ground
 btVector3 Boid::LiftForce(const btScalar & boundary) const{
     
-    //lift
     if( (boundary - m_body->getCenterOfMassPosition().y())  < 20.0){
         return btVector3(0, -(bGet(Boid::BoidsValues::BLift)), 0);
     }else if( (m_body->getCenterOfMassPosition().y()) < 20.0 ) { 
@@ -144,64 +143,6 @@ btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
                                                                            0.0,0.0,0.0);
 
             oAvoidance = obstacle->GetAvoidanceForce(angleBasedOnDirection, actorLocalAngle, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)));
-            
-//            if(angleBasedOnDirection > 0.0 && angleBasedOnDirection < 90.0 ){
-//                
-//                if( actorLocalAngle > 90.0 && actorLocalAngle < 180.0 ){
-//                    //45->-125     then left is 45 to 125 and right is 125 to -125
-//                    bool right = ( (actorLocalAngle > 125.0 && actorLocalAngle < 180.0) || (actorLocalAngle <= -125.0 && actorLocalAngle > -180.0) ) ;
-//                    bool left = (actorLocalAngle > 45.0 && actorLocalAngle <= 125.0);
-//                    if (right){
-//                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
-//                    }
-//                    if (left){
-//                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
-//                    }
-//                }
-//            }else if(angleBasedOnDirection >= 90.0 && angleBasedOnDirection < 180.0 ){
-//                if( actorLocalAngle > 0.0 && actorLocalAngle < 90.0 ){
-//                    //-45->125     then left is -45 to 45 and right is 45 to 125
-//                    bool right = (actorLocalAngle < 125.0 && actorLocalAngle > 45.0);
-//                    bool left = ((actorLocalAngle <= 45.0 && actorLocalAngle > 0.0) || (actorLocalAngle < 0.0 && actorLocalAngle > -45.0));
-//                    if (right){
-//                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
-//                    }
-//                    if (left){
-//                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
-//                    }
-//                }
-//                
-//            }else if(angleBasedOnDirection < 0.0 && angleBasedOnDirection > -90.0){
-//                if( actorLocalAngle < -90.0 && actorLocalAngle > -180.0 ){
-//                    
-//                    //-45->125     then left is -125 to 125 and right is -45 to -125
-//                    bool right = (actorLocalAngle < -45.0 && actorLocalAngle > -125.0);
-//                    bool left = ((actorLocalAngle <= -125.0 && actorLocalAngle > -180.0) || (actorLocalAngle < 180.0 && actorLocalAngle > 125.0));
-//                    
-//                    if (right){
-//                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
-//                    }
-//                    if (left){
-//                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
-//                    }
-//                }
-//            }else if(angleBasedOnDirection <= -90.0 && angleBasedOnDirection > -180.0 ){
-//                if( actorLocalAngle < 0.0 && actorLocalAngle > -90.0){
-//                    
-//                    //45->-125     then left is -45 to -125 and right is -45 to 45
-//                    bool right = ((actorLocalAngle < 0.0 && actorLocalAngle > -45.0) || (actorLocalAngle < 45.0 && actorLocalAngle > 0.0));
-//                    bool left = (actorLocalAngle <= -45.0 && actorLocalAngle > -125.0);
-//                    
-//                    if (right){
-//                        oAvoidance = btVector3( 0, -(bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//right
-//                    }
-//                    if (left){
-//                        oAvoidance = btVector3( 0, (bGet(Boid::BoidsValues::BMAXAVOIDANCEFORCE)),0 );//left
-//                    }
-//                    
-//                }
-//            }
-        
             
         } 
         

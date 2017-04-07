@@ -3,18 +3,17 @@
 
 #include "btBulletDynamicsCommon.h"
 
-// Abstract class for obstacles.
 // A obstacle is a convex volume that boids should avoid.
 // Often this will coincide with a static rigid body, but
-// this is not mandatory.
 class Obstacle {
     
-    // Solid sphere
+    // Solid sphere obstacle
     const btVector3 centre;
     const btScalar radius;
         
 public:
     
+    //constructor
     Obstacle(const btVector3 &c, btScalar r) : centre(c), radius(r) {}
     
     //obstacle center position
@@ -31,7 +30,8 @@ public:
     //returns the obstacle avoidance force when boid is in path of an obstacle 
     btVector3 GetAvoidanceForce(const btScalar &obstacleDirectionAngle, const btScalar &boidLocalAngle, const btScalar &avoidanceForce) const;
     
-    virtual ~Obstacle();
+    //destructor
+    virtual ~Obstacle(){};
 };
 
 #endif
