@@ -2,26 +2,29 @@
 #define MY_FLOCKING_DEMO_H
 
 #include "btBulletDynamicsCommon.h"
-#include "GlutDemoApplication.h"
 
 #include <vector>
 
-#include "Obstacle.h"
 #include "Boid.h"
+#include "Obstacle.h"
 #include "Extension.h"
 
 class Flock {
-
-	// declare dummies as private to forbid copying
-	Flock(const Flock &flock) {}
-	Flock & operator=(const Flock &flock) { return *this; }
-
+    
+    //collision avoidance or seperation
     btVector3 CollisionAvoidance(const Boid *actor) const ;
+    
+    //velocity matching or allingment 
     btVector3 VelocityMarching(const Boid *actor) const;
+    
+    //flock centering or cohesion
     btVector3 FlockCentering(const Boid *actor) const;
     
 public:
-    Flock() {}
+    
+    //flock constructor
+    Flock();
+    ~Flock();
     
     //btScalar m_borderboundary;
     std::vector<Boid*> m_boids;
@@ -37,7 +40,7 @@ public:
 	// Add an obstacle for boids to avoid.
 	void addObstacle(Obstacle* o);
     
-    //update the flocking
+    //update the flocking boids
     void UpdateFlock();
 
     

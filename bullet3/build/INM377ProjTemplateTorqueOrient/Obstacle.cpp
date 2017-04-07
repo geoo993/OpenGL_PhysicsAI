@@ -9,16 +9,77 @@
 #include "Obstacle.h"
 
 
-
-bool Obstacle::missed(const btVector3 &pos, btVector3 &target) const{
+bool Obstacle::InPath(const btVector3 &boidPosition) const{
     
-    return false;
+    btScalar obstacleRadius = getRadius() * 50;
+    btVector3 obstacleCenter = getCentre();
+    btScalar aheadDistanceToObstacle = obstacleCenter.distance(boidPosition);
+  
+    return aheadDistanceToObstacle <= obstacleRadius;
 }
 
-bool Obstacle::inPath(const btVector3 &pos, const btVector3 &vel, btScalar boundingRadius, btScalar &distance, btVector3 &avoidPoint) const{
+btVector3 Obstacle::GetAvoidanceForce(const btScalar &obstacleDirectionAngle, const btScalar &boidLocalAngle, const btScalar &avoidanceForce) const{
     
+    btVector3 obstacleAvoidanceForce = btVector3(0,0,0);
+
+    if(obstacleDirectionAngle > 0.0 && obstacleDirectionAngle < 90.0 ){
+        
+        if( boidLocalAngle > 90.0 && boidLocalAngle < 180.0 ){
+            //45->-125     then left is 45 to 125 and right is 125 to -125
+            bool right = ( (boidLocalAngle > 125.0 && boidLocalAngle < 180.0) || (boidLocalAngle <= -125.0 && boidLocalAngle > -180.0) ) ;
+            bool left = (boidLocalAngle > 45.0 && boidLocalAngle <= 125.0);
+            if (right){
+                obstacleAvoidanceForce = btVector3( 0, -(avoidanceForce),0 );//right
+            }
+            if (left){
+                obstacleAvoidanceForce = btVector3( 0, (avoidanceForce),0 );//left
+            }
+        }
+    }else if(obstacleDirectionAngle >= 90.0 && obstacleDirectionAngle < 180.0 ){
+        if( boidLocalAngle > 0.0 && boidLocalAngle < 90.0 ){
+            //-45->125     then left is -45 to 45 and right is 45 to 125
+            bool right = (boidLocalAngle < 125.0 && boidLocalAngle > 45.0);
+            bool left = ((boidLocalAngle <= 45.0 && boidLocalAngle > 0.0) || (boidLocalAngle < 0.0 && boidLocalAngle > -45.0));
+            if (right){
+                obstacleAvoidanceForce = btVector3( 0, -(avoidanceForce),0 );//right
+            }
+            if (left){
+                obstacleAvoidanceForce = btVector3( 0, (avoidanceForce),0 );//left
+            }
+        }
+        
+    }else if(obstacleDirectionAngle < 0.0 && obstacleDirectionAngle > -90.0){
+        if( boidLocalAngle < -90.0 && boidLocalAngle > -180.0 ){
+            
+            //-45->125     then left is -125 to 125 and right is -45 to -125
+            bool right = (boidLocalAngle < -45.0 && boidLocalAngle > -125.0);
+            bool left = ((boidLocalAngle <= -125.0 && boidLocalAngle > -180.0) || (boidLocalAngle < 180.0 && boidLocalAngle > 125.0));
+            
+            if (right){
+                obstacleAvoidanceForce = btVector3( 0, -(avoidanceForce),0 );//right
+            }
+            if (left){
+                obstacleAvoidanceForce = btVector3( 0, (avoidanceForce),0 );//left
+            }
+        }
+    }else if(obstacleDirectionAngle <= -90.0 && obstacleDirectionAngle > -180.0 ){
+        if( boidLocalAngle < 0.0 && boidLocalAngle > -90.0){
+            
+            //45->-125     then left is -45 to -125 and right is -45 to 45
+            bool right = ((boidLocalAngle < 0.0 && boidLocalAngle > -45.0) || (boidLocalAngle < 45.0 && boidLocalAngle > 0.0));
+            bool left = (boidLocalAngle <= -45.0 && boidLocalAngle > -125.0);
+            
+            if (right){
+                obstacleAvoidanceForce = btVector3( 0, -(avoidanceForce),0 );//right
+            }
+            if (left){
+                obstacleAvoidanceForce = btVector3( 0, (avoidanceForce),0 );//left
+            }
+            
+        }
+    }
     
-    return false;
+    return obstacleAvoidanceForce;
 }
 
 Obstacle::~Obstacle(){

@@ -20,7 +20,7 @@ dependencies: \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/BroadphaseCollision/btBroadphaseProxy.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btCollisionMargin.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/LinearMath/btQuickprof.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/MyFlockingDemo.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Boid.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/btBulletDynamicsCommon.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/btBulletCollisionCommon.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionDispatch/btCollisionWorld.h \
@@ -105,7 +105,7 @@ dependencies: \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Vehicle/btWheelInfo.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Dynamics/btActionInterface.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Obstacle.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Boid.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Extension.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/MyFlockingDemo.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL/GLDebugFont.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL/GLDebugDrawer.h

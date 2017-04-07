@@ -1,19 +1,3 @@
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  http://continuousphysics.com/Bullet/
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-
 
 #define CUBE_HALF_EXTENTS 1
 
@@ -174,7 +158,7 @@ void INM377ProjTemplateTorqueOrient::CreateGround(){
         btRigidBody* body = new btRigidBody(rbInfo);
         body->setFriction(0.5);
         
-        //body->setRollingFriction(0.3);
+        body->setRollingFriction(0.3);
         //add the body to the dynamics world
         m_dynamicsWorld->addRigidBody(body);
     }
@@ -228,8 +212,50 @@ void INM377ProjTemplateTorqueOrient::CreateObstacle(){
     for (unsigned long int o = 0; o < NUMBER_OF_OBSTACLES; ++o){
         NewObstacle(o);
     }
-
 }
+
+
+void INM377ProjTemplateTorqueOrient::NewBoids(const unsigned long int &index, const btVector3 &position){
+    
+    flock.m_boids[index]->SetPosition(position);
+    m_collisionShapes.push_back(flock.m_boids[index]->GetHullShape());
+    
+    //bind and create shape with mass, transform, and structure
+    flock.m_boids[index]->m_body =
+    localCreateRigidBody(flock.m_boids[ index]->bGet(Boid::BoidsValues::BMASS), flock.m_boids[index]->GetTransform(), flock.m_boids[index]->GetHullShape());
+    flock.m_boids[index]->Activate();
+}
+
+void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index){
+    
+    btCollisionShape* collisionShape = new btCylinderShape (
+                                                            btVector3(flock.m_obstacles[index]->getRadius(), 
+                                                                      50.0, 
+                                                                      flock.m_obstacles[index]->getRadius())
+                                                            );
+    //btCollisionShape* collisionShape = new btSphereShape(5.0);
+    //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
+    m_collisionShapes.push_back(collisionShape);
+    
+    btRigidBody* body = nullptr;
+    
+    btTransform trans;
+    trans.setIdentity();
+    trans.setOrigin(flock.m_obstacles[index]->getCentre());
+    
+    btScalar mass(0.0);
+    btVector3 cLocalInertia(0,0,0);
+    collisionShape->calculateLocalInertia(mass, cLocalInertia);
+    
+    btMotionState* motionState = nullptr;
+    body = new btRigidBody(mass, motionState, collisionShape, cLocalInertia);
+    body = localCreateRigidBody(mass, trans, collisionShape);
+    body->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
+    body->setFriction(0.5);
+    body->activate(true);
+    
+}
+
 
 void MyTickCallback(btDynamicsWorld *world, btScalar timeStep) {
     
@@ -335,48 +361,4 @@ void	INM377ProjTemplateTorqueOrient::exitPhysics()
 	delete m_dynamicsWorld;
     
 }
-
-
-void INM377ProjTemplateTorqueOrient::NewBoids(const unsigned long int &index, const btVector3 &position){
-   
-    flock.m_boids[index]->Set(position);
-    m_collisionShapes.push_back(flock.m_boids[index]->GetHullShape());
-    
-    //bind and create shape with mass, transform, and structure
-    flock.m_boids[index]->m_body =
-    localCreateRigidBody(flock.m_boids[ index]->bGet(Boid::BoidsValues::BMASS), flock.m_boids[index]->GetTransform(), flock.m_boids[index]->GetHullShape());
-    flock.m_boids[index]->Activate();
-}
-
-void INM377ProjTemplateTorqueOrient::NewObstacle(const unsigned long int &index){
-    
-    
-    btCollisionShape* collisionShape = new btCylinderShape (
-                                                            btVector3(flock.m_obstacles[index]->getRadius(), 
-                                                                      50.0, 
-                                                                      flock.m_obstacles[index]->getRadius())
-                                                            );
-    //btCollisionShape* collisionShape = new btSphereShape(5.0);
-    //btCollisionShape* collisionShape = new btBoxShape(btVector3(1.0, 10.0, 1.0));
-    m_collisionShapes.push_back(collisionShape);
-    
-    btRigidBody* body = nullptr;
-    
-    btTransform trans;
-    trans.setIdentity();
-    trans.setOrigin(flock.m_obstacles[index]->getCentre());
-    
-    btScalar mass(0.0);
-    btVector3 cLocalInertia(0,0,0);
-    collisionShape->calculateLocalInertia(mass, cLocalInertia);
-    
-    btMotionState* motionState = nullptr;
-    body = new btRigidBody(mass, motionState, collisionShape, cLocalInertia);
-    body = localCreateRigidBody(mass, trans, collisionShape);
-    body->setAnisotropicFriction(collisionShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
-    body->setFriction(0.5);
-    body->activate(true);
-    
-}
-
 

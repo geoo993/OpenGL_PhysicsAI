@@ -15,23 +15,20 @@ class Extension {
     
 public:
     
+    //calculating angle between two positions
     static btScalar getAngleBetweenTwoPoints (btScalar x1,btScalar y1,btScalar z1,btScalar x2,btScalar y2,btScalar z2)
     {
         btScalar theta = btAtan2(z1-z2,x1-x2);
         return -theta*180/3.1415926;
     }
-    
-    static btScalar randFloat(){
-        return btScalar( (double)rand() / (RAND_MAX + 1.0));
-        //return  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-    }
-    
-    //Random between 2 floats 
+  
+    //get Random number between a minimum and maximum value 
     static btScalar  randomFloatBetween(btScalar min, btScalar max)    
     {    
         return (min + 1) + (((btScalar) rand()) / (btScalar) RAND_MAX) * (max - (min + 1));    
     }
-
+    
+    //get the percentage value of a number given its min and max range
     static btScalar percentageWith(btScalar value, btScalar min, btScalar max) 
     {
         btScalar difference = (min < 0.0) ? max : max - min;

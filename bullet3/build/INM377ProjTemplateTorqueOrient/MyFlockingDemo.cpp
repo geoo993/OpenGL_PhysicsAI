@@ -8,6 +8,20 @@
 
 #include "MyFlockingDemo.h"
 
+//boids constructor
+Flock::Flock() {}
+
+//boids destructor
+Flock::~Flock() {
+    for (unsigned int i = 0; i < m_boids.size(); ++i){
+        delete m_boids[i];
+    }
+    
+    for (unsigned int i = 0; i < m_obstacles.size(); ++i){
+        delete m_obstacles[i];
+    }
+}
+
 void Flock::CreateFlock(const std::vector<Boid*> boids, const std::vector<Obstacle *> obstacles){
     m_boids = boids; 
     m_obstacles = obstacles;

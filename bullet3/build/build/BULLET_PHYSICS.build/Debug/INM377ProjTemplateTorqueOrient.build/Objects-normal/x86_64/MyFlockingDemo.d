@@ -98,11 +98,6 @@ dependencies: \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Vehicle/btVehicleRaycaster.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Vehicle/btWheelInfo.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletDynamics/Dynamics/btActionInterface.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL/GlutDemoApplication.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL/DemoApplication.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL/GlutStuff.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/Demos/OpenGL/GL_ShapeDrawer.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/src/BulletCollision/CollisionShapes/btShapeHull.h \
-  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Obstacle.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Boid.h \
+  /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Obstacle.h \
   /Users/GeorgeQuentin/Dev/OpenGL/PhysicsAndAI/bullet3/build/INM377ProjTemplateTorqueOrient/Extension.h

@@ -14,31 +14,23 @@ class Obstacle {
     const btScalar radius;
         
 public:
-    Obstacle(): centre(btVector3(0,0,0)), radius(0.0){}
-    Obstacle(const btVector3 &c, btScalar r) :
-    centre(c), radius(r) {}
     
+    Obstacle(const btVector3 &c, btScalar r) : centre(c), radius(r) {}
+    
+    //obstacle center position
     btVector3 getCentre() const { return centre; };
-    btScalar getRadius() const { return radius; };
-        
     
-    // Returns true if pos is past the obstacle.
-	// In that case, the output parameter target is set to a point
-	// to aim towards to return to the right side of the obstacle.
-    bool missed(const btVector3 &pos, btVector3 &target) const;
+    //obstacle radius
+    btScalar getRadius() const { return radius; };
 
 	// Test whether a sphere of radius boundingRadius is on a
 	// a path that will meet the obstacle.
-	// Returns true if this obstacle lies within boundingRadius
-	// of a ray starting at pos and proceeding in direction vel.
-	// In that case, the output parameters are set:
-	// distance = distance from pos to the point of impact
-	// avoidPoint = a point on the obstacle that the object
-	//	should steer away from.
-    bool inPath(const btVector3 &pos, const btVector3 &vel,
-		btScalar boundingRadius,
-		btScalar &distance, btVector3 &avoidPoint) const;
+	// Returns true if this obstacle lies within boundingRadius of an obstacle
+    bool InPath(const btVector3 &boidPosition) const;
 
+    //returns the obstacle avoidance force when boid is in path of an obstacle 
+    btVector3 GetAvoidanceForce(const btScalar &obstacleDirectionAngle, const btScalar &boidLocalAngle, const btScalar &avoidanceForce) const;
+    
     virtual ~Obstacle();
 };
 
