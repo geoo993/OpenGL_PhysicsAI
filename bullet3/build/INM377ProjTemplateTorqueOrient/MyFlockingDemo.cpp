@@ -80,6 +80,7 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
         // get all my nearby neighbors inside the Spherical Zone/radius of this current actor
         if (distance > 0 && distance < m_neighborhoodSphericalZone){
             
+            //calulating the desired position of the boid by averaging the positions of the flockmates
             btScalar tempX = actor->m_body->getCenterOfMassPosition().x() - positions[i].x() ;
             btScalar tempY = actor->m_body->getCenterOfMassPosition().y() - positions[i].y();
             btScalar tempZ = actor->m_body->getCenterOfMassPosition().z() - positions[i].z();
@@ -108,12 +109,12 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     }
     
     if (c.length() > 0){
-        
         c.normalize();
         c = c * actor->bGet(Boid::BoidsValues::BMAXSPEED);
         c = c - actor->m_body->getLinearVelocity();
-        c = c.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE); //limit
+        c = c.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE); //limit the force to max force
     }
+    
     return c;
 }
 
@@ -162,7 +163,7 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     v = v * actor->bGet(Boid::BoidsValues::BMAXSPEED);
     
     btVector3 steer = v - actor->m_body->getLinearVelocity();
-    steer = steer.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE);
+    steer = steer.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE);//limit the force to max force
 
     return steer;
 }

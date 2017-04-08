@@ -97,10 +97,10 @@ btVector3 Boid::Seek(const btVector3 &target) const{
     
     btVector3 desired = target - m_body->getCenterOfMassPosition();
     desired.normalize();
-    desired = desired * bGet(BoidsValues::BMAXSPEED); //m_maxSpeed;
+    desired = desired * bGet(BoidsValues::BMAXSPEED);
     
     btVector3 steer = desired - m_body->getLinearVelocity();
-    steer = steer.normalize() * bGet(BoidsValues::BMAXFORCE);
+    steer = steer.normalize() * bGet(BoidsValues::BMAXFORCE);//limit the force to max force
     
     return steer;
 }
