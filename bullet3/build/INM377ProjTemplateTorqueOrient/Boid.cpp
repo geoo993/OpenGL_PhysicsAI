@@ -6,8 +6,6 @@ Boid::Boid(){
     m_body = nullptr; 
     m_hullShape = nullptr;
     
-    m_transform = btTransform();
-    m_hullShape = new btConvexHullShape();
 }
 //boid constructor with rigidbody parameter
 Boid::Boid(btRigidBody* body){
@@ -15,8 +13,6 @@ Boid::Boid(btRigidBody* body){
     m_body = body; 
     m_hullShape = nullptr;
     
-    m_transform = btTransform();
-    m_hullShape = new btConvexHullShape();
 }
 
 //boid destructor
@@ -27,6 +23,9 @@ Boid::~Boid(){
 
 //Set boid position and creating three types of boids
 void  Boid::SetPosition( const btVector3 &position){
+    
+    m_transform = btTransform();
+    m_hullShape = new btConvexHullShape();
     
     //creating three different boid shapes
     int r = rand() % 3;    

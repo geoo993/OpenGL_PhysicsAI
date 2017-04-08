@@ -16,10 +16,12 @@ Flock::~Flock() {
     for (unsigned int i = 0; i < m_boids.size(); ++i){
         delete m_boids[i];
     }
+    m_boids.clear();
     
     for (unsigned int i = 0; i < m_obstacles.size(); ++i){
         delete m_obstacles[i];
     }
+    m_obstacles.clear();
 }
 
 //create flock of boids and obstacles

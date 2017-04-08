@@ -14,6 +14,6 @@ int main(int argc,char** argv)
     demo->getDynamicsWorld()->setDebugDrawer(&gDebugDrawer);
     //demo->setDebugMode(btIDebugDraw::DBG_DrawConstraints+btIDebugDraw::DBG_DrawConstraintLimits);
     
-    return glutmain(argc, argv,780,560,"Bullet Physics Demo. http://bulletphysics.com",demo);
+    return glutmain(argc, argv,880,600,"Bullet Physics Demo. http://bulletphysics.com",demo);
     
 }

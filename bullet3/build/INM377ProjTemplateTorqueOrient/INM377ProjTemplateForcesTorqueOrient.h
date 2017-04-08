@@ -64,6 +64,7 @@ private:
 
 public:
     
+    //create boid flocking behavior from the Flock class
     Flock flock;
     
     INM377ProjTemplateTorqueOrient();
@@ -78,9 +79,10 @@ public:
 	virtual void keyboardCallback(unsigned char key, int x, int y);
 
 	virtual void displayCallback();
+    
 	virtual void clientResetScene();
 
-	static DemoApplication* Create()
+	static DemoApplication * Create()
 	{
 		INM377ProjTemplateTorqueOrient* demo = new INM377ProjTemplateTorqueOrient;
 		demo->myinit();

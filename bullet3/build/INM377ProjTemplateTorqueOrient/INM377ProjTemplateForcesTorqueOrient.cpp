@@ -16,7 +16,7 @@ INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
     InitialiseFlock();
     
 	setDebugMode(btIDebugDraw::DBG_DrawText+btIDebugDraw::DBG_NoHelpText);
-	setCameraDistance(btScalar(40.0));
+	setCameraDistance(btScalar(50.0));
 }
 
 INM377ProjTemplateTorqueOrient::~INM377ProjTemplateTorqueOrient()
@@ -24,58 +24,6 @@ INM377ProjTemplateTorqueOrient::~INM377ProjTemplateTorqueOrient()
     exitPhysics();
 }
 
-void INM377ProjTemplateTorqueOrient::clientMoveAndDisplay()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-
-	//simple dynamics world doesn't handle fixed-time-stepping
-	float ms = getDeltaTimeMicroseconds();
-	
-	///step the simulation
-	if (m_dynamicsWorld)
-	{
-        m_dynamicsWorld->stepSimulation(ms/1000000,0);
-		//optional but useful: debug drawing
-		m_dynamicsWorld->debugDrawWorld();
-	}
-		
-	renderme(); 
-
-#if 0
-	for (int i=0;i<debugContacts.size();i++)
-	{
-		getDynamicsWorld()->getDebugDrawer()->drawContactPoint(debugContacts[i],debugNormals[i],0,0,btVector3(1,0,0));
-	}
-#endif
-
-	glFlush();
-
-	swapBuffers();
-
-}
-
-
-void INM377ProjTemplateTorqueOrient::displayCallback(void) {
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-	
-	renderme();
-
-	//optional but useful: debug drawing to detect problems
-	if (m_dynamicsWorld)
-	{
-		m_dynamicsWorld->debugDrawWorld();
-	}
-#if 0
-	for (int i=0;i<debugContacts.size();i++)
-	{
-		getDynamicsWorld()->getDebugDrawer()->drawContactPoint(debugContacts[i],debugNormals[i],0,0,btVector3(1,0,0));
-	}
-#endif
-
-	glFlush();
-	swapBuffers();
-}
 
 //create gound in the scene
 void INM377ProjTemplateTorqueOrient::CreateGround(){
@@ -233,7 +181,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 {
 	setTexturing(true);
 	setShadows(false);
-	setCameraDistance(50.0f);
+	setCameraDistance(50.0);
 
 	// init world
 	m_collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -251,28 +199,118 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 	m_dynamicsWorld->setInternalTickCallback(MyTickCallback, static_cast<void *>(this), true);
 
     CreateGround();
-    
 	{
-		//create a few dynamic rigidbodies
-		// Re-using the same collision is better for memory usage and performance
+		//firstly, we create boids and obstacles and creating the ground
         CreateBoids();
         CreateObstacle();
 		
 	}
 }
 
+
+void	INM377ProjTemplateTorqueOrient::exitPhysics()
+{
+    
+    //cleanup in the reverse order of creation/initialization
+    
+    //remove the rigidbodies from the dynamics world and delete them
+    int i;
+    for (i=m_dynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
+    {
+        btCollisionObject* obj = m_dynamicsWorld->getCollisionObjectArray()[i];
+        btRigidBody* body = btRigidBody::upcast(obj);
+        if (body && body->getMotionState())
+        {
+            delete body->getMotionState();
+        }
+        m_dynamicsWorld->removeCollisionObject( obj );
+        delete obj;
+    }
+    
+    //delete collision shapes
+    for (int j=0;j<m_collisionShapes.size();j++)
+    {
+        btCollisionShape* shape = m_collisionShapes[j];
+        delete shape;
+    }
+    m_collisionShapes.clear();
+    
+    delete m_dynamicsWorld;
+    
+    delete m_overlappingPairCache;
+    
+    delete m_dispatcher;
+    
+    delete	m_constraintSolver;
+    
+    delete m_collisionConfiguration;
+    
+    
+}
+
 void	INM377ProjTemplateTorqueOrient::clientResetScene()
 {
-	exitPhysics();
-	initPhysics();
+    exitPhysics();
+    initPhysics();
 }
+
+void INM377ProjTemplateTorqueOrient::clientMoveAndDisplay()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+    
+    //simple dynamics world doesn't handle fixed-time-stepping
+    float ms = getDeltaTimeMicroseconds();
+    
+    ///step the simulation
+    if (m_dynamicsWorld)
+    {
+        m_dynamicsWorld->stepSimulation(ms/1000000,0);
+        //optional but useful: debug drawing
+        m_dynamicsWorld->debugDrawWorld();
+    }
+    
+    renderme(); 
+    
+#if 0
+    for (int i=0;i<debugContacts.size();i++)
+    {
+        getDynamicsWorld()->getDebugDrawer()->drawContactPoint(debugContacts[i],debugNormals[i],0,0,btVector3(1,0,0));
+    }
+#endif
+    
+    glFlush();
+    
+    swapBuffers();
+    
+}
+
+
+void INM377ProjTemplateTorqueOrient::displayCallback(void) {
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+    
+    renderme();
+    
+    //optional but useful: debug drawing to detect problems
+    if (m_dynamicsWorld)
+    {
+        m_dynamicsWorld->debugDrawWorld();
+    }
+#if 0
+    for (int i=0;i<debugContacts.size();i++)
+    {
+        getDynamicsWorld()->getDebugDrawer()->drawContactPoint(debugContacts[i],debugNormals[i],0,0,btVector3(1,0,0));
+    }
+#endif
+    
+    glFlush();
+    swapBuffers();
+}
+
 
 void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, int y)
 {
-	if (key=='p')
-	{
-		clientResetScene();
-    }else if (key=='b')
+	if (key=='b')
     {
         btRigidBody *bboid;
         flock.addBoid(bboid);
@@ -294,35 +332,4 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
 	}
 }
 
-
-void	INM377ProjTemplateTorqueOrient::exitPhysics()
-{
-
-	//cleanup in the reverse order of creation/initialization
-
-	//remove the rigidbodies from the dynamics world and delete them
-	int i;
-	for (i=m_dynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
-	{
-		btCollisionObject* obj = m_dynamicsWorld->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
-			delete body->getMotionState();
-		}
-		m_dynamicsWorld->removeCollisionObject( obj );
-		delete obj;
-	}
-
-	//delete collision shapes
-	for (int j=0;j<m_collisionShapes.size();j++)
-	{
-		btCollisionShape* shape = m_collisionShapes[j];
-		delete shape;
-	}
-	m_collisionShapes.clear();
-
-	delete m_dynamicsWorld;
-    
-}
 
