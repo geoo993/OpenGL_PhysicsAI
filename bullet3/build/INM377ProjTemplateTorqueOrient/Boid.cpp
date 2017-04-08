@@ -25,10 +25,10 @@ Boid::~Boid(){
     delete m_hullShape;
 }
 
-//Set boid position
+//Set boid position and creating three types of boids
 void  Boid::SetPosition( const btVector3 &position){
     
-    //creating boids shape
+    //creating three different boid shapes
     int r = rand() % 3;    
     if ( r == 1){
         m_hullShape->addPoint(btVector3(3.5, 0, 0));
@@ -153,7 +153,7 @@ btVector3 Boid::AvoidanceForce(const std::vector<Obstacle *>& obstacles) const{
 }
 
 //This is used to apply steering torque force to each boid in the flock to turn them back in the scene
-void Boid::SteerBack(){
+bool Boid::SteerBack(){
     
     /////////////////////////
     ///////////////-90/////////
@@ -176,29 +176,32 @@ void Boid::SteerBack(){
     btScalar angleFromLocal = Extension::getAngleBetweenTwoPoints(GetHeading().x()
                                                                   ,0,GetHeading().z(),
                                                                   0.0,0.0,0.0);
+    bool bsteerBack = false;
+    
     if (m_body->getCenterOfMassPosition().length() > bGet(Boid::BoidsValues::BBORDERBOUNDARY)){
-        
-        btVector3 steer(0, bGet(Boid::BoidsValues::BROTATEBACK), 0);
         
         if(angleFromWorld > 0.0 && angleFromWorld < 90.0 ){
             if( (angleFromLocal > 0.0 && angleFromLocal < 45.0) || (angleFromLocal <= 0.0 && angleFromLocal > -125.0) ){
-                m_body->applyTorque(steer);
+                bsteerBack = true;
             }
         }else if(angleFromWorld >= 90.0 && angleFromWorld < 180.0 ){
             if( (angleFromLocal > 125.0 && angleFromLocal < 180.0) || (angleFromLocal <= -45.0 && angleFromLocal > -180.0) ){
-                m_body->applyTorque(steer);
+                bsteerBack = true;
             }
         }else if(angleFromWorld < 0.0 && angleFromWorld > -90.0){
             if( (angleFromLocal > 0.0 && angleFromLocal < 125.0) || (angleFromLocal <= 0.0 && angleFromLocal > -45.0) ){
-                m_body->applyTorque(steer);
+                bsteerBack = true;
             }
         }else if(angleFromWorld <= -90.0 && angleFromWorld > -180.0 ){
             if( (angleFromLocal > 45.0 && angleFromLocal < 180.0) || (angleFromLocal <= -125.0 && angleFromLocal > -180.0) ){
-                m_body->applyTorque(steer);
+                bsteerBack = true;
             }
         }
+    }else{
+        bsteerBack = false;
     }
     
+    return bsteerBack;
 }
 
 

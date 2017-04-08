@@ -96,7 +96,6 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
         c = c - actor->m_body->getLinearVelocity();
         c = c.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE); //limit
     }
-    
     return c;
 }
 
@@ -146,7 +145,7 @@ btVector3 Flock::VelocityMarching(const Boid *actor) const{
     
     btVector3 steer = v - actor->m_body->getLinearVelocity();
     steer = steer.normalize() * actor->bGet(Boid::BoidsValues::BMAXFORCE);
-    
+
     return steer;
 }
 
@@ -193,10 +192,7 @@ btVector3 Flock::FlockCentering(const Boid *actor) const{
     
     //the computation vector is divided by the neighbor count, resulting in the position that corresponds to the center of mass. However, we don't want the center of mass itself, we want the direction towards the center of mass, so we recompute the vector as the distance from the actor to the center of mass. 
     p = btVector3( p.x() / btScalar(neighborCount), p.y() / btScalar(neighborCount), p.z() / btScalar(neighborCount));
-    
-    //Finally, this value is normalized and returned.
     p = actor->Seek(p);
-    p.normalize();
     
     return p;
 }
@@ -222,7 +218,12 @@ void Flock::UpdateFlock(){
         
         //combine all behaviours
         btVector3 combinedbehaviours = (alignment * 2.0) + cohesion + separation;
-        combinedbehaviours.safeNormalize();
+        combinedbehaviours.safeNormalize();//can safe normalise
+        
+        //add a force when the combined flocking behaviors is zero, to keep the boid moving
+        if (combinedbehaviours.x()==0 && combinedbehaviours.y()==0&&combinedbehaviours.z()==0){
+            combinedbehaviours = btVector3(1.0,0.0,1.0);
+        }
         
         btScalar bmass = bbody->getInvMass();
         btVector3 bgravity = bbody->getGravity();
@@ -236,24 +237,26 @@ void Flock::UpdateFlock(){
         btVector3 bangulardrag =  -(actor->bGet(Boid::BoidsValues::BANGULARDRAG)) * bbody->getAngularVelocity();
         btVector3 blift = actor->LiftForce(actor->bGet(Boid::BoidsValues::BBORDERBOUNDARY)) - bgravity ;
         
-        //applying linear force to move the boids
+        //Applying linear force to move the boids
         bbody->applyCentralForce((bthrust + combinedbehaviours + blift + bgravity + bdrag) * bmass);
         
         //This aligns the boid’s orientation to bdir with some drag torque (depending on the angular velocity)
-        bbody->applyTorque(2.0 * bfront.cross(bdirection) + bangulardrag);
+        bbody->applyTorque((2.0 * bfront.cross(bdirection) + bangulardrag) * bmass);//using F = m * a function
         
         //This turns the boid around the vertical axis
-        bbody->applyTorque(-0.5 * worldup);
+        bbody->applyTorque((-0.5 * worldup) * bmass);//using F = m * a function
         
         //This flattens the boid (with some drag torque)
-        bbody->applyTorque(0.5 * btop.cross(worldup) + bangulardrag );
+        bbody->applyTorque( (0.5 * btop.cross(worldup) + bangulardrag) * bmass);//using F = m * a function
         
         //This makes the boid avoid obsatcles
-        bbody->applyTorque(bangulardrag + actor->AvoidanceForce(m_obstacles) );
+        bbody->applyTorque( (bangulardrag + actor->AvoidanceForce(m_obstacles)) * bmass );//using F = m * a function
         
-        //this steers the boids back around, so they never go off the scene
-        actor->SteerBack();
-        
+        //This steers the boids back around, so they never go off the scene
+        if (actor->SteerBack() == true){
+            btVector3 steer(0, actor->bGet(Boid::BoidsValues::BROTATEBACK), 0);
+            bbody->applyTorque((steer) * bmass); //using F = m * a function
+        }
     }
     
     

@@ -10,14 +10,9 @@
 #define PlatformDemoApplication GlutDemoApplication
 #endif
 
-
-#include <iostream>
-
 #include "Boid.h"
 #include "MyFlockingDemo.h"
 #include "Obstacle.h"
-#include "Extension.h"
-
 
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -79,9 +74,7 @@ public:
 	void	exitPhysics();
 
 	virtual void clientMoveAndDisplay();
-
-	void displayText();
-
+    
 	virtual void keyboardCallback(unsigned char key, int x, int y);
 
 	virtual void displayCallback();

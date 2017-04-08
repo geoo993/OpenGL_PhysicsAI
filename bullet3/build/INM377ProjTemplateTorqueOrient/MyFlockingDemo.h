@@ -1,13 +1,7 @@
 #ifndef MY_FLOCKING_DEMO_H
 #define MY_FLOCKING_DEMO_H
 
-#include "btBulletDynamicsCommon.h"
-
-#include <vector>
-
 #include "Boid.h"
-#include "Obstacle.h"
-#include "Extension.h"
 
 class Flock {
     

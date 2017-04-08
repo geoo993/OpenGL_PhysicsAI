@@ -4,22 +4,11 @@
 #define EXTRA_HEIGHT 1.f
 
 #include "INM377ProjTemplateForcesTorqueOrient.h"
-#include "GlutStuff.h"
-#include "GLDebugFont.h"
-
-///btBulletDynamicsCommon.h is the main Bullet include file, contains most common include files.
-#include "btBulletDynamicsCommon.h"
-
-#include <stdio.h> //printf debugging
-#include "GLDebugDrawer.h"
 
 #if 0
 extern btAlignedObjectArray<btVector3> debugContacts;
 extern btAlignedObjectArray<btVector3> debugNormals;
 #endif 
-
-static GLDebugDrawer	sDebugDrawer;
-
 
 INM377ProjTemplateTorqueOrient::INM377ProjTemplateTorqueOrient()
 {
@@ -52,7 +41,6 @@ void INM377ProjTemplateTorqueOrient::clientMoveAndDisplay()
 		
 	renderme(); 
 
-	//displayText();
 #if 0
 	for (int i=0;i<debugContacts.size();i++)
 	{
@@ -67,48 +55,11 @@ void INM377ProjTemplateTorqueOrient::clientMoveAndDisplay()
 }
 
 
-void INM377ProjTemplateTorqueOrient::displayText()
-{
-	int lineWidth=440;
-	int xStart = m_glutScreenWidth - lineWidth;
-	int yStart = 20;
-
-	if((getDebugMode() & btIDebugDraw::DBG_DrawText)!=0)
-	{
-		setOrthographicProjection();
-		glDisable(GL_LIGHTING);
-		glColor3f(0, 0, 0);
-		char buf[124];
-		
-		GLDebugDrawString(xStart,20,buf);
-		glRasterPos3f(xStart, yStart, 0);
-		sprintf(buf,"Press 'p' to change CCD mode");
-		yStart+=20;
-		GLDebugDrawString(xStart,yStart,buf);
-		glRasterPos3f(xStart, yStart, 0);
-		sprintf(buf,"Press '.' or right mouse to shoot bullets");
-		yStart+=20;
-		GLDebugDrawString(xStart,yStart,buf);
-		glRasterPos3f(xStart, yStart, 0);
-		sprintf(buf,"space to restart, h(elp), t(ext), w(ire)");
-		yStart+=20;
-		GLDebugDrawString(xStart,yStart,buf);
-		
-		resetPerspectiveProjection();
-		glEnable(GL_LIGHTING);
-	}	
-
-}
-
-
-
 void INM377ProjTemplateTorqueOrient::displayCallback(void) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	
 	renderme();
-
-	//displayText();
 
 	//optional but useful: debug drawing to detect problems
 	if (m_dynamicsWorld)
@@ -135,7 +86,6 @@ void INM377ProjTemplateTorqueOrient::CreateGround(){
     btCollisionShape* groundShape = box;
     
     m_collisionShapes.push_back(groundShape);
-    //m_collisionShapes.push_back(new btCylinderShape (btVector3(CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS)));
     m_collisionShapes.push_back(new btBoxShape (btVector3(CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS,CUBE_HALF_EXTENTS)));
     
     btTransform groundTransform;

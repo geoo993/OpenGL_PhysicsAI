@@ -1,10 +1,11 @@
 #ifndef BOID_H
 #define BOID_H
 
+///btBulletDynamicsCommon.h is the main Bullet include file, contains most common include files.
 #include "btBulletDynamicsCommon.h"
 
-#include "Obstacle.h"
 #include <iostream>
+#include "Obstacle.h"
 #include <vector>
 #include "Extension.h"
 
@@ -110,7 +111,7 @@ struct Boid {
     btVector3 AvoidanceForce(const std::vector<Obstacle *>& obstacles) const;
     
     //This is used to apply steering torque force to each boid in the flock to turn them back in the scene
-    void SteerBack();
+    bool SteerBack();
     
 };
 
