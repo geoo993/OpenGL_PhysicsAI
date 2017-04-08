@@ -53,32 +53,48 @@ btVector3 Flock::CollisionAvoidance(const Boid *actor) const{
     
     btVector3 c(0,0,0);
     int neighborCount = 0;
-    const btScalar m_neighborhoodSphericalZone = 20.0;// also known as the neighbor radius
+    const btScalar m_neighborhoodSphericalZone = 30.0;// also known as the neighbor radius
     
+    //adding the boids and obstcles in a position vector that will hold their postions
+    //a boid collision avoidance will be compared against all boids and obstacles
+    std::vector<btVector3> positions;
+    positions.reserve(m_boids.size() + m_obstacles.size());
+    
+    //adding boids center of mass positions in the positions vector
     for (unsigned int b = 0; b < m_boids.size(); ++b){
         btRigidBody*otherActor = m_boids[b]->m_body;
-        
         if (otherActor != actor->m_body)
         {
-            btScalar distance = actor->m_body->getCenterOfMassPosition().distance(otherActor->getCenterOfMassPosition());
-            // get all my nearby neighbors inside the Spherical Zone/radius of this current actor
-            if (distance > 0 && distance < m_neighborhoodSphericalZone){
-                
-                btScalar tempX = actor->m_body->getCenterOfMassPosition().x() - otherActor->getCenterOfMassPosition().x() ;
-                btScalar tempY = actor->m_body->getCenterOfMassPosition().y() - otherActor->getCenterOfMassPosition().y();
-                btScalar tempZ = actor->m_body->getCenterOfMassPosition().z() - otherActor->getCenterOfMassPosition().z();
-                
-                btVector3 difference(tempX, tempY, tempZ);
-                difference.normalize();
-                
-                difference = difference / distance;
-                
-                c = c + difference;
-                
-                neighborCount++;
-            }
-            
+            positions.push_back(otherActor->getCenterOfMassPosition());
         }
+    }
+    //adding obstacle center in the positions vector
+    for (unsigned int o = 0; o < m_obstacles.size(); ++o){
+        positions.push_back(m_obstacles[o]->getCentre());
+    }
+    
+    for (unsigned int i = 0; i < positions.size(); ++i){
+       
+        btScalar distance = actor->m_body->getCenterOfMassPosition().distance(positions[i]);
+        
+        // get all my nearby neighbors inside the Spherical Zone/radius of this current actor
+        if (distance > 0 && distance < m_neighborhoodSphericalZone){
+            
+            btScalar tempX = actor->m_body->getCenterOfMassPosition().x() - positions[i].x() ;
+            btScalar tempY = actor->m_body->getCenterOfMassPosition().y() - positions[i].y();
+            btScalar tempZ = actor->m_body->getCenterOfMassPosition().z() - positions[i].z();
+            
+            btVector3 difference(tempX, tempY, tempZ);
+            difference.normalize();
+            
+            difference = difference / distance;
+            
+            c = c + difference;
+            
+            neighborCount++;
+        }
+            
+        
     }
     
     //If no neighbors were found, we simply return the zero vector (the default value of the computation vector).
@@ -219,7 +235,7 @@ void Flock::UpdateFlock(){
         btVector3 cohesion = FlockCentering(actor);
         
         //combine all behaviours
-        btVector3 combinedbehaviours = (alignment * 2.0) + cohesion + separation;
+        btVector3 combinedbehaviours = cohesion + alignment + (separation * 2.0);
         combinedbehaviours.safeNormalize();//can safe normalise
         
         //add a force when the combined flocking behaviors is zero, to keep the boid moving
@@ -242,7 +258,7 @@ void Flock::UpdateFlock(){
         //Applying linear force to move the boids
         bbody->applyCentralForce((bthrust + combinedbehaviours + blift + bgravity + bdrag) * bmass);
         
-        //This aligns the boid’s orientation to bdir with some drag torque (depending on the angular velocity)
+        //This aligns the boid’s orientation to bdirection with some drag torque (depending on the angular velocity)
         bbody->applyTorque((2.0 * bfront.cross(bdirection) + bangulardrag) * bmass);//using F = m * a function
         
         //This turns the boid around the vertical axis

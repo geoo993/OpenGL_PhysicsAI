@@ -110,7 +110,7 @@ void INM377ProjTemplateTorqueOrient::InitialiseFlock(){
 void INM377ProjTemplateTorqueOrient::CreateBoids(){
     
     for (unsigned long int b = 0; b < NUMBER_OF_BOIDS; ++b){
-        btVector3 tempPos( Extension::randomFloatBetween(-30, 30), Extension::randomFloatBetween(2, 30), Extension::randomFloatBetween(-30, 30));//-30 and 30
+        btVector3 tempPos( Extension::randomFloatBetween(-30, 30), 1.0, Extension::randomFloatBetween(-30, 30));//-30 and 30
         NewBoids(b, tempPos);
     }
     
@@ -321,7 +321,8 @@ void INM377ProjTemplateTorqueOrient::keyboardCallback(unsigned char key, int x, 
         
     }else if (key=='o')
     {
-        btVector3 tempPos(Extension::randomFloatBetween(-100, 100) , 1, Extension::randomFloatBetween(-100, 100) ); // -100 and 100
+        btScalar maxBound = flock.m_boids[0]->bGet(Boid::BoidsValues::BBORDERBOUNDARY);
+        btVector3 tempPos(Extension::randomFloatBetween(-maxBound, maxBound) , 1, Extension::randomFloatBetween(-maxBound, maxBound) ); 
         flock.addObstacle( new Obstacle(tempPos, 2.0));
         unsigned long int index = (flock.m_obstacles.size() - 1);
         NewObstacle(index);

@@ -24,10 +24,14 @@ Boid::~Boid(){
 //Set boid position and creating three types of boids
 void  Boid::SetPosition( const btVector3 &position){
     
+    //setting position
     m_transform = btTransform();
-    m_hullShape = new btConvexHullShape();
+    m_transform.setIdentity();
+    m_transform.setOrigin(position);
     
     //creating three different boid shapes
+    m_hullShape = new btConvexHullShape();
+    
     int r = rand() % 3;    
     if ( r == 1){
         m_hullShape->addPoint(btVector3(3.5, 0, 0));
@@ -72,10 +76,6 @@ void  Boid::SetPosition( const btVector3 &position){
         m_hullShape->addPoint(btVector3(-0.3, 0, -1.0));
         
     }
-    
-    //setting position
-    m_transform.setIdentity();
-    m_transform.setOrigin(position);
     
     //setting mass
     btVector3 bLocalInertia(0,0,0);
