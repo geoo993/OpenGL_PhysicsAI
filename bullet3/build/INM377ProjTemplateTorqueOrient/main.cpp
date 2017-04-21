@@ -8,7 +8,7 @@ int main(int argc,char** argv)
 {
     
     INM377ProjTemplateTorqueOrient* demo = new INM377ProjTemplateTorqueOrient();
-    srand ( time(nullptr) );
+    srand ( time_t(nullptr) );
     
     demo->initPhysics();
     demo->getDynamicsWorld()->setDebugDrawer(&gDebugDrawer);
