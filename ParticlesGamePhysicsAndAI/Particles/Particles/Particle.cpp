@@ -49,7 +49,7 @@ const Vector3 wind(20.8f+10, 5.4f, 0.2f);
 //Advance the particle's state in time by delta_t seconds
 void Particle::step(float delta_t) {
 	//Vector3 acc = gravity;
-    Vector3 acc = (1-life*1.5f)*gravity-drag*(velocity - wind);
+    Vector3 acc = (1-life*1.5f) * gravity - drag * (velocity - wind);
 	position += velocity * delta_t;	// Move the particle
 	velocity += acc * delta_t;	// Take pull into account
 	life -= age_rate * delta_t;	// Age the particle
@@ -61,8 +61,7 @@ void Particle::step(float delta_t) {
         //velocity.y = -fabs(velocity.y)*restitution;
         
         velocity.y *= -restitution;
-        position.y = ground_y + (ground_y - position.y);
-        position.y = ground_y + restitution*(ground_y - position.y);
+        position.y = ground_y + restitution * (ground_y - position.y);
         
     }
 }
